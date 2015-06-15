@@ -1,2 +1,2 @@
 # mxdiModule
-Configure dependency injection using annotations
+Configure dependency injection in Zend Framework 2 using annotations.
