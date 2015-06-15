@@ -39,6 +39,7 @@ For now following injections are available:
 * constructor injection via `@InjectParams` annotation
 * method injection via `@InjectParams` annotation
 * property injection via `@Inject` annotation
+   * set `invokable=true` to bypass service manager, useful with simple POPO's
 
 Example class:
 
@@ -92,7 +93,7 @@ class Injectable
      *
      * @DI\InjectParams({
      *     @DI\Inject("mxdiModuleTest\TestObjects\DependencyC"),
-     *     @DI\Inject("mxdiModuleTest\TestObjects\DependencyD")
+     *     @DI\Inject("mxdiModuleTest\TestObjects\DependencyD", invokable=true)
      * })
      * @param DependencyC $dependencyC
      * @param DependencyD $dependencyD
