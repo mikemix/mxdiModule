@@ -149,6 +149,8 @@ The `@Inject` annotation requires valid service name, registered as ZF2 service 
 The service must not be registered in the Service Manager though, because it must go through the Abstract Factory of
 the Module. This allows you to create custom factory for the service.
 
+The order of the `@Inject` annotations inside the `@InjectParams` is important as with this order parameters will be passed to the method. Wrong order will result in PHP's errors.
+
 ### Example Doctrine service
 
 ```php
