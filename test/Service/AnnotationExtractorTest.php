@@ -9,7 +9,6 @@ use mxdiModuleTest\TestObjects\DependencyA;
 use mxdiModuleTest\TestObjects\DependencyB;
 use mxdiModuleTest\TestObjects\DependencyC;
 use mxdiModuleTest\TestObjects\DependencyD;
-use mxdiModuleTest\TestObjects\DependencyE;
 use mxdiModuleTest\TestObjects\Injectable;
 
 class AnnotationExtractorTest extends TestCase
