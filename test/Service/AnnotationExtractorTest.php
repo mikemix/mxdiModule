@@ -39,14 +39,14 @@ class AnnotationExtractorTest extends TestCase
 
     public function testGetMethodsAnnotations()
     {
-        $injectA = new Inject();
-        $injectA->value = DependencyC::class;
+        $injectC = new Inject();
+        $injectC->value = DependencyC::class;
 
-        $injectB = new Inject();
-        $injectB->value = DependencyD::class;
+        $injectD = new Inject();
+        $injectD->value = DependencyD::class;
 
         $params = new InjectParams();
-        $params->value = [$injectA, $injectB];
+        $params->value = [$injectC, $injectD];
 
         $this->assertEquals(['setDependency' => $params], $this->service->getMethodsInjections(Injectable::class));
     }
