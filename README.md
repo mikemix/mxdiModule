@@ -1,7 +1,7 @@
 # mxdiModule
 Configure dependency injection in Zend Framework 2 using annotations.
 
-## This code in still in active development and should not be used on production!
+## This code is still in active development and should not be used on production!
 
 ### Installation
 
@@ -16,16 +16,16 @@ Install with Composer.
 Enable via ZF2 config in `appliation.config.php` under `modules` key:
 
 ```php
-    return [
-        //
-        //
-        'modules' => [
-            // other modules
-            'mxdiModule',
-        ],
-        //
-        //
-    ];
+return [
+    //
+    //
+    'modules' => [
+        // other modules
+        'mxdiModule',
+    ],
+    //
+    //
+];
 ```
 
 This will enable the module and register the Abstract Factory with the Service Manager.
@@ -33,6 +33,7 @@ This will enable the module and register the Abstract Factory with the Service M
 ### Annotation mapping
 
 For now following injections are available:
+
     * constructor injection via @InjectParams annotation
     * method injection via @InjectParams annotation
     * property injection via @Inject annotation
@@ -142,6 +143,6 @@ class Injectable
 }
 ```
 
-The @Inject annotation requires valid service name, registered as ZF2 service in the Service Manager.
+The `@Inject` annotation requires valid service name, registered as ZF2 service in the Service Manager.
 The service must not be registered in the Service Manager though, because it must go through the Abstract Factory of
 the Module. This allows you to create custom factory for the service.
