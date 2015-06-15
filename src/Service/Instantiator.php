@@ -54,14 +54,15 @@ class Instantiator
         foreach ($pi as $propertyName => $injection) {
             $reflection = new \ReflectionProperty($fqcn, $propertyName);
 
+            $serviceName = $injection->getServiceName();
+            $value = $injection->isInvokable() ? new $serviceName : $this->serviceLocator->get($serviceName);
+
             if (!$reflection->isPublic()) {
                 $reflection->setAccessible(true);
-            }
-
-            $reflection->setValue($object, $this->serviceLocator->get($injection->getServiceName()));
-
-            if (!$reflection->isPublic()) {
+                $reflection->setValue($object, $value);
                 $reflection->setAccessible(false);
+            } else {
+                $object->$propertyName = $value;
             }
         }
 
@@ -78,7 +79,10 @@ class Instantiator
     {
         $params = [];
         foreach ($injections->getInjections() as $param) {
-            $params[] = $this->serviceLocator->get($param->getServiceName());
+            $serviceName = $param->getServiceName();
+            $value = $param->isInvokable() ? new $serviceName : $this->serviceLocator->get($serviceName);
+
+            $params[] = $value;
         }
 
         return $params;

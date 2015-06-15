@@ -44,6 +44,7 @@ class AnnotationExtractorTest extends TestCase
 
         $injectD = new Inject();
         $injectD->value = DependencyD::class;
+        $injectD->invokable = true;
 
         $params = new InjectParams();
         $params->value = [$injectC, $injectD];

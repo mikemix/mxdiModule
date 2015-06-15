@@ -47,12 +47,12 @@ class Injectable
      *
      * @DI\InjectParams({
      *     @DI\Inject("mxdiModuleTest\TestObjects\DependencyC"),
-     *     @DI\Inject("mxdiModuleTest\TestObjects\DependencyD")
+     *     @DI\Inject("mxdiModuleTest\TestObjects\DependencyD", invokable=true)
      * })
      * @param DependencyC $dependencyC
      * @param DependencyD $dependencyD
      */
-    private function setDependency(DependencyC $dependencyC, DependencyD $dependencyD)
+    protected function setDependency(DependencyC $dependencyC, DependencyD $dependencyD)
     {
         $this->dependencyC = $dependencyC;
         $this->dependencyD = $dependencyD;
