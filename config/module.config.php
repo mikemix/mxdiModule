@@ -2,6 +2,6 @@
 
 return [
     'abstract_factories' => [
-        mxdiModule\Factory\DiFactory::class,
+        mxdiModule\Factory\DiAbstractFactory::class,
     ],
 ];

@@ -2,7 +2,7 @@
 namespace mxdiModuleTest;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use mxdiModule\Factory\DiFactory;
+use mxdiModule\Factory\DiAbstractFactory;
 use mxdiModuleTest\TestObjects\DependencyA;
 use mxdiModuleTest\TestObjects\DependencyB;
 use mxdiModuleTest\TestObjects\DependencyC;
@@ -26,7 +26,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'dependency_e'     => DependencyE::class,
         ],
         'abstract_factories' => [
-            DiFactory::class,
+            DiAbstractFactory::class,
         ],
     ];
     
