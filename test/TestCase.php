@@ -35,9 +35,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->sm = new ServiceManager(new Config($this->config));
 
         $base = realpath(getcwd() . '/../../src');
-        foreach (glob($base . '/Annotation/*.php') as $file) {
-            AnnotationRegistry::registerFile($file);
-        }
+        AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
     }
 
     /**
@@ -46,21 +44,5 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function getServiceManager()
     {
         return $this->sm;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * @param array $config
-     */
-    protected function setConfig(array $config)
-    {
-        $this->config = array_merge($this->config, $config);
     }
 }
