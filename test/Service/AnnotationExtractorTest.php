@@ -18,8 +18,6 @@ class AnnotationExtractorTest extends TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->service = new AnnotationExtractor();
     }
 

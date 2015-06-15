@@ -30,19 +30,18 @@ class TestCase extends \PHPUnit_Framework_TestCase
         ],
     ];
     
-    public function setUp()
-    {
-        $this->sm = new ServiceManager(new Config($this->config));
-
-        $base = realpath(getcwd() . '/../../src');
-        AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
-    }
-
     /**
      * @return ServiceManager
      */
     protected function getServiceManager()
     {
+        if (! $this->sm) {
+            $this->sm = new ServiceManager(new Config($this->config));
+
+            $base = realpath(getcwd() . '/../../src');
+            AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
+        }
+
         return $this->sm;
     }
 }

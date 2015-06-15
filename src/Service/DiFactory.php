@@ -13,6 +13,11 @@ final class DiFactory implements ServiceLocatorAwareInterface
     /** @var DiAbstractFactory */
     private $diAbstractFactory;
 
+    public function __construct(DiAbstractFactory $factory = null)
+    {
+        $this->diAbstractFactory = $factory ?: new DiAbstractFactory();
+    }
+
     /**
      * Create service
      *
@@ -29,6 +34,8 @@ final class DiFactory implements ServiceLocatorAwareInterface
      *
      * @param string $fqcn FQCN of the service
      * @return object
+     *
+     * @throws CannotCreateService
      */
     public function get($fqcn)
     {
@@ -37,25 +44,5 @@ final class DiFactory implements ServiceLocatorAwareInterface
         }
 
         throw CannotCreateService::forClass($fqcn);
-    }
-
-    /**
-     * @return DiAbstractFactory
-     */
-    public function getDiAbstractFactory()
-    {
-        if (!$this->diAbstractFactory) {
-            $this->setDiAbstractFactory(new DiAbstractFactory());
-        }
-
-        return $this->diAbstractFactory;
-    }
-
-    /**
-     * @param DiAbstractFactory $diAbstractFactory
-     */
-    public function setDiAbstractFactory(DiAbstractFactory $diAbstractFactory)
-    {
-        $this->diAbstractFactory = $diAbstractFactory;
     }
 }
