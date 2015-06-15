@@ -148,7 +148,7 @@ class Injectable
 The `@Inject` annotation requires valid service name, registered as ZF2 service in the Service Manager.
 
 The requested service must not be registered in the Service Manager, because it must go through the Abstract Factory of
-the Module. This allows you to create custom factory for the service.
+the Module. This allows you to create custom factory for the service by the way.
 
 The order of the `@Inject` annotations inside the `@InjectParams` is important as with this order parameters will be
 passed to the method. Wrong order will result in PHP's errors.
@@ -157,7 +157,7 @@ To speed up locate time you can request the service through the DiFactory invoka
 
 ```php
 /** @var \mxdiModule\Service\DiFactory @factory */ 
-$factory = $this->getServiceLocator()->get(\mxdiModule\Service\DiFactory);
+$factory = $this->getServiceLocator()->get(\mxdiModule\Service\DiFactory::class);
 
 /** @var \YourApplication\Service\SomeService::class $service */
 $service = $factory(\YourApplication\Service\SomeService::class);
