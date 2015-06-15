@@ -32,18 +32,21 @@ class AnnotationExtractor
     {
         $injections = [];
 
-        foreach (get_class_methods($fqcn) as $method) {
-            if ('__construct' === $method) {
+        $reflection = new \ReflectionClass($fqcn);
+
+        foreach ($reflection->getMethods() as $method) {
+            $name = $method->getName();
+            if ('__construct' === $name) {
                 continue;
             }
 
             $inject = $this->getReader()->getMethodAnnotation(
-                new \ReflectionMethod($fqcn, $method),
+                new \ReflectionMethod($fqcn, $name),
                 InjectParams::class
             );
 
             if (null !== $inject) {
-                $injections[$method] = $inject;
+                $injections[$name] = $inject;
             }
         }
 
