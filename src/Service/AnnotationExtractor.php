@@ -84,7 +84,7 @@ class AnnotationExtractor
             $this->reader = new AnnotationReader();
         }
 
-        $this->reader;
+        return $this->reader;
     }
 
     /**
