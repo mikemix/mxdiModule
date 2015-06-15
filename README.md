@@ -9,7 +9,7 @@ Install with Composer.
 
 ```js
     "require": {
-        "mikemix/mxdiModule": "*@dev"
+        "mikemix/mxdi-module": "*@dev"
     }
 ```
 

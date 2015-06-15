@@ -1,5 +1,5 @@
 {
-    "name": "mikemix/mxdiModule",
+    "name": "mikemix/mxdi-module",
     "description": "Configure dependency injection using annotations",
     "keywords": [
         "zf2",
