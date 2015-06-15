@@ -29,7 +29,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             DiAbstractFactory::class,
         ],
     ];
-    
+
     /**
      * @return ServiceManager
      */
@@ -38,8 +38,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
         if (! $this->sm) {
             $this->sm = new ServiceManager(new Config($this->config));
 
-            $base = realpath(getcwd() . '/../../src');
-            AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
+            //$base = realpath(__DIR__ . '/../src');
+            //AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
         }
 
         return $this->sm;
