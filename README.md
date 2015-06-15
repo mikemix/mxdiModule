@@ -196,3 +196,10 @@ class UsersService
     }
 }
 ```
+
+### TODO
+
+* Caching !!!
+* Lazy injection !!
+* Injecting ZF2's configuration params for example `@Inject("%doctrine.connection.orm_default%")`
+* `Required` flag for not required dependencies
