@@ -148,3 +148,37 @@ class Injectable
 The `@Inject` annotation requires valid service name, registered as ZF2 service in the Service Manager.
 The service must not be registered in the Service Manager though, because it must go through the Abstract Factory of
 the Module. This allows you to create custom factory for the service.
+
+### Example Doctrine service
+
+```php
+<?php
+namespace Application\Service;
+
+use Doctrine\ORM\EntityManager;
+use mxdiModule\Annotation as DI;
+
+class UsersService
+{
+    /** @var EntityManager */
+    protected $em;
+    
+    /**
+     * @DI\InjectParams({
+     *     @DI\Inject("Doctrine\ORM\EntityManager")
+     * })
+     */
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getUsers()
+    {
+        return $this->em->getRepository('Application\Entity\User')->findAll();
+    }
+}
+```
