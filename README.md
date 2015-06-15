@@ -36,9 +36,9 @@ This will enable the module and register the Abstract Factory with the Service M
 
 For now following injections are available:
 
-    * constructor injection via @InjectParams annotation
-    * method injection via @InjectParams annotation
-    * property injection via @Inject annotation
+* constructor injection via @InjectParams annotation
+* method injection via @InjectParams annotation
+* property injection via @Inject annotation
 
 Example class:
 
