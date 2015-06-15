@@ -53,9 +53,7 @@ class Instantiator
          */
         foreach ($pi as $propertyName => $injection) {
             $reflection = new \ReflectionProperty($fqcn, $propertyName);
-
-            $serviceName = $injection->getServiceName();
-            $value = $injection->isInvokable() ? new $serviceName : $this->serviceLocator->get($serviceName);
+            $value = $injection->getObject($this->serviceLocator);
 
             if (!$reflection->isPublic()) {
                 $reflection->setAccessible(true);
@@ -72,17 +70,14 @@ class Instantiator
     /**
      * Converts injectParams object into array of parameters.
      *
-     * @param InjectParams $injections
+     * @param InjectParams|Inject[] $injections
      * @return array
      */
     protected function convertParamsToArray(InjectParams $injections)
     {
         $params = [];
-        foreach ($injections->getInjections() as $param) {
-            $serviceName = $param->getServiceName();
-            $value = $param->isInvokable() ? new $serviceName : $this->serviceLocator->get($serviceName);
-
-            $params[] = $value;
+        foreach ($injections as $param) {
+            $params[] = $param->getObject($this->serviceLocator);
         }
 
         return $params;

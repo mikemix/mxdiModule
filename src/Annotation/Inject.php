@@ -1,5 +1,6 @@
 <?php
 namespace mxdiModule\Annotation;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @Annotation
@@ -19,6 +20,21 @@ final class Inject
     public function getServiceName()
     {
         return $this->value;
+    }
+
+    /**
+     * @param ServiceLocatorInterface $sm
+     * @return object
+     */
+    public function getObject(ServiceLocatorInterface $sm)
+    {
+        $serviceName = $this->getServiceName();
+
+        if ($this->isInvokable()) {
+            return new $serviceName;
+        }
+
+        return $sm->get($serviceName);
     }
 
     /**
