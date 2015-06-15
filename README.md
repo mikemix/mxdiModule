@@ -202,3 +202,4 @@ class UsersService
 * Caching !!!
 * Injecting ZF2's configuration params for example `@Inject("%doctrine.connection.orm_default%")`
 * `Required` flag for not required dependencies
+* Increase test coverage
