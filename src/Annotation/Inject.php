@@ -23,10 +23,10 @@ final class Inject
     }
 
     /**
-     * @param ServiceLocatorInterface $sm
+     * @param ServiceLocatorInterface|null $sm
      * @return object
      */
-    public function getObject(ServiceLocatorInterface $sm)
+    public function getObject(ServiceLocatorInterface $sm = null)
     {
         $serviceName = $this->getServiceName();
 
