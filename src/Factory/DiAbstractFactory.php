@@ -4,6 +4,7 @@ namespace mxdiModule\Factory;
 use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\Instantiator;
+use Zend\Cache\Storage\StorageInterface;
 use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -15,6 +16,9 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
     /** @var AnnotationExtractor */
     protected $extractor;
+
+    /** @var StorageInterface */
+    protected $cache;
 
     public function __construct(AnnotationExtractor $extractor = null)
     {
@@ -31,14 +35,16 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $config = (array)$serviceLocator->get('config')['mxdimodule'];
-        $cache = StorageFactory::adapterFactory($config['cache_adapter'], $config['cache_options']);
+        if (!$this->cache) {
+            $config = (array)$serviceLocator->get('config')['mxdimodule'];
+            $this->cache = StorageFactory::adapterFactory($config['cache_adapter'], $config['cache_options']);
+        }
 
-        if ($cache->hasItem($name)) {
-            $this->changeSet = $cache->getItem($name);
+        if ($this->cache->hasItem($name)) {
+            $this->changeSet = $this->cache->getItem($name);
         } else {
             $this->changeSet = $this->extractor->getChangeSet($requestedName);
-            $cache->setItem($name, $this->changeSet);
+            $this->cache->setItem($name, $this->changeSet);
         }
 
         return $this->changeSet->isAnnotated();
