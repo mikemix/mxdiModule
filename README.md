@@ -162,9 +162,19 @@ class UsersService
 }
 ```
 
+### CACHING
+
+Annotation parsing is very heavy. You should enable the cache on production servers.
+
+You can set up caching easily with any custom or pre-existing ZF2 cache adapter. Copy the dist configuration file
+to your `config/autoload` directory, for example:
+
+`cp vendor/mikemix/mxdi-module/config/mxdimodule.local.php.dist config/autoload/mxdimodule.local.php`
+
+and override the `cache_adapter` and `cache_options` keys for your needs. You can find more information about
+caching adapter at the [ZF2 docs site](http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html).
+
 ### TODO
 
-* Caching !!!
 * Injecting ZF2's configuration params for example `@Inject("%doctrine.connection.orm_default%")`
-* `Required` flag for not required dependencies
 * Increase test coverage and code rating
