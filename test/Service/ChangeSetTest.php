@@ -82,4 +82,20 @@ class ChangeSetTest extends TestCase
         $this->assertSame($params, $changeSet->getPropertiesInjections());
         $this->assertTrue($changeSet->isAnnotated());
     }
+
+    public function testIsSerializableToString()
+    {
+        $params = [
+            'dependency' => new Inject(),
+        ];
+
+        $this->extractor->expects($this->once())
+            ->method('getPropertiesInjections')
+            ->with($this->equalTo('fqcn'))
+            ->will($this->returnValue($params));
+
+        $changeSet = new ChangeSet($this->extractor, 'fqcn');
+
+        $this->assertInternalType('string', (string) $changeSet);
+    }
 }

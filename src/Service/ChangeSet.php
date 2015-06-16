@@ -74,4 +74,12 @@ class ChangeSet
     {
         return $this->isAnnotated;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return serialize($this);
+    }
 }
