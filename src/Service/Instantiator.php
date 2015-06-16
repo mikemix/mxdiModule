@@ -26,8 +26,12 @@ class Instantiator
      */
     public function create($fqcn, InjectParams $ci = null, array $mi = [], array $pi = [])
     {
-        $reflection = new \ReflectionClass($fqcn);
-        $object = $reflection->newInstanceArgs($ci->getValue($this->serviceLocator));
+        if ($ci) {
+            $reflection = new \ReflectionClass($fqcn);
+            $object = $reflection->newInstanceArgs($ci->getValue($this->serviceLocator));
+        } else {
+            $object = new $fqcn;
+        }
 
         /**
          * @var string $methodName
