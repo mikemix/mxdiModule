@@ -178,3 +178,4 @@ caching adapter at the [ZF2 docs site](http://framework.zend.com/manual/current/
 
 * Injecting ZF2's configuration params for example `@Inject("%doctrine.connection.orm_default%")`
 * Increase test coverage and code rating
+* Lazy injections via `@InjectLazy` :o !!!
