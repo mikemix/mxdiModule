@@ -25,18 +25,10 @@ final class Inject implements Annotation
     {
         $serviceName = $this->value;
 
-        if ($this->isInvokable()) {
+        if ($this->invokable) {
             return new $serviceName;
         }
 
         return $sm->get($serviceName);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInvokable()
-    {
-        return $this->invokable;
     }
 }
