@@ -1,5 +1,6 @@
 <?php
 namespace mxdiModule\Annotation;
+
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -21,8 +22,12 @@ final class InjectParams implements \IteratorAggregate, Annotation
     }
 
     /**
+     * Get the value.
+     *
      * @param ServiceLocatorInterface $sm
      * @return mixed
+     *
+     * @throws Exception\CannotGetValue
      */
     public function getValue(ServiceLocatorInterface $sm = null)
     {

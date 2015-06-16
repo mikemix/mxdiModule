@@ -10,6 +10,8 @@ interface Annotation
      *
      * @param ServiceLocatorInterface $sm
      * @return mixed
+     *
+     * @throws Exception\CannotGetValue
      */
     public function getValue(ServiceLocatorInterface $sm = null);
 }

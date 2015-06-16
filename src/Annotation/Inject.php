@@ -1,5 +1,7 @@
 <?php
 namespace mxdiModule\Annotation;
+
+use mxdiModule\Annotation\Exception\CannotGetValue;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -15,8 +17,12 @@ final class Inject implements Annotation
     public $invokable = false;
 
     /**
+     * Get the value.
+     *
      * @param ServiceLocatorInterface|null $sm
      * @return object
+     *
+     * @throws Exception\CannotGetValue
      */
     public function getValue(ServiceLocatorInterface $sm = null)
     {
@@ -24,6 +30,10 @@ final class Inject implements Annotation
 
         if ($this->isInvokable()) {
             return new $serviceName;
+        }
+
+        if (! $sm) {
+            throw CannotGetValue::serviceManagerMissing();
         }
 
         return $sm->get($serviceName);
