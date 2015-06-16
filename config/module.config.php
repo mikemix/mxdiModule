@@ -10,7 +10,7 @@ return [
         ],
     ],
     'mxdimodule' => [
-        'cache_adapter' => 'filesystem',
+        'cache_adapter' => 'memory',
         'cache_options' => [],
     ],
 ];
