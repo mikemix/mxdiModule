@@ -83,7 +83,7 @@ class Injectable
      * ZF2 configuration injection
      *
      * @var string
-     * @DI\Inject("doctrine.connection.orm_default.params")
+     * @DI\InjectConfig("doctrine.connection.orm_default.params")
      */
     private $doctrineConnectionSettings;
 
