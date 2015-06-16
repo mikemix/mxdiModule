@@ -3,7 +3,6 @@ namespace mxdiModuleTest;
 
 use mxdiModule\Factory\DiAbstractFactory;
 use mxdiModuleTest\TestObjects;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Zend\ServiceManager as SM;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
@@ -32,9 +31,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         if (! $this->sm) {
             $this->sm = new SM\ServiceManager(new SM\Config($this->config));
-
-            //$base = realpath(__DIR__ . '/../src');
-            //AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
         }
 
         return $this->sm;
