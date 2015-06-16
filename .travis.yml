@@ -12,8 +12,7 @@ matrix:
     - php: nightly
 
 before_script:
-  - if [[ $TRAVIS_PHP_VERSION == '7.0' || $TRAVIS_PHP_VERSION == 'nightly' ]]; then echo 'opcache.load_comments = 1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi
-  - if [[ $TRAVIS_PHP_VERSION == '7.0' || $TRAVIS_PHP_VERSION == 'nightly' ]]; then echo 'zend_optimizerplus.load_comments = 1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi
+  - echo 'opcache.load_comments = 1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
