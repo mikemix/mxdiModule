@@ -10,6 +10,7 @@ use mxdiModuleTest\TestObjects\DependencyB;
 use mxdiModuleTest\TestObjects\DependencyC;
 use mxdiModuleTest\TestObjects\DependencyD;
 use mxdiModuleTest\TestObjects\Injectable;
+use mxdiModuleTest\TestObjects\NoConstructor;
 
 class AnnotationExtractorTest extends TestCase
 {
@@ -56,5 +57,10 @@ class AnnotationExtractorTest extends TestCase
         $inject->value = 'dependency_e';
 
         $this->assertEquals(['dependencyE' => $inject], $this->service->getPropertiesInjections(Injectable::class));
+    }
+
+    public function testGetConstructorInjectionsWhenNoConstructorExistsShouldReturnNull()
+    {
+        $this->assertNull($this->service->getConstructorInjections(NoConstructor::class));
     }
 }

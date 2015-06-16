@@ -21,6 +21,10 @@ class AnnotationExtractor
      */
     public function getConstructorInjections($fqcn)
     {
+        if (! in_array('__construct', get_class_methods($fqcn))) {
+            return null;
+        }
+
         return $this->reader->getMethodAnnotation(
             new \ReflectionMethod($fqcn, '__construct'),
             InjectParams::class
