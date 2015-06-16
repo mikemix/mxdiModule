@@ -1,7 +1,6 @@
 <?php
 namespace mxdiModuleTest\Annotation;
 
-use mxdiModule\Annotation\Exception\CannotGetValue;
 use mxdiModule\Annotation\Inject;
 use mxdiModuleTest\TestCase;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -21,6 +20,7 @@ class InjectTest extends TestCase
 
         $service = new \stdClass();
 
+        /** @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $sm */
         $sm = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->setMethods(['get'])
             ->getMockForAbstractClass();
@@ -39,14 +39,14 @@ class InjectTest extends TestCase
         $inject->value = self::class;
         $inject->invokable = true;
 
-        $this->assertInstanceOf(self::class, $inject->getValue());
-    }
+        /** @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $sm */
+        $sm = $this->getMockBuilder(ServiceLocatorInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
 
-    public function testGetValueThrowsExceptionOnMissingSMWhenRequired()
-    {
-        $inject = new Inject();
+        $sm->expects($this->never())
+            ->method('get');
 
-        $this->setExpectedException(CannotGetValue::class);
-        $inject->getValue();
+        $this->assertInstanceOf(self::class, $inject->getValue($sm));
     }
 }
