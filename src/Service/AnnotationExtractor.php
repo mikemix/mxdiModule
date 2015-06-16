@@ -82,4 +82,15 @@ class AnnotationExtractor
 
         return $injections;
     }
+
+    /**
+     * Handy shortcut.
+     *
+     * @param string $fqcn
+     * @return ChangeSet
+     */
+    public function getChangeSet($fqcn)
+    {
+        return new ChangeSet($this, $fqcn);
+    }
 }

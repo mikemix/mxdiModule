@@ -3,6 +3,7 @@ namespace mxdiModuleTest\Service;
 
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
+use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\Instantiator;
 use mxdiModuleTest\TestCase;
 use mxdiModuleTest\TestObjects\DependencyA;
@@ -51,13 +52,35 @@ class InstantiatorTest extends TestCase
             $dependencyD
         ];
 
+        /** @var ChangeSet|\PHPUnit_Framework_MockObject_MockObject $changeSet */
+        $changeSet = $this->getMockBuilder(ChangeSet::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getConstructorInjections',
+                'hasSimpleConstructor',
+                'getMethodsInjections',
+                'getPropertiesInjections',
+            ])
+            ->getMock();
+
+        $changeSet->expects($this->once())
+            ->method('getConstructorInjections')
+            ->will($this->returnValue($constructorInjection));
+
+        $changeSet->expects($this->once())
+            ->method('hasSimpleConstructor')
+            ->will($this->returnValue(false));
+
+        $changeSet->expects($this->once())
+            ->method('getMethodsInjections')
+            ->will($this->returnValue(['setDependency' => $methodsInjections]));
+
+        $changeSet->expects($this->once())
+            ->method('getPropertiesInjections')
+            ->will($this->returnValue(['dependencyE' => $dependencyE]));
+
         /** @var Injectable $object */
-        $object = $this->service->create(
-            Injectable::class,
-            $constructorInjection,
-            ['setDependency' => $methodsInjections],
-            ['dependencyE' => $dependencyE]
-        );
+        $object = $this->service->create(Injectable::class, $changeSet);
 
         $this->assertInstanceOf(Injectable::class, $object);
         $this->assertInstanceOf(DependencyA::class, $object->getDependencyA());

@@ -1,22 +1,25 @@
 <?php
 namespace mxdiModule\Factory;
 
-use mxdiModule\Annotation\InjectParams;
 use mxdiModule\Service\AnnotationExtractor;
+use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\Instantiator;
+use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class DiAbstractFactory implements AbstractFactoryInterface
 {
-    /** @var InjectParams|null */
-    protected $constructorInjections;
+    /** @var ChangeSet */
+    protected $changeSet;
 
-    /** @var array */
-    protected $methodsInjections = [];
+    /** @var AnnotationExtractor */
+    protected $extractor;
 
-    /** @var array */
-    protected $propertiesInjections = [];
+    public function __construct(AnnotationExtractor $extractor = null)
+    {
+        $this->extractor = $extractor ?: new AnnotationExtractor();
+    }
 
     /**
      * Determine if we can create a service with name
@@ -28,16 +31,17 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $extractor = new AnnotationExtractor();
+        $config = (array)$serviceLocator->get('config')['mxdimodule'];
+        $cache = StorageFactory::adapterFactory($config['cache_adapter'], $config['cache_options']);
 
-        $this->constructorInjections = $extractor->getConstructorInjections($requestedName);
-        $this->methodsInjections = $extractor->getMethodsInjections($requestedName);
-        $this->propertiesInjections = $extractor->getPropertiesInjections($requestedName);
+        if ($cache->hasItem($name)) {
+            $this->changeSet = $cache->getItem($name);
+        } else {
+            $this->changeSet = $this->extractor->getChangeSet($requestedName);
+            $cache->setItem($name, $this->changeSet);
+        }
 
-        return
-            $this->constructorInjections ||
-            count($this->methodsInjections) ||
-            count($this->propertiesInjections);
+        return $this->changeSet->isAnnotated();
     }
 
     /**
@@ -51,12 +55,6 @@ class DiAbstractFactory implements AbstractFactoryInterface
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $instantiator = new Instantiator($serviceLocator);
-
-        return $instantiator->create(
-            $requestedName,
-            $this->constructorInjections,
-            $this->methodsInjections,
-            $this->propertiesInjections
-        );
+        return $instantiator->create($requestedName, $this->changeSet);
     }
 }

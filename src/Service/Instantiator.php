@@ -19,25 +19,25 @@ class Instantiator
      * Create object.
      *
      * @param string $fqcn
-     * @param InjectParams $ci Constructor injection params
-     * @param InjectParams[] $mi Methods injections (method name => injection params)
-     * @param Inject[] $pi Properties injections (property name => injection params)
+     * @param ChangeSet $changeSet
      * @return object
      */
-    public function create($fqcn, InjectParams $ci = null, array $mi = [], array $pi = [])
+    public function create($fqcn, ChangeSet $changeSet)
     {
-        if ($ci) {
-            $reflection = new \ReflectionClass($fqcn);
-            $object = $reflection->newInstanceArgs($ci->getValue($this->serviceLocator));
-        } else {
+        if ($changeSet->hasSimpleConstructor()) {
             $object = new $fqcn;
+        } else {
+            $reflection = new \ReflectionClass($fqcn);
+            $object = $reflection->newInstanceArgs(
+                $changeSet->getConstructorInjections()->getValue($this->serviceLocator)
+            );
         }
 
         /**
          * @var string $methodName
          * @var InjectParams $injection
          */
-        foreach ($mi as $methodName => $injection) {
+        foreach ($changeSet->getMethodsInjections() as $methodName => $injection) {
             if (is_callable([$object, $methodName])) {
                 call_user_func_array([$object, $methodName], $injection->getValue($this->serviceLocator));
                 continue;
@@ -53,7 +53,7 @@ class Instantiator
          * @var string $propertyName
          * @var Inject $injection
          */
-        foreach ($pi as $propertyName => $injection) {
+        foreach ($changeSet->getPropertiesInjections() as $propertyName => $injection) {
             $value = $injection->getValue($this->serviceLocator);
 
             if (isset(get_object_vars($object)[$propertyName])) {
