@@ -54,10 +54,10 @@ use mxdiModule\Annotation as DI;
 class Injectable
 {
     /** @var DependencyA */
-    public $dependencyA;
+    private $dependencyA;
 
     /** @var DependencyB */
-    public $dependencyB;
+    private $dependencyB;
 
     /** @var DependencyC */
     private $dependencyC;
@@ -84,10 +84,10 @@ class Injectable
      *     @DI\Inject("mxdiModuleTest\TestObjects\DependencyB")
      * })
      */
-    public function __construct(DependencyA $dep1, DependencyB $dep2)
+    public function __construct(DependencyA $dependencyA, DependencyB $dependencyB)
     {
-        $this->dependencyA = $dep1;
-        $this->dependencyB = $dep2;
+        $this->dependencyA = $dependencyA;
+        $this->dependencyB = $dependencyB;
     }
 
     /**
@@ -104,46 +104,6 @@ class Injectable
     {
         $this->dependencyC = $dependencyC;
         $this->dependencyD = $dependencyD;
-    }
-
-    /**
-     * @return DependencyA
-     */
-    public function getDependencyA()
-    {
-        return $this->dependencyA;
-    }
-
-    /**
-     * @return DependencyB
-     */
-    public function getDependencyB()
-    {
-        return $this->dependencyB;
-    }
-
-    /**
-     * @return DependencyC
-     */
-    public function getDependencyC()
-    {
-        return $this->dependencyC;
-    }
-
-    /**
-     * @return DependencyD
-     */
-    public function getDependencyD()
-    {
-        return $this->dependencyD;
-    }
-
-    /**
-     * @return DependencyE
-     */
-    public function getDependencyE()
-    {
-        return $this->dependencyE;
     }
 }
 ```
