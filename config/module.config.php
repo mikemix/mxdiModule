@@ -12,5 +12,9 @@ return [
     'mxdimodule' => [
         'cache_adapter' => 'memory',
         'cache_options' => [],
+        'avoid_service' => [
+            'zendmodulemanagermodulemanager' => true,
+            'zendi18ntranslatortranslatorinterface' => true,
+        ],
     ],
 ];

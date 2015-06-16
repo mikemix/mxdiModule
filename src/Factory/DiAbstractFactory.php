@@ -35,8 +35,15 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
+        $config = (array)$serviceLocator->get('config')['mxdimodule'];
+        $knownServices = $config['avoid_service'];
+
+        if (isset($knownServices[$name]) && $knownServices[$name]) {
+            // avoid known services
+            return false;
+        }
+
         if (!$this->cache) {
-            $config = (array)$serviceLocator->get('config')['mxdimodule'];
             $this->cache = StorageFactory::adapterFactory($config['cache_adapter'], $config['cache_options']);
         }
 
