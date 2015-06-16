@@ -42,6 +42,9 @@ class DiAbstractFactoryTest extends TestCase
                 'mxdimodule' => [
                     'cache_adapter' => $this->cacheAdapter,
                     'cache_options' => [],
+                    'avoid_service' => [
+                        'servicename' => true,
+                    ],
                 ],
             ]));
 
