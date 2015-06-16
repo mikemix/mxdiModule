@@ -117,4 +117,11 @@ class DiAbstractFactoryTest extends TestCase
             $this->factory->canCreateServiceWithName($this->serviceLocator, 'injectable', Injectable::class)
         );
     }
+
+    public function testFactoryAvoidsConfiguredServices()
+    {
+        $this->assertFalse(
+            $this->factory->canCreateServiceWithName($this->serviceLocator, 'servicename', 'fqcn')
+        );
+    }
 }
