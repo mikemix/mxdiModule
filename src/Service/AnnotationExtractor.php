@@ -10,13 +10,18 @@ class AnnotationExtractor
     /** @var AnnotationReader */
     protected $reader;
 
+    public function __construct(AnnotationReader $reader = null)
+    {
+        $this->reader = $reader ?: new AnnotationReader();
+    }
+
     /**
      * @param string $fqcn
      * @return \mxdiModule\Annotation\Inject[]|null
      */
     public function getConstructorInjections($fqcn)
     {
-        return $this->getReader()->getMethodAnnotation(
+        return $this->reader->getMethodAnnotation(
             new \ReflectionMethod($fqcn, '__construct'),
             InjectParams::class
         );
@@ -40,7 +45,7 @@ class AnnotationExtractor
                 continue;
             }
 
-            $inject = $this->getReader()->getMethodAnnotation(
+            $inject = $this->reader->getMethodAnnotation(
                 new \ReflectionMethod($fqcn, $name),
                 InjectParams::class
             );
@@ -65,7 +70,7 @@ class AnnotationExtractor
         $reflection = new \ReflectionClass($fqcn);
 
         foreach ($reflection->getProperties() as $property) {
-            $inject = $this->getReader()->getPropertyAnnotation(
+            $inject = $this->reader->getPropertyAnnotation(
                 new \ReflectionProperty($fqcn, $property->getName()),
                 Inject::class
             );
@@ -76,25 +81,5 @@ class AnnotationExtractor
         }
 
         return $injections;
-    }
-
-    /**
-     * @return AnnotationReader
-     */
-    protected function getReader()
-    {
-        if (!$this->reader) {
-            $this->reader = new AnnotationReader();
-        }
-
-        return $this->reader;
-    }
-
-    /**
-     * @param AnnotationReader $reader
-     */
-    public function setReader(AnnotationReader $reader)
-    {
-        $this->reader = $reader;
     }
 }

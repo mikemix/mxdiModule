@@ -19,8 +19,6 @@ class InstantiatorTest extends TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->service = new Instantiator($this->getServiceManager());
     }
 

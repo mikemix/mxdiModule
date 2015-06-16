@@ -18,8 +18,6 @@ class AnnotationExtractorTest extends TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->service = new AnnotationExtractor();
     }
 
@@ -44,6 +42,7 @@ class AnnotationExtractorTest extends TestCase
 
         $injectD = new Inject();
         $injectD->value = DependencyD::class;
+        $injectD->invokable = true;
 
         $params = new InjectParams();
         $params->value = [$injectC, $injectD];

@@ -5,16 +5,17 @@ namespace mxdiModule\Annotation;
  * @Annotation
  * @Target("METHOD")
  */
-final class InjectParams
+final class InjectParams implements \IteratorAggregate
 {
     /** @var array */
-    public $value;
+    public $value = [];
 
     /**
-     * @return Inject[]
+     * @return array|\Traversable
+     * @internal
      */
-    public function getInjections()
+    public function getIterator()
     {
-        return $this->value;
+        return new \ArrayIterator($this->value);
     }
 }

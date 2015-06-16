@@ -1,48 +1,42 @@
 <?php
 namespace mxdiModuleTest;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use mxdiModule\Factory\DiAbstractFactory;
-use mxdiModuleTest\TestObjects\DependencyA;
-use mxdiModuleTest\TestObjects\DependencyB;
-use mxdiModuleTest\TestObjects\DependencyC;
-use mxdiModuleTest\TestObjects\DependencyD;
-use mxdiModuleTest\TestObjects\DependencyE;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
+use mxdiModuleTest\TestObjects;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Zend\ServiceManager as SM;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Zend\ServiceManager\ServiceManager */
+    /** @var SM\ServiceManager */
     private $sm;
 
     /** @var array */
     private $config = [
         'invokables' => [
-            DependencyA::class => DependencyA::class,
-            DependencyB::class => DependencyB::class,
-            DependencyC::class => DependencyC::class,
-            DependencyD::class => DependencyD::class,
-            'dependency_e'     => DependencyE::class,
+            TestObjects\DependencyA::class => TestObjects\DependencyA::class,
+            TestObjects\DependencyB::class => TestObjects\DependencyB::class,
+            TestObjects\DependencyC::class => TestObjects\DependencyC::class,
+            TestObjects\DependencyD::class => TestObjects\DependencyD::class,
+            'dependency_e'                 => TestObjects\DependencyE::class,
         ],
         'abstract_factories' => [
             DiAbstractFactory::class,
         ],
     ];
-    
-    public function setUp()
-    {
-        $this->sm = new ServiceManager(new Config($this->config));
-
-        $base = realpath(getcwd() . '/../../src');
-        AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
-    }
 
     /**
-     * @return ServiceManager
+     * @return SM\ServiceManager
      */
     protected function getServiceManager()
     {
+        if (! $this->sm) {
+            $this->sm = new SM\ServiceManager(new SM\Config($this->config));
+
+            //$base = realpath(__DIR__ . '/../src');
+            //AnnotationRegistry::registerAutoloadNamespace('mxdiModule\\', $base);
+        }
+
         return $this->sm;
     }
 }
