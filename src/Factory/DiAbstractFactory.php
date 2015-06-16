@@ -4,6 +4,8 @@ namespace mxdiModule\Factory;
 use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\Instantiator;
+use Zend\Cache\Storage\Adapter\AbstractAdapter;
+use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\AbstractFactoryInterface;
@@ -17,7 +19,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
     /** @var AnnotationExtractor */
     protected $extractor;
 
-    /** @var StorageInterface */
+    /** @var StorageInterface|AbstractAdapter */
     protected $cache;
 
     public function __construct(AnnotationExtractor $extractor = null)
@@ -45,6 +47,9 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         if (!$this->cache) {
             $this->cache = StorageFactory::adapterFactory($config['cache_adapter'], $config['cache_options']);
+            if (is_callable([$this->cache, ['addPlugin']])) {
+                $this->cache->addPlugin(new Serializer());
+            }
         }
 
         if ($this->cache->hasItem($name)) {
