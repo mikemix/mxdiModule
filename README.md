@@ -42,6 +42,9 @@ For now following injections are available:
 * method injection via `@InjectParams` annotation
 * property injection via `@Inject` annotation
    * set `invokable=true` to bypass service manager, useful with simple POPO's
+* ZF2 configuration injection via `@InjectConfig` annotation
+   * set `default=value` to customize default value (default is null)
+   * set `default=[]` to set default value to empty array
 
 DI for private/protected methods/properties is available altough not recommended to avoid costly reflection.
 
@@ -75,6 +78,14 @@ class Injectable
      */
     private $dependencyE;
 
+    
+    /**
+     * ZF2 configuration injection
+     *
+     * @var string
+     * @DI\Inject("doctrine.connection.orm_default.params")
+     */
+    private $doctrineConnectionSettings;
 
     /**
      * Constructor injection.
@@ -176,5 +187,4 @@ caching adapter at the [ZF2 docs site](http://framework.zend.com/manual/current/
 
 ### TODO
 
-* Injecting ZF2's configuration params for example `@Inject("%doctrine.connection.orm_default%")`
 * Increase test coverage and code rating
