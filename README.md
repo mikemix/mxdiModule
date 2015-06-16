@@ -122,7 +122,7 @@ To speed up locate time you can request the service through the DiFactory invoka
 /** @var \mxdiModule\Service\DiFactory @factory */ 
 $factory = $this->getServiceLocator()->get(\mxdiModule\Service\DiFactory::class);
 
-/** @var \YourApplication\Service\SomeService::class $service */
+/** @var \YourApplication\Service\SomeService $service */
 $service = $factory(\YourApplication\Service\SomeService::class);
 ```
 
