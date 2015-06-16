@@ -1,0 +1,11 @@
+<?php
+
+return [
+    'mxdimodule' => [
+        /** ZF2 cache adapter FQCN */
+        'cache_adapter' => 'memory',
+
+        /** Additional adapter options */
+        'cache_options' => [],
+    ],
+];
