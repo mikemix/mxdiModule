@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModule\Factory;
 
+use mxdiModule\Annotation\InjectParams;
 use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\Instantiator;
 use Zend\ServiceManager\AbstractFactoryInterface;
@@ -8,8 +9,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class DiAbstractFactory implements AbstractFactoryInterface
 {
+    /** @var InjectParams|null */
     protected $constructorInjections;
+
+    /** @var array */
     protected $methodsInjections = [];
+
+    /** @var array */
     protected $propertiesInjections = [];
 
     /**

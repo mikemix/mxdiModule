@@ -17,7 +17,7 @@ class AnnotationExtractor
 
     /**
      * @param string $fqcn
-     * @return \mxdiModule\Annotation\Inject[]|null
+     * @return \mxdiModule\Annotation\InjectParams|null
      */
     public function getConstructorInjections($fqcn)
     {
