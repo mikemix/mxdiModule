@@ -26,10 +26,8 @@ final class InjectParams implements \IteratorAggregate, Annotation
      *
      * @param ServiceLocatorInterface $sm
      * @return mixed
-     *
-     * @throws Exception\CannotGetValue
      */
-    public function getValue(ServiceLocatorInterface $sm = null)
+    public function getValue(ServiceLocatorInterface $sm)
     {
         $value = [];
 
