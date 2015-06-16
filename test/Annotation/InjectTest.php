@@ -17,7 +17,7 @@ class InjectTest extends TestCase
         $inject = new Inject();
         $inject->value = 'value';
 
-        $this->assertEquals('value', $inject->getServiceName());
+        $this->assertEquals('value', $inject->value);
     }
 
     public function testGetObjectWithServiceLocator()
@@ -34,10 +34,10 @@ class InjectTest extends TestCase
 
         $sm->expects($this->once())
             ->method('get')
-            ->with($this->equalTo($inject->getServiceName()))
+            ->with($this->equalTo($inject->value))
             ->will($this->returnValue($service));
 
-        $this->assertSame($service, $inject->getObject($sm));
+        $this->assertSame($service, $inject->getValue($sm));
     }
 
     public function testGetObjectBypassesServiceManagerWithInvokable()
@@ -46,7 +46,6 @@ class InjectTest extends TestCase
         $inject->value = self::class;
         $inject->invokable = true;
 
-        $this->assertInstanceOf(self::class, $inject->getObject());
+        $this->assertInstanceOf(self::class, $inject->getValue());
     }
 }
- 

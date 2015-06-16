@@ -6,7 +6,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION", "METHOD"})
  */
-final class Inject
+final class Inject implements Annotation
 {
     /** @var string */
     public $value;
@@ -15,20 +15,12 @@ final class Inject
     public $invokable = false;
 
     /**
-     * @return string
-     */
-    public function getServiceName()
-    {
-        return $this->value;
-    }
-
-    /**
      * @param ServiceLocatorInterface|null $sm
      * @return object
      */
-    public function getObject(ServiceLocatorInterface $sm = null)
+    public function getValue(ServiceLocatorInterface $sm = null)
     {
-        $serviceName = $this->getServiceName();
+        $serviceName = $this->value;
 
         if ($this->isInvokable()) {
             return new $serviceName;

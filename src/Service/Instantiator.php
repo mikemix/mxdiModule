@@ -27,24 +27,22 @@ class Instantiator
     public function create($fqcn, InjectParams $ci = null, array $mi = [], array $pi = [])
     {
         $reflection = new \ReflectionClass($fqcn);
-        $object = $reflection->newInstanceArgs($this->convertParamsToArray($ci));
+        $object = $reflection->newInstanceArgs($ci->getValue($this->serviceLocator));
 
         /**
          * @var string $methodName
          * @var InjectParams $injection
          */
         foreach ($mi as $methodName => $injection) {
+            if (is_callable([$object, $methodName])) {
+                call_user_func_array([$object, $methodName], $injection->getValue($this->serviceLocator));
+                continue;
+            }
+
             $reflection = new \ReflectionMethod($fqcn, $methodName);
-
-            if (!$reflection->isPublic()) {
-                $reflection->setAccessible(true);
-            }
-
-            $reflection->invokeArgs($object, $this->convertParamsToArray($injection));
-
-            if (!$reflection->isPublic()) {
-                $reflection->setAccessible(false);
-            }
+            $reflection->setAccessible(true);
+            $reflection->invokeArgs($object, $injection->getValue($this->serviceLocator));
+            $reflection->setAccessible(false);
         }
 
         /**
@@ -52,34 +50,19 @@ class Instantiator
          * @var Inject $injection
          */
         foreach ($pi as $propertyName => $injection) {
-            $reflection = new \ReflectionProperty($fqcn, $propertyName);
-            $value = $injection->getObject($this->serviceLocator);
+            $value = $injection->getValue($this->serviceLocator);
 
-            if (!$reflection->isPublic()) {
-                $reflection->setAccessible(true);
-                $reflection->setValue($object, $value);
-                $reflection->setAccessible(false);
-            } else {
+            if (isset(get_object_vars($object)[$propertyName])) {
                 $object->$propertyName = $value;
+                continue;
             }
+
+            $reflection = new \ReflectionProperty($fqcn, $propertyName);
+            $reflection->setAccessible(true);
+            $reflection->setValue($object, $value);
+            $reflection->setAccessible(false);
         }
 
         return $object;
-    }
-
-    /**
-     * Converts injectParams object into array of parameters.
-     *
-     * @param InjectParams|Inject[] $injections
-     * @return array
-     */
-    protected function convertParamsToArray(InjectParams $injections)
-    {
-        $params = [];
-        foreach ($injections as $param) {
-            $params[] = $param->getObject($this->serviceLocator);
-        }
-
-        return $params;
     }
 }

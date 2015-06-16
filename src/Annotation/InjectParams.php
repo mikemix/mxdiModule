@@ -1,11 +1,12 @@
 <?php
 namespace mxdiModule\Annotation;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @Annotation
  * @Target("METHOD")
  */
-final class InjectParams implements \IteratorAggregate
+final class InjectParams implements \IteratorAggregate, Annotation
 {
     /** @var array */
     public $value = [];
@@ -17,5 +18,21 @@ final class InjectParams implements \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->value);
+    }
+
+    /**
+     * @param ServiceLocatorInterface $sm
+     * @return mixed
+     */
+    public function getValue(ServiceLocatorInterface $sm = null)
+    {
+        $value = [];
+
+        /** @var Inject $injection */
+        foreach ($this as $injection) {
+            $value[] = $injection->getValue($sm);
+        }
+
+        return $value;
     }
 }
