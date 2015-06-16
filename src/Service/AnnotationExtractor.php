@@ -2,7 +2,7 @@
 namespace mxdiModule\Service;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use mxdiModule\Annotation\Inject;
+use mxdiModule\Annotation\Annotation;
 use mxdiModule\Annotation\InjectParams;
 
 class AnnotationExtractor
@@ -51,7 +51,7 @@ class AnnotationExtractor
 
             $inject = $this->reader->getMethodAnnotation(
                 new \ReflectionMethod($fqcn, $name),
-                InjectParams::class
+                Annotation::class
             );
 
             if (null !== $inject) {
@@ -76,7 +76,7 @@ class AnnotationExtractor
         foreach ($reflection->getProperties() as $property) {
             $inject = $this->reader->getPropertyAnnotation(
                 new \ReflectionProperty($fqcn, $property->getName()),
-                Inject::class
+                Annotation::class
             );
 
             if (null !== $inject) {
