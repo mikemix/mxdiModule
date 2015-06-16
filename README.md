@@ -43,7 +43,7 @@ For now following injections are available:
 * property injection via `@Inject` annotation
    * set `invokable=true` to bypass service manager, useful with simple POPO's
 
-DI for private/protected methods is available altough not recommended, to avoid costly reflection.
+DI for private/protected methods/properties is available altough not recommended to avoid costly reflection.
 
 ### Example class:
 
