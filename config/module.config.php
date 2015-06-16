@@ -9,4 +9,7 @@ return [
             mxdiModule\Factory\DiAbstractFactory::class,
         ],
     ],
+    'mxdimodule' => [
+        'cache_adapter' => 'filesystem'
+    ],
 ];
