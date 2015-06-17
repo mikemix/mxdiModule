@@ -4,6 +4,7 @@ namespace mxdiModuleTest\Factory;
 use mxdiModule\Factory\DiAbstractFactory;
 use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\ChangeSet;
+use mxdiModule\Service\Instantiator;
 use mxdiModuleTest\TestCase;
 use mxdiModuleTest\TestObjects\Injectable;
 use Zend\Cache\Storage\Adapter;
@@ -23,6 +24,9 @@ class DiAbstractFactoryTest extends TestCase
 
     /** @var DiAbstractFactory */
     protected $factory;
+
+    /** @var Instantiator|\PHPUnit_Framework_MockObject_MockObject */
+    protected $instantiator;
 
     public function setUp()
     {
@@ -53,7 +57,12 @@ class DiAbstractFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->factory = new DiAbstractFactory($this->extractor);
+        $this->instantiator = $this->getMockBuilder(Instantiator::class)
+            ->setMethods(['create', 'setServiceLocator'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->factory = new DiAbstractFactory($this->extractor, $this->instantiator);
     }
 
     public function testCanCreateServiceWithNameGetsCachedResultIfAvailable()
@@ -85,21 +94,54 @@ class DiAbstractFactoryTest extends TestCase
         );
     }
 
-    public function testCanCreateServiceWithNameSetsResultInCache()
+    public function testCanCreateServiceWithNameSetsFalseInCacheIfNotAnnotated()
     {
         $result = $this->getMockBuilder(ChangeSet::class)
             ->disableOriginalConstructor()
             ->setMethods(['isAnnotated'])
             ->getMock();
 
+        $result->expects($this->any())
+            ->method('isAnnotated')
+            ->will($this->returnValue(false));
+
         $this->extractor->expects($this->once())
             ->method('getChangeSet')
             ->with($this->equalTo(Injectable::class))
             ->will($this->returnValue($result));
 
-        $result->expects($this->once())
-            ->method('isAnnotated')
+        $this->cacheAdapter->expects($this->once())
+            ->method('hasItem')
+            ->with($this->equalTo('injectable'))
             ->will($this->returnValue(false));
+
+        $this->cacheAdapter->expects($this->never())
+            ->method('getItem');
+
+        $this->cacheAdapter->expects($this->once())
+            ->method('setItem')
+            ->with($this->equalTo('injectable'), $this->equalTo(false));
+
+        $this->assertFalse(
+            $this->factory->canCreateServiceWithName($this->serviceLocator, 'injectable', Injectable::class)
+        );
+    }
+
+    public function testCanCreateServiceWithNameSetsResultInCacheIfAnnotated()
+    {
+        $result = $this->getMockBuilder(ChangeSet::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isAnnotated'])
+            ->getMock();
+
+        $result->expects($this->any())
+            ->method('isAnnotated')
+            ->will($this->returnValue(true));
+
+        $this->extractor->expects($this->once())
+            ->method('getChangeSet')
+            ->with($this->equalTo(Injectable::class))
+            ->will($this->returnValue($result));
 
         $this->cacheAdapter->expects($this->once())
             ->method('hasItem')
@@ -113,9 +155,26 @@ class DiAbstractFactoryTest extends TestCase
             ->method('setItem')
             ->with($this->equalTo('injectable'), $this->equalTo($result));
 
-        $this->assertFalse(
+        $this->assertTrue(
             $this->factory->canCreateServiceWithName($this->serviceLocator, 'injectable', Injectable::class)
         );
+    }
+
+    public function testCreateService()
+    {
+        /** @var ChangeSet|\PHPUnit_Framework_MockObject_MockObject $changeSet */
+        $changeSet = $this->getMockBuilder(ChangeSet::class)->disableOriginalConstructor()->getMock();
+
+        $this->instantiator->expects($this->once())
+            ->method('setServiceLocator')
+            ->with($this->equalTo($this->serviceLocator));
+
+        $this->instantiator->expects($this->once())
+            ->method('create')
+            ->with($this->equalTo('fqcn'), $this->equalTo($changeSet));
+
+        $this->factory->setChangeSet($changeSet);
+        $this->factory->createServiceWithName($this->serviceLocator, 'name', 'fqcn');
     }
 
     public function testFactoryAvoidsConfiguredServices()

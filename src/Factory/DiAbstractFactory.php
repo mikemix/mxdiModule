@@ -60,10 +60,12 @@ class DiAbstractFactory implements AbstractFactoryInterface
             $this->changeSet = $this->cache->getItem($name);
         } else {
             $this->changeSet = $this->extractor->getChangeSet($requestedName);
+            $this->changeSet = $this->changeSet->isAnnotated() ? $this->changeSet : false;
+
             $this->cache->setItem($name, $this->changeSet);
         }
 
-        return $this->changeSet->isAnnotated();
+        return $this->changeSet && $this->changeSet->isAnnotated();
     }
 
     /**
@@ -78,5 +80,13 @@ class DiAbstractFactory implements AbstractFactoryInterface
     {
         $this->instantiator->setServiceLocator($serviceLocator);
         return $this->instantiator->create($requestedName, $this->changeSet);
+    }
+
+    /**
+     * @param ChangeSet $changeSet
+     */
+    public function setChangeSet(ChangeSet $changeSet)
+    {
+        $this->changeSet = $changeSet;
     }
 }
