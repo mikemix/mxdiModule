@@ -16,8 +16,8 @@ final class InjectConfig implements Annotation
     /**
      * Get the value.
      *
-     * @param ServiceLocatorInterface|null $sm
-     * @return object
+     * @param ServiceLocatorInterface $sm
+     * @return mixed
      *
      * @throws CannotGetValue
      */
