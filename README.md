@@ -42,8 +42,6 @@ For now following injections are available:
    * example usage: `@Inject("service_name")` where service_name is registered in the ZF2's Service Manager
    * set `invokable=true` to bypass service manager, useful with simple POPO's
 * ZF2 configuration injection via `@InjectConfig` annotation
-   * set `default=value` to customize default value (default is null)
-   * set `default=[]` to set default value to empty array
 
 DI for private/protected methods/properties is available altough not recommended to avoid costly reflection.
 
@@ -84,7 +82,7 @@ class Injectable
      * @var string
      * @DI\InjectConfig("doctrine.connection.orm_default.params")
      */
-    private $doctrineConnectionSettings;
+    private $doctrineConnectionSettings = [];
 
     /**
      * Constructor injection.
