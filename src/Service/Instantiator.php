@@ -10,9 +10,12 @@ class Instantiator
     /** @var ServiceLocatorInterface */
     protected $serviceLocator;
 
-    public function __construct(ServiceLocatorInterface $sm)
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->serviceLocator = $sm;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
@@ -24,6 +27,10 @@ class Instantiator
      */
     public function create($fqcn, ChangeSet $changeSet)
     {
+        if (!$this->serviceLocator) {
+            throw new \InvalidArgumentException('Service locator is mandatory');
+        }
+
         if ($changeSet->hasSimpleConstructor()) {
             $object = new $fqcn;
         } else {

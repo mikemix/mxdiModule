@@ -19,12 +19,16 @@ class DiAbstractFactory implements AbstractFactoryInterface
     /** @var AnnotationExtractor */
     protected $extractor;
 
+    /** @var Instantiator */
+    protected $instantiator;
+
     /** @var StorageInterface|AbstractAdapter */
     protected $cache;
 
-    public function __construct(AnnotationExtractor $extractor = null)
+    public function __construct(AnnotationExtractor $extractor = null, Instantiator $instantiator = null)
     {
         $this->extractor = $extractor ?: new AnnotationExtractor();
+        $this->instantiator = $instantiator ?: new Instantiator();
     }
 
     /**
@@ -72,7 +76,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $instantiator = new Instantiator($serviceLocator);
-        return $instantiator->create($requestedName, $this->changeSet);
+        $this->instantiator->setServiceLocator($serviceLocator);
+        return $this->instantiator->create($requestedName, $this->changeSet);
     }
 }

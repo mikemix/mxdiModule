@@ -20,7 +20,8 @@ class InstantiatorTest extends TestCase
 
     public function setUp()
     {
-        $this->service = new Instantiator($this->getServiceManager());
+        $this->service = new Instantiator();
+        $this->service->setServiceLocator($this->getServiceManager());
     }
 
     public function testCreate()
