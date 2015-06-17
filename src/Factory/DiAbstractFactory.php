@@ -51,7 +51,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         if (!$this->cache) {
             $this->cache = StorageFactory::adapterFactory($config['cache_adapter'], $config['cache_options']);
-            if (is_callable([$this->cache, ['addPlugin']])) {
+            if ($this->cache instanceof AbstractAdapter) {
                 $this->cache->addPlugin(new Serializer());
             }
         }
