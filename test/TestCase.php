@@ -35,4 +35,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
         return $this->sm;
     }
+
+    /**
+     * @param array $config
+     */
+    public function setServiceManagerConfig(array $config)
+    {
+        $this->config = $config;
+    }
 }
