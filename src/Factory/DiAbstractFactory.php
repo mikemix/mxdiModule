@@ -13,6 +13,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class DiAbstractFactory implements AbstractFactoryInterface
 {
+    /** @var array */
+    protected $config;
+
     /** @var ChangeSet|mixed */
     protected $changeSet;
 
@@ -41,22 +44,16 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $config = (array)$serviceLocator->get('config')['mxdimodule'];
-        $knownServices = $config['avoid_service'];
+        if (! $this->config) {
+            $this->config = (array)$serviceLocator->get('config')['mxdimodule'];
+        }
 
-        if (isset($knownServices[$name]) && $knownServices[$name]) {
+        if (isset($this->config['avoid_service'][$name]) && $this->config['avoid_service'][$name]) {
             // avoid known services
             return false;
         }
 
-        if (!$this->cache) {
-            $this->cache = StorageFactory::adapterFactory($config['cache_adapter'], $config['cache_options']);
-            if ($this->cache instanceof AbstractAdapter) {
-                $this->cache->addPlugin(new Serializer());
-            }
-        }
-
-        $this->changeSet = $this->cache->getItem($name);
+        $this->changeSet = $this->getCache()->getItem($name);
 
         if ($this->changeSet instanceof ChangeSet) {
             // Positive result available via cache
@@ -70,13 +67,13 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         if ($this->changeSet->isAnnotated()) {
             // Service is annotated to cache results
-            $this->cache->setItem($name, $this->changeSet);
+            $this->getCache()->setItem($name, $this->changeSet);
             return true;
         }
 
         // Service is not annotated
         // Cache false for it
-        $this->cache->setItem($name, false);
+        $this->getCache()->setItem($name, false);
         return false;
     }
 
@@ -92,5 +89,28 @@ class DiAbstractFactory implements AbstractFactoryInterface
     {
         $this->instantiator->setServiceLocator($serviceLocator);
         return $this->instantiator->create($requestedName, $this->changeSet);
+    }
+
+    /**
+     * Get cache adapter
+     *
+     * @return AbstractAdapter|StorageInterface
+     */
+    protected function getCache()
+    {
+        if ($this->cache) {
+            return $this->cache;
+        }
+
+        $this->cache = StorageFactory::adapterFactory(
+            $this->config['cache_adapter'],
+            $this->config['cache_options']
+        );
+
+        if ($this->cache instanceof AbstractAdapter) {
+            $this->cache->addPlugin(new Serializer());
+        }
+
+        return $this->cache;
     }
 }
