@@ -3,6 +3,7 @@
     "description": "Configure dependency injection using annotations",
     "keywords": [
         "zf2",
+        "zendframework",
         "di",
         "dependency injection",
         "annotations"
@@ -22,8 +23,7 @@
         "zendframework/zend-cache": "~2.5"
     },
     "require-dev": {
-        "phpunit/phpunit" : "~3.7",
-        "scrutinizer/ocular": "~1.1"
+        "phpunit/phpunit" : "~3.7"
     },
     "autoload": {
         "psr-4": {
