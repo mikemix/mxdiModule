@@ -12,10 +12,10 @@ class ChangeSet
     /** @var bool */
     protected $hasSimpleConstructor;
 
-    /** @var InjectParams|null */
+    /** @var InjectParams[] */
     protected $methodsInjections;
 
-    /** @var array|Inject[] */
+    /** @var Inject[] */
     protected $propertiesInjections;
 
     /** @var bool */
@@ -31,7 +31,7 @@ class ChangeSet
 
         $this->isAnnotated =
             $this->constructorInjections ||
-            $this->methodsInjections ||
+            count($this->methodsInjections) ||
             count($this->propertiesInjections);
     }
 

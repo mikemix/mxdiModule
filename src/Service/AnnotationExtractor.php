@@ -3,6 +3,7 @@ namespace mxdiModule\Service;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use mxdiModule\Annotation\Annotation;
+use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 
 class AnnotationExtractor
@@ -17,7 +18,7 @@ class AnnotationExtractor
 
     /**
      * @param string $fqcn
-     * @return \mxdiModule\Annotation\InjectParams|null
+     * @return InjectParams|null
      */
     public function getConstructorInjections($fqcn)
     {
@@ -35,7 +36,7 @@ class AnnotationExtractor
      * Get methods injections (except the constructor).
      *
      * @param string $fqcn
-     * @return \mxdiModule\Annotation\InjectParams[]
+     * @return InjectParams[]
      */
     public function getMethodsInjections($fqcn)
     {
@@ -66,7 +67,7 @@ class AnnotationExtractor
      * Get properties injections (except the constructor).
      *
      * @param string $fqcn
-     * @return \mxdiModule\Annotation\Inject[]
+     * @return Inject[]
      */
     public function getPropertiesInjections($fqcn)
     {
