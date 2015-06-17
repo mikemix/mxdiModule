@@ -39,8 +39,10 @@ final class DiFactory implements ServiceLocatorAwareInterface
      */
     public function get($fqcn)
     {
-        if ($this->diAbstractFactory->canCreateServiceWithName($this->serviceLocator, '', $fqcn)) {
-            return $this->diAbstractFactory->createServiceWithName($this->serviceLocator, '', $fqcn);
+        $serviceName = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $fqcn));
+
+        if ($this->diAbstractFactory->canCreateServiceWithName($this->serviceLocator, $serviceName, $fqcn)) {
+            return $this->diAbstractFactory->createServiceWithName($this->serviceLocator, $serviceName, $fqcn);
         }
 
         throw CannotCreateService::forClass($fqcn);
