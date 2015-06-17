@@ -13,7 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class DiAbstractFactory implements AbstractFactoryInterface
 {
-    /** @var ChangeSet */
+    /** @var ChangeSet|mixed */
     protected $changeSet;
 
     /** @var AnnotationExtractor */
@@ -56,16 +56,28 @@ class DiAbstractFactory implements AbstractFactoryInterface
             }
         }
 
-        if ($this->cache->hasItem($name)) {
-            $this->changeSet = $this->cache->getItem($name);
-        } else {
-            $this->changeSet = $this->extractor->getChangeSet($requestedName);
-            $this->changeSet = $this->changeSet->isAnnotated() ? $this->changeSet : false;
+        $this->changeSet = $this->cache->getItem($name);
 
-            $this->cache->setItem($name, $this->changeSet);
+        if ($this->changeSet instanceof ChangeSet) {
+            // Positive result available via cache
+            // Because we don't allow not annotated results to be set there
+            return true;
         }
 
-        return $this->changeSet && $this->changeSet->isAnnotated();
+        // Result is not available via cache
+        // Calculate the result first
+        $this->changeSet = $this->extractor->getChangeSet($requestedName);
+
+        if ($this->changeSet->isAnnotated()) {
+            // Service is annotated to cache results
+            $this->cache->setItem($name, $this->changeSet);
+            return true;
+        }
+
+        // Service is not annotated
+        // Cache false for it
+        $this->cache->setItem($name, false);
+        return false;
     }
 
     /**
@@ -80,13 +92,5 @@ class DiAbstractFactory implements AbstractFactoryInterface
     {
         $this->instantiator->setServiceLocator($serviceLocator);
         return $this->instantiator->create($requestedName, $this->changeSet);
-    }
-
-    /**
-     * @param ChangeSet $changeSet
-     */
-    public function setChangeSet(ChangeSet $changeSet)
-    {
-        $this->changeSet = $changeSet;
     }
 }

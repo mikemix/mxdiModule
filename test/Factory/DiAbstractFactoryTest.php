@@ -31,7 +31,7 @@ class DiAbstractFactoryTest extends TestCase
     public function setUp()
     {
         $this->cacheAdapter = $this->getMockBuilder(StorageInterface::class)
-            ->setMethods(['hasItem', 'getItem', 'setItem'])
+            ->setMethods(['getItem', 'setItem'])
             ->getMockForAbstractClass();
 
         $this->serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
@@ -65,21 +65,11 @@ class DiAbstractFactoryTest extends TestCase
         $this->factory = new DiAbstractFactory($this->extractor, $this->instantiator);
     }
 
-    public function testCanCreateServiceWithNameGetsCachedResultIfAvailable()
+    public function testCanCreateServiceWithNameReturnsResultFromCache()
     {
         $result = $this->getMockBuilder(ChangeSet::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAnnotated'])
             ->getMock();
-
-        $result->expects($this->once())
-            ->method('isAnnotated')
-            ->will($this->returnValue(true));
-
-        $this->cacheAdapter->expects($this->once())
-            ->method('hasItem')
-            ->with($this->equalTo('injectable'))
-            ->will($this->returnValue(true));
 
         $this->cacheAdapter->expects($this->once())
             ->method('getItem')
@@ -94,8 +84,13 @@ class DiAbstractFactoryTest extends TestCase
         );
     }
 
-    public function testCanCreateServiceWithNameSetsFalseInCacheIfNotAnnotated()
+    public function testCanCreateServiceWithNameSetsFalseInCacheIfServiceNotAnnotated()
     {
+        $this->cacheAdapter->expects($this->once())
+            ->method('getItem')
+            ->with($this->equalTo('injectable'))
+            ->will($this->returnValue(false));
+
         $result = $this->getMockBuilder(ChangeSet::class)
             ->disableOriginalConstructor()
             ->setMethods(['isAnnotated'])
@@ -109,14 +104,6 @@ class DiAbstractFactoryTest extends TestCase
             ->method('getChangeSet')
             ->with($this->equalTo(Injectable::class))
             ->will($this->returnValue($result));
-
-        $this->cacheAdapter->expects($this->once())
-            ->method('hasItem')
-            ->with($this->equalTo('injectable'))
-            ->will($this->returnValue(false));
-
-        $this->cacheAdapter->expects($this->never())
-            ->method('getItem');
 
         $this->cacheAdapter->expects($this->once())
             ->method('setItem')
@@ -144,12 +131,9 @@ class DiAbstractFactoryTest extends TestCase
             ->will($this->returnValue($result));
 
         $this->cacheAdapter->expects($this->once())
-            ->method('hasItem')
+            ->method('getItem')
             ->with($this->equalTo('injectable'))
             ->will($this->returnValue(false));
-
-        $this->cacheAdapter->expects($this->never())
-            ->method('getItem');
 
         $this->cacheAdapter->expects($this->once())
             ->method('setItem')
@@ -173,11 +157,14 @@ class DiAbstractFactoryTest extends TestCase
             ->method('create')
             ->with($this->equalTo('fqcn'), $this->equalTo($changeSet));
 
-        $this->factory->setChangeSet($changeSet);
+        $property = new \ReflectionProperty(DiAbstractFactory::class, 'changeSet');
+        $property->setAccessible(true);
+        $property->setValue($this->factory, $changeSet);
+
         $this->factory->createServiceWithName($this->serviceLocator, 'name', 'fqcn');
     }
 
-    public function testFactoryAvoidsConfiguredServices()
+    public function testFactoryAvoidsKnownServices()
     {
         $this->assertFalse(
             $this->factory->canCreateServiceWithName($this->serviceLocator, 'servicename', 'fqcn')
