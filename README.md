@@ -167,7 +167,7 @@ class UsersService
 }
 ```
 
-### CACHING
+### Caching
 
 Annotation parsing is very heavy. You should enable the cache on production servers.
 
@@ -178,6 +178,12 @@ to your `config/autoload` directory, for example:
 
 and override the `cache_adapter` and `cache_options` keys for your needs. You can find more information about
 available out-of-the-box adapters at the [ZF2 docs site](http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html).
+
+### Debugging
+
+If you get *ServiceNotCreated* exception most probably one of your injections is not registered in the ZF2's Service
+ Manager. In the exception stack you will see some more detailed information. For instance look for *CannotGetValue*
+ exceptions.
 
 ### TODO
 
