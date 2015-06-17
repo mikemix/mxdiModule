@@ -12,6 +12,9 @@ class DiFactoryTest extends TestCase
     /** @var DiAbstractFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $abstractFactory;
 
+    /** @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $sm;
+
     /** @var DiFactory */
     private $factory;
 
@@ -22,21 +25,22 @@ class DiFactoryTest extends TestCase
             ['canCreateServiceWithName', 'createServiceWithName']
         );
 
-        $sm = $this->getMockBuilder(ServiceLocatorInterface::class)
+        $this->sm = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->getMockForAbstractClass();
 
         $this->factory = new DiFactory($this->abstractFactory);
-        $this->factory->setServiceLocator($sm);
+        $this->factory->setServiceLocator($this->sm);
     }
 
     public function testGetThrowsExceptionWhenNotServiceNotAnnotated()
     {
         $this->abstractFactory->expects($this->once())
             ->method('canCreateServiceWithName')
+            ->with($this->equalTo($this->sm), $this->equalTo('namespacefqcn'), $this->equalTo('namespace\FQCN'))
             ->will($this->returnValue(false));
 
         $this->setExpectedException(CannotCreateService::class);
-        $this->factory->get('fqcn');
+        $this->factory->get('namespace\FQCN');
     }
 
     public function testReturnObjectWithAnnotatedService()
