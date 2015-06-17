@@ -46,4 +46,15 @@ class InjectParamsTest extends TestCase
 
         $this->assertEquals(['A', 'B'], $params->getValue($sm));
     }
+
+    public function testIsCountable()
+    {
+        $params = new InjectParams();
+
+        $this->assertCount(0, $params);
+
+        $params->value = [new Inject(), new Inject()];
+
+        $this->assertCount(2, $params);
+    }
 }
