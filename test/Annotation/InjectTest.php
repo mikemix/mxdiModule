@@ -4,7 +4,6 @@ namespace mxdiModuleTest\Annotation;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Exception\CannotGetValue;
 use mxdiModuleTest\TestCase;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class InjectTest extends TestCase
