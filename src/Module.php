@@ -18,7 +18,8 @@ class Module
     public function annotationAutoloader($class)
     {
         if (strpos($class, 'mxdiModule\\Annotation') !== false) {
-            require_once sprintf('%s/Annotation/%s.php', __DIR__, basename($class));
+            $file = substr($class, strrpos($class, '\\')+1);
+            require_once sprintf('%s/Annotation/%s.php', __DIR__, $file);
             return true;
         }
 
