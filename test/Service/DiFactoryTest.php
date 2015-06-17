@@ -53,5 +53,14 @@ class DiFactoryTest extends TestCase
 
         $this->assertSame($obj, $this->factory->get('fqcn'));
     }
+
+    public function testIsInvokable()
+    {
+        $this->abstractFactory->expects($this->once())
+            ->method('canCreateServiceWithName')
+            ->will($this->returnValue(false));
+
+        $this->setExpectedException(CannotCreateService::class);
+        $this->factory->__invoke('fqcn');
+    }
 }
- 
