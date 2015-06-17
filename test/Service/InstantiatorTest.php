@@ -126,6 +126,6 @@ class InstantiatorTest extends TestCase
         $this->assertInstanceOf(Instantiator::class, $object->getServicePropertyInjection());
         $this->assertInternalType('string', $object->getConfigInjectionScalar());
         $this->assertNotEmpty($object->getConfigInjectionArray());
-        //$this->assertInternalType('string', $object->getConfigDefaultValue());
+        $this->assertInternalType('array', $object->getConfigDefaultValue());
     }
 }

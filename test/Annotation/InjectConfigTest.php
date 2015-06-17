@@ -2,6 +2,7 @@
 namespace mxdiModuleTest\Annotation;
 
 use mxdiModule\Annotation\InjectConfig;
+use mxdiModule\Exception\CannotGetValue;
 use mxdiModuleTest\TestCase;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -28,24 +29,16 @@ class InjectConfigTest extends TestCase
             ]));
     }
 
-    public function testGetDefaultValueNull()
+    public function testGetValueThrowsExceptionOnMissingKey()
     {
         $inject = new InjectConfig();
-        $inject->value = 'fake.test.test';
+        $inject->value = 'fake';
 
-        $this->assertNull($inject->getValue($this->sm));
+        $this->setExpectedException(CannotGetValue::class);
+        $inject->getValue($this->sm);
     }
 
-    public function testGetDefaultValue()
-    {
-        $inject = new InjectConfig();
-        $inject->value = 'fake.test.test';
-        $inject->default = 't3st';
-
-        $this->assertEquals('t3st', $inject->getValue($this->sm));
-    }
-
-    public function testGetConfigReturnScalar()
+    public function testGetValueReturnScalar()
     {
         $inject = new InjectConfig();
         $inject->value = 'mxdimodule.adapters.test';
@@ -53,16 +46,7 @@ class InjectConfigTest extends TestCase
         $this->assertEquals('value', $inject->getValue($this->sm));
     }
 
-    public function testGetDefaultValueEmptyArray()
-    {
-        $inject = new InjectConfig();
-        $inject->value = 'fake.test.test';
-        $inject->default = '[]';
-
-        $this->assertEquals([], $inject->getValue($this->sm));
-    }
-
-    public function testGetConfigReturnArray()
+    public function testGetValueReturnArray()
     {
         $inject = new InjectConfig();
         $inject->value = 'mxdimodule';

@@ -3,6 +3,7 @@ namespace mxdiModule\Service;
 
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
+use mxdiModule\Exception\CannotGetValue;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Instantiator
@@ -61,7 +62,11 @@ class Instantiator
          * @var Inject $injection
          */
         foreach ($changeSet->getPropertiesInjections() as $propertyName => $injection) {
-            $value = $injection->getValue($this->serviceLocator);
+            try {
+                $value = $injection->getValue($this->serviceLocator);
+            } catch (CannotGetValue $e) {
+                continue;
+            }
 
             if (isset(get_object_vars($object)[$propertyName])) {
                 $object->$propertyName = $value;

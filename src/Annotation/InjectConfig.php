@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModule\Annotation;
 
+use mxdiModule\Exception\CannotGetValue;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -12,14 +13,13 @@ final class InjectConfig implements Annotation
     /** @var string */
     public $value;
 
-    /** @var mixed */
-    public $default = null;
-
     /**
      * Get the value.
      *
      * @param ServiceLocatorInterface|null $sm
      * @return object
+     *
+     * @throws CannotGetValue
      */
     public function getValue(ServiceLocatorInterface $sm)
     {
@@ -29,11 +29,7 @@ final class InjectConfig implements Annotation
             // Return default value
         }
 
-        if ('[]' === $this->default) {
-            return [];
-        }
-
-        return $this->default;
+        throw CannotGetValue::of($this->value);
     }
 
     protected function read(array $config, $value)
