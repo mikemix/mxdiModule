@@ -5,8 +5,6 @@ Configure dependency injection in Zend Framework 2 using annotations.
 
 Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBundle) for the Symfony2 project.
 
-## This code is still in active development and should not be used on production!
-
 ### Installation
 
 Install with Composer.
