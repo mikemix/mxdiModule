@@ -3,7 +3,9 @@ namespace mxdiModuleTest\Service;
 
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
+use mxdiModule\Module;
 use mxdiModule\Service\ChangeSet;
+use mxdiModule\Service\DiFactory;
 use mxdiModule\Service\Instantiator;
 use mxdiModuleTest\TestCase;
 use mxdiModuleTest\TestObjects\DependencyA;
@@ -12,6 +14,7 @@ use mxdiModuleTest\TestObjects\DependencyC;
 use mxdiModuleTest\TestObjects\DependencyD;
 use mxdiModuleTest\TestObjects\DependencyE;
 use mxdiModuleTest\TestObjects\Injectable;
+use mxdiModuleTest\TestObjects\IntegrationTest;
 
 class InstantiatorTest extends TestCase
 {
@@ -101,5 +104,28 @@ class InstantiatorTest extends TestCase
         $this->assertInstanceOf(DependencyC::class, $object->getDependencyC());
         $this->assertInstanceOf(DependencyD::class, $object->getDependencyD());
         $this->assertInstanceOf(DependencyE::class, $object->getDependencyE());
+    }
+
+    /**
+     * Integration test to ultimately check if module is working correctly.
+     * Check all features as well.
+     */
+    public function testCreateIntegration()
+    {
+        $config = (new Module())->getConfig();
+        $config['service_manager']['invokables'][DiFactory::class] = DiFactory::class;
+
+        $this->setServiceManagerConfig($config['service_manager']);
+        $this->getServiceManager()->setService('config', $config);
+
+        /** @var IntegrationTest $object */
+        $object = $this->getServiceManager()->get(IntegrationTest::class);
+
+        $this->assertInstanceOf(DiFactory::class, $object->getConstructorInjection());
+        $this->assertInstanceOf(DiFactory::class, $object->getServiceMethodInjection());
+        $this->assertInstanceOf(Instantiator::class, $object->getServicePropertyInjection());
+        $this->assertInternalType('string', $object->getConfigInjectionScalar());
+        $this->assertNotEmpty($object->getConfigInjectionArray());
+        //$this->assertInternalType('string', $object->getConfigDefaultValue());
     }
 }
