@@ -32,7 +32,7 @@ return [
 ];
 ```
 
-This will enable the module and register the Abstract Factory with the Service Manager.
+This will enable the module and register the Abstract Factory in the ZF2's Service Manager.
 
 ### Annotation mapping
 
@@ -41,6 +41,7 @@ For now following injections are available:
 * constructor injection via `@InjectParams` annotation
 * method injection via `@InjectParams` annotation
 * property injection via `@Inject` annotation
+   * example usage: `@Inject("service_name")` where service_name is registered in the ZF2's Service Manager
    * set `invokable=true` to bypass service manager, useful with simple POPO's
 * ZF2 configuration injection via `@InjectConfig` annotation
    * set `default=value` to customize default value (default is null)
@@ -121,13 +122,10 @@ class Injectable
 }
 ```
 
-The `@Inject` annotation requires valid service name, registered as ZF2 service in the Service Manager.
+*Remember*, the service which is being injected must not be registered in the Service Manager. If you register it as factory or invokable, it won't go through the Abstract Factory and won't get injected. By the way, this allows you to create custom factory for the service in mention.
 
-The requested service must not be registered in the Service Manager, because it must go through the Abstract Factory of
-the Module. This allows you to create custom factory for the service by the way.
-
-The order of the `@Inject` annotations inside the `@InjectParams` is important as with this order parameters will be
-passed to the method. Wrong order will result in PHP's errors.
+The order of the `@Inject` annotations inside the `@InjectParams` *is important* as with this order parameters will be
+passed to the method/constructor. Wrong order will result in PHP's errors.
 
 To speed up locate time you can request the service through the DiFactory invokable, for example:
 
@@ -183,11 +181,11 @@ to your `config/autoload` directory, for example:
 `cp vendor/mikemix/mxdi-module/config/mxdimodule.local.php.dist config/autoload/mxdimodule.local.php`
 
 and override the `cache_adapter` and `cache_options` keys for your needs. You can find more information about
-caching adapter at the [ZF2 docs site](http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html).
+available out-of-the-box adapters at the [ZF2 docs site](http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html).
 
 ### TODO
 
 * ~~Caching !!!~~
-* ~~Injecting ZF2's configuration params for example `@Inject("%doctrine.connection.orm_default%")`~~
+* ~~Injecting ZF2's configuration params for example `@InjectConfig("doctrine.connection.orm_default")`~~
 * Increase test coverage and code rating
-* Lazy injections via `@InjectLazy` :o !!!
+* Lazy injections via `@InjectLazy` or `lazy=true` flag :o !!!
