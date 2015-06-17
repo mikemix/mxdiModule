@@ -21,7 +21,17 @@ class InstantiatorTest extends TestCase
     public function setUp()
     {
         $this->service = new Instantiator();
-        $this->service->setServiceLocator($this->getServiceManager());
+    }
+
+    public function testCreateThrowsExceptionWithNoServiceLocator()
+    {
+        /** @var ChangeSet|\PHPUnit_Framework_MockObject_MockObject $changeSet */
+        $changeSet = $this->getMockBuilder(ChangeSet::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->setExpectedException('InvalidArgumentException');
+        $this->service->create('fqcn', $changeSet);
     }
 
     public function testCreate()
@@ -79,6 +89,8 @@ class InstantiatorTest extends TestCase
         $changeSet->expects($this->once())
             ->method('getPropertiesInjections')
             ->will($this->returnValue(['dependencyE' => $dependencyE]));
+
+        $this->service->setServiceLocator($this->getServiceManager());
 
         /** @var Injectable $object */
         $object = $this->service->create(Injectable::class, $changeSet);
