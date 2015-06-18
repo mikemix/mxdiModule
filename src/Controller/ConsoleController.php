@@ -1,7 +1,6 @@
 <?php
 namespace mxdiModule\Controller;
 
-use Zend\Console\Adapter\AdapterInterface;
 use Zend\Mvc\Controller\AbstractConsoleController;
 
 class ConsoleController extends AbstractConsoleController
@@ -15,12 +14,12 @@ class ConsoleController extends AbstractConsoleController
     {
         $config = $this->getServiceLocator()->get('config');
         if (! isset($config['mxdimodule']['proxy_dir']) || empty($config['mxdimodule']['proxy_dir'])) {
-            $this->console()->writeLine('Proxy dir is not set or empty');
+            $this->getConsole()->writeLine('Proxy dir is not set or empty');
             return -1;
         }
 
         if (! is_dir($config['mxdimodule']['proxy_dir'])) {
-            $this->console()->writeLine('Proxy dir does not exist');
+            $this->getConsole()->writeLine('Proxy dir does not exist');
             return -1;
         }
 
@@ -29,13 +28,5 @@ class ConsoleController extends AbstractConsoleController
         }
 
         return 0;
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    protected function console()
-    {
-        return $this->getServiceLocator()->get('console');
     }
 }
