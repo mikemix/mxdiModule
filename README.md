@@ -182,6 +182,10 @@ to your `config/autoload` directory, for example:
 and override the `cache_adapter` and `cache_options` keys for your needs. You can find more information about
 available out-of-the-box adapters at the [ZF2 docs site](http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html).
 
+### Lazy injection
+
+Make sure to copy dist config file mentioned above and set the `proxy_dir` accordingly. Make sure this directory exists and is writable by the webserver.
+
 ### Debugging
 
 If you get *ServiceNotCreated* exception most probably one of your injections is not registered in the ZF2's Service
