@@ -13,6 +13,9 @@ final class InjectConfig implements Annotation
     /** @var string */
     public $value;
 
+    /** @var string */
+    public $splitter = '-!splitter-';
+
     /**
      * Get the value.
      *
@@ -46,12 +49,18 @@ final class InjectConfig implements Annotation
             return $config[$configKey];
         }
 
-        $keys = explode('.', $configKey);
+        $splitter = $this->splitter;
+        $keys = array_map(function ($item) use ($splitter) {
+            return str_replace($splitter, '.', $item);
+        }, explode('.', str_replace('\.', $splitter, $configKey)));
 
         foreach ($keys as $key) {
             if (isset($config[$key]) && is_array($config[$key])) {
                 array_shift($keys);
-                return $this->read($config[$key], implode('.', $keys));
+                $input = implode('.', array_map(function ($item) {
+                    return str_replace('.', '\.', $item);
+                }, $keys));
+                return $this->read($config[$key], $input);
             }
         }
 

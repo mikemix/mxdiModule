@@ -17,7 +17,7 @@ class InjectConfigTest extends TestCase
             ->setMethods(['get'])
             ->getMockForAbstractClass();
 
-        $this->sm->expects($this->once())
+        $this->sm->expects($this->any())
             ->method('get')
             ->with($this->equalTo('config'))
             ->will($this->returnValue([
@@ -34,7 +34,20 @@ class InjectConfigTest extends TestCase
                         ],
                     ],
                 ],
+                'some.nested' => [
+                    'dotted.key' => [
+                        'example' => 1.1,
+                    ],
+                ],
             ]));
+    }
+
+    public function testGetValueAllowsDotEscapedKeys()
+    {
+        $inject = new InjectConfig();
+        $inject->value = 'some\.nested.dotted\.key.example';
+
+        $this->assertSame(1.1, $inject->getValue($this->sm));
     }
 
     public function testGetValueThrowsExceptionOnMissingKey()
