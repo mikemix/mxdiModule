@@ -163,6 +163,10 @@ If you get *ServiceNotCreated* exception most probably one of your injections is
  Manager. In the exception stack you will see some more detailed information. For instance look for *CannotGetValue*
  exceptions.
 
+### Console commands
+
+* Clear generated proxy files: `php public/index.php mxdimodule proxy clear`
+
 ### Example Doctrine service
 
 ```php
