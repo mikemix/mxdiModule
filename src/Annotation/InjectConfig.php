@@ -49,7 +49,7 @@ final class InjectConfig implements Annotation
         $keys = explode('.', $configKey);
 
         foreach ($keys as $key) {
-            if (isset($config[$key])) {
+            if (isset($config[$key]) && is_array($config[$key])) {
                 array_shift($keys);
                 return $this->read($config[$key], implode('.', $keys));
             }
