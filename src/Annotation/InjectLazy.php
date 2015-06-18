@@ -2,6 +2,7 @@
 namespace mxdiModule\Annotation;
 
 use mxdiModule\Exception\CannotGetValue;
+use mxdiModule\Factory\ProxyFactory;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -45,16 +46,19 @@ final class InjectLazy implements Annotation
             return true;
         };
 
-        return $this->getFactory()->createProxy($fqcn, $initializer);
+        return $this->getFactory($sm)->createProxy($fqcn, $initializer);
     }
 
     /**
+     * @param ServiceLocatorInterface $sm
      * @return LazyLoadingValueHolderFactory
      */
-    public function getFactory()
+    public function getFactory(ServiceLocatorInterface $sm)
     {
         if (! $this->factory) {
-            $this->setFactory(new LazyLoadingValueHolderFactory());
+            /** @var LazyLoadingValueHolderFactory $factory */
+            $factory = $sm->get(ProxyFactory::class);
+            $this->setFactory($factory);
         }
 
         return $this->factory;

@@ -2,8 +2,9 @@
 namespace mxdiModuleTest\Annotation;
 
 use mxdiModule\Annotation\InjectLazy;
+use mxdiModule\Factory\ProxyFactory;
 use mxdiModuleTest\TestCase;
-use ProxyManager\Factory\AbstractBaseFactory;
+use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class InjectLazyTest extends TestCase
@@ -11,17 +12,27 @@ class InjectLazyTest extends TestCase
     /** @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $sm;
 
+    /** @var InjectLazy */
+    private $inject;
+
     public function setUp()
     {
         $this->sm = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->setMethods(['get'])
             ->getMockForAbstractClass();
+
+        $this->inject = new InjectLazy();
     }
 
-    public function testGetFactory()
+    public function testGetFactoryReturnsFactoryFromServiceManager()
     {
-        $inject = new InjectLazy();
+        $factory = new LazyLoadingValueHolderFactory();
 
-        $this->assertInstanceOf(AbstractBaseFactory::class, $inject->getFactory());
+        $this->sm->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo(ProxyFactory::class))
+            ->will($this->returnValue($factory));
+
+        $this->assertSame($factory, $this->inject->getFactory($this->sm));
     }
 }

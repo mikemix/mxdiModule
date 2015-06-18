@@ -5,11 +5,16 @@ return [
         'invokables' => [
             mxdiModule\Service\DiFactory::class,
         ],
+        'factories' => [
+            mxdiModule\Factory\ProxyFactory::class => mxdiModule\Factory\ProxyFactory::class,
+        ],
         'abstract_factories' => [
             mxdiModule\Factory\DiAbstractFactory::class,
         ],
     ],
     'mxdimodule' => [
+        'proxy_dir'     => 'data/mxdiModule',
+        'proxy_namespace' => 'mxdiModuleProxy',
         'cache_adapter' => 'memory',
         'cache_options' => [],
         'avoid_service' => [
