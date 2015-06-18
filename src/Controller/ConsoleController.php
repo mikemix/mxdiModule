@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModule\Controller;
 
+use Zend\Console\Adapter\AdapterInterface;
 use Zend\Console\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -9,7 +10,7 @@ class ConsoleController extends AbstractActionController
     /**
      * Clear proxy files.
      *
-     * @return string
+     * @return int
      * @throws \BadMethodCallException
      */
     public function proxyClearAction()
@@ -20,13 +21,27 @@ class ConsoleController extends AbstractActionController
 
         $config = $this->getServiceLocator()->get('config');
         if (! isset($config['mxdimodule']['proxy_dir']) || empty($config['mxdimodule']['proxy_dir'])) {
-            return 'Proxy dir is not set or empty';
+            $this->console()->writeLine('Proxy dir is not set or empty');
+            return -1;
+        }
+
+        if (! is_dir($config['mxdimodule']['proxy_dir'])) {
+            $this->console()->writeLine('Proxy dir does not exist');
+            return -1;
         }
 
         foreach (glob($config['mxdimodule']['proxy_dir'] . '/*.php') as $file) {
             unlink($file);
         }
 
-        return '';
+        return 0;
+    }
+
+    /**
+     * @return AdapterInterface
+     */
+    protected function console()
+    {
+        return $this->getServiceLocator()->get('console');
     }
 }
