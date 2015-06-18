@@ -27,9 +27,9 @@ return [
             'routes' => [
                 'mxdimodule-proxy-clear' => [
                     'options' => [
-                        'route'    => 'proxy clear',
+                        'route'    => 'mxdimodule proxy clear',
                         'defaults' => [
-                            'controller' => 'mxdiModule\Controller\ConsoleController',
+                            'controller' => 'mxdiModule\Controller\Console',
                             'action'     => 'proxyClear'
                         ],
                     ],
