@@ -20,7 +20,8 @@
         "php" : ">=5.5.0",
         "doctrine/annotations": "~1.2.4",
         "zendframework/zend-servicemanager": "~2.5",
-        "zendframework/zend-cache": "~2.5"
+        "zendframework/zend-cache": "~2.5",
+        "ocramius/proxy-manager": "~1.0.0"
     },
     "require-dev": {
         "phpunit/phpunit" : "~3.7"
@@ -34,8 +35,5 @@
         "psr-4": {
             "mxdiModuleTest\\": "test"
         }
-    },
-    "suggest": {
-        "ocramius/proxy-manager": "Create lazy ZF2 services"
     }
 }
