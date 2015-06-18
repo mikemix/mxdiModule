@@ -2,10 +2,21 @@
 
 return [
     'mxdimodule' => [
-        /** ZF2 cache adapter FQCN */
+        /* Proxy directory for generated proxy files */
+        'proxy_dir'     => 'data/mxdiModule',
+
+        /* Proxy namespace */
+        'proxy_namespace' => 'mxdiModuleProxy',
+
+        /* ZF2 cache adapter FQCN */
         'cache_adapter' => 'memory',
 
-        /** Additional adapter options */
+        /* Additional adapter options */
         'cache_options' => [],
+
+        /* Services to avoid in the Abstract Factory. Will be avoided if set to true */
+        'avoid_service' => [
+            // service name => true|false
+        ],
     ],
 ];
