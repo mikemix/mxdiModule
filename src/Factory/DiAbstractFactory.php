@@ -1,15 +1,15 @@
 <?php
 namespace mxdiModule\Factory;
 
-use mxdiModule\Service\AnnotationExtractor;
-use mxdiModule\Service\ChangeSet;
-use mxdiModule\Service\Instantiator;
+use Zend\Cache\StorageFactory;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
 use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\Storage\StorageInterface;
-use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use mxdiModule\Service\AnnotationExtractor;
+use mxdiModule\Service\ChangeSet;
+use mxdiModule\Service\Instantiator;
 
 class DiAbstractFactory implements AbstractFactoryInterface
 {
