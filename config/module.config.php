@@ -22,4 +22,19 @@ return [
             'zendi18ntranslatortranslatorinterface' => true,
         ],
     ],
+    'console' => [
+        'router' => [
+            'routes' => [
+                'mxdimodule-proxy-clear' => [
+                    'options' => [
+                        'route'    => 'proxy clear',
+                        'defaults' => [
+                            'controller' => 'mxdiModule\Controller\ConsoleController',
+                            'action'     => 'proxyClear'
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];

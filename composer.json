@@ -20,7 +20,10 @@
         "php" : ">=5.5.0",
         "doctrine/annotations": "~1.2.4",
         "zendframework/zend-servicemanager": "~2.5",
+        "zendframework/zend-modulemanager": "~2.5",
+        "zendframework/zend-mvc": "~2.5",
         "zendframework/zend-cache": "~2.5",
+        "zendframework/zend-console": "~2.5",
         "ocramius/proxy-manager": "~1.0.0"
     },
     "require-dev": {
