@@ -26,6 +26,14 @@ class InjectConfigTest extends TestCase
                         'test' => 'value',
                     ],
                 ],
+                'some' => [
+                    'nested' => [
+                        'field' => [
+                            'key' => 1,
+                            'bool' => true,
+                        ],
+                    ],
+                ],
             ]));
     }
 
@@ -36,6 +44,40 @@ class InjectConfigTest extends TestCase
 
         $this->setExpectedException(CannotGetValue::class);
         $inject->getValue($this->sm);
+    }
+
+    public function testGetValueThrowsExceptionOnInvalidKey()
+    {
+        $inject = new InjectConfig();
+        $inject->value = 'some.nested.field.key.';
+
+        $this->setExpectedException(CannotGetValue::class);
+        $inject->getValue($this->sm);
+    }
+
+    public function testGetValueThrowsExceptionOnInvalidNestedKey()
+    {
+        $inject = new InjectConfig();
+        $inject->value = 'some.nested.field.key.1';
+
+        $this->setExpectedException(CannotGetValue::class);
+        $inject->getValue($this->sm);
+    }
+
+    public function testGetValueReturnInteger()
+    {
+         $inject = new InjectConfig();
+         $inject->value = 'some.nested.field.key';
+
+         $this->assertSame(1, $inject->getValue($this->sm));
+    }
+
+    public function testGetValueReturnBool()
+    {
+         $inject = new InjectConfig();
+         $inject->value = 'some.nested.field.bool';
+
+         $this->assertTrue($inject->getValue($this->sm));
     }
 
     public function testGetValueReturnScalar()
