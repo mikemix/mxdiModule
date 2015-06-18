@@ -42,6 +42,8 @@ For now following injections are available:
    * example usage: `@Inject("service_name")` where service_name is registered in the ZF2's Service Manager
    * set `invokable=true` to bypass service manager, useful with simple POPO's
 * ZF2 configuration injection via `@InjectConfig` annotation
+   * example usage `@InjectConfig("service_manager.invokables")` to get array of registered invokables
+   * if the key in the configuration contains dots, escape them with a backslash, for example `@InjectConfig("module.config\.key.setting")`
 * Lazy object injection via `@InjectLazy` annotation
    * set `fqcn="service\fqcn"` if its name in the Service Manager is different from its FQCN. For example, to lazily inject the ZF2's request object: `@InjectLazy("request", "Zend\Http\Request")`. If your service is for example registered as `Application\Service\SomeService` then simple `@InjectLazy("Application\Service\SomeService")` will do.
    * see important notes about [configuring lazy injection](#lazy-injection).
