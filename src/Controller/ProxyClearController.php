@@ -3,14 +3,14 @@ namespace mxdiModule\Controller;
 
 use Zend\Mvc\Controller\AbstractConsoleController;
 
-class ConsoleController extends AbstractConsoleController
+class ProxyClearController extends AbstractConsoleController
 {
     /**
      * Clear proxy files.
      *
      * @return int
      */
-    public function proxyClearAction()
+    public function indexAction()
     {
         $config = $this->getServiceLocator()->get('config');
         if (! isset($config['mxdimodule']['proxy_dir']) || empty($config['mxdimodule']['proxy_dir'])) {

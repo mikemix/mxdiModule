@@ -29,8 +29,8 @@ return [
                     'options' => [
                         'route'    => 'mxdimodule proxy clear',
                         'defaults' => [
-                            'controller' => 'mxdiModule\Controller\Console',
-                            'action'     => 'proxyClear'
+                            'controller' => 'mxdiModule\Controller\ProxyClear',
+                            'action'     => 'index'
                         ],
                     ],
                 ],
@@ -39,7 +39,7 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'mxdiModule\Controller\Console' => mxdiModule\Controller\ConsoleController::class,
+            'mxdiModule\Controller\ProxyClear' => mxdiModule\Controller\ProxyClearController::class,
         ],
     ],
 ];
