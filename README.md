@@ -44,6 +44,7 @@ For now following injections are available:
 * ZF2 configuration injection via `@InjectConfig` annotation
 * Lazy object injection via `@InjectLazy` annotation
    * set `fqcn="service\fqcn"` if its name in the Service Manager is different from its FQCN. For example, to lazily inject the ZF2's request object: `@InjectLazy("request", "Zend\Http\Request")`. If your service is for example registered as `Application\Service\SomeService` then simple `@InjectLazy("Application\Service\SomeService")` will do.
+   * see important notes about [configuring lazy injection](#lazy-injection).
 
 DI for private/protected methods/properties is available altough not recommended to avoid costly reflection.
 
@@ -120,6 +121,8 @@ class Injectable
 }
 ```
 
+### Important notes
+
 *Remember*, the service you are about to inject, like the `Injectable` class above, must not be registered in the Service Manager.
 If you register it as factory or invokable, it won't go through the Abstract Factory and won't get injected. By the way, this allows you to create custom factory for the service in mention.
 
@@ -134,40 +137,6 @@ $factory = $this->getServiceLocator()->get(\mxdiModule\Service\DiFactory::class)
 
 /** @var \YourApplication\Service\SomeService $service */
 $service = $factory(\YourApplication\Service\SomeService::class);
-```
-
-### Example Doctrine service
-
-```php
-<?php
-namespace Application\Service;
-
-use Doctrine\ORM\EntityManager;
-use mxdiModule\Annotation as DI;
-
-class UserService
-{
-    /** @var EntityManager */
-    protected $em;
-    
-    /**
-     * @DI\InjectParams({
-     *     @DI\Inject("Doctrine\ORM\EntityManager")
-     * })
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-    
-    /**
-     * @return array
-     */
-    public function getUsers()
-    {
-        return $this->em->getRepository('Application\Entity\User')->findAll();
-    }
-}
 ```
 
 ### Caching
@@ -191,3 +160,42 @@ Make sure to copy dist config file mentioned above and set the `proxy_dir` accor
 If you get *ServiceNotCreated* exception most probably one of your injections is not registered in the ZF2's Service
  Manager. In the exception stack you will see some more detailed information. For instance look for *CannotGetValue*
  exceptions.
+
+### Example Doctrine service
+
+```php
+<?php
+namespace Application\Service;
+
+use Doctrine\ORM\EntityManager;
+use mxdiModule\Annotation as DI;
+
+class UserService
+{
+    /** @var EntityManager */
+    protected $em;
+    
+    /** @var array */
+    protected $params;
+    
+    /**
+     * @DI\InjectParams({
+     *     @DI\Inject("Doctrine\ORM\EntityManager")
+     *     @DI\InjectConfig("doctrine.connection.orm_default.params")
+     * })
+     */
+    public function __construct(EntityManager $em, array $params)
+    {
+        $this->em = $em;
+        $this->params = $params;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getUsers()
+    {
+        return $this->em->getRepository('Application\Entity\User')->findAll();
+    }
+}
+```
