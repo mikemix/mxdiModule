@@ -7,9 +7,6 @@ use Zend\Console\Adapter\AdapterInterface;
 
 class ProxyClearControllerTest extends TestCase
 {
-    /** @var ProxyClearController */
-    private $controller;
-
     /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $console;
 
@@ -18,33 +15,22 @@ class ProxyClearControllerTest extends TestCase
         $this->console = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['writeLine'])
             ->getMockForAbstractClass();
-
-        $this->controller = new ProxyClearController();
-        $this->controller->setConsole($this->console);
-    }
-
-    public function testDoesNotAcceptMissingProxyDir()
-    {
-        unset($this->config['mxdimodule']['proxy_dir']);
-        $this->controller->setServiceLocator($this->getServiceManager());
-
-        $this->assertEquals(-1, $this->controller->indexAction());
     }
 
     public function testDoesNotAcceptEmptyProxyDir()
     {
-        $this->config['mxdimodule']['proxy_dir'] = '';
-        $this->controller->setServiceLocator($this->getServiceManager());
+        $controller = new ProxyClearController('');
+        $controller->setConsole($this->console);
 
-        $this->assertEquals(-1, $this->controller->indexAction());
+        $this->assertEquals(-1, $controller->indexAction());
     }
 
     public function testDoesNotAcceptFakeProxyDir()
     {
-        $this->config['mxdimodule']['proxy_dir'] = '/fake/proxy/dir';
-        $this->controller->setServiceLocator($this->getServiceManager());
+        $controller = new ProxyClearController('/fake/proxy/dir');
+        $controller->setConsole($this->console);
 
-        $this->assertEquals(-1, $this->controller->indexAction());
+        $this->assertEquals(-1, $controller->indexAction());
     }
 
     public function testProxyClearAction()
@@ -54,15 +40,13 @@ class ProxyClearControllerTest extends TestCase
             mkdir($proxyDir);
         }
 
-        $this->config['mxdimodule']['proxy_dir'] = $proxyDir;
-        $this->controller->setServiceLocator($this->getServiceManager());
-
         touch($proxyDir . '/proxy1.php');
         touch($proxyDir . '/proxy2.php');
-
         $this->assertCount(2, glob($proxyDir . '/*.php'));
 
-        $this->assertEquals(0, $this->controller->indexAction());
+        $controller = new ProxyClearController($proxyDir);
+        $controller->setConsole($this->console);
+        $this->assertEquals(0, $controller->indexAction());
 
         clearstatcache();
         $this->assertCount(0, glob($proxyDir . '/*.php'));

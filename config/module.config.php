@@ -38,8 +38,8 @@ return [
         ],
     ],
     'controllers' => [
-        'invokables' => [
-            'mxdiModule\Controller\ProxyClear' => mxdiModule\Controller\ProxyClearController::class,
+        'factories' => [
+            'mxdiModule\Controller\ProxyClear' => mxdiModule\Factory\Controller\ProxyClearControllerFactory::class,
         ],
     ],
 ];
