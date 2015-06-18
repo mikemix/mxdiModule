@@ -42,6 +42,8 @@ For now following injections are available:
    * example usage: `@Inject("service_name")` where service_name is registered in the ZF2's Service Manager
    * set `invokable=true` to bypass service manager, useful with simple POPO's
 * ZF2 configuration injection via `@InjectConfig` annotation
+* Lazy object injection via `@InjectLazy` annotation
+   * set `fqcn="service\fqcn"` if its name in the Service Manager is different from its FQCN. For example, to lazily inject the ZF2's request object: `@InjectLazy("request", "Zend\Http\Request")`. If your service is for example registered as `Application\Service\SomeService` then simple `@InjectLazy("Application\Service\SomeService")` will do.
 
 DI for private/protected methods/properties is available altough not recommended to avoid costly reflection.
 
@@ -118,7 +120,8 @@ class Injectable
 }
 ```
 
-*Remember*, the service which is being injected must not be registered in the Service Manager. If you register it as factory or invokable, it won't go through the Abstract Factory and won't get injected. By the way, this allows you to create custom factory for the service in mention.
+*Remember*, the service you are about to inject, like the `Injectable` class above, must not be registered in the Service Manager.
+If you register it as factory or invokable, it won't go through the Abstract Factory and won't get injected. By the way, this allows you to create custom factory for the service in mention.
 
 The order of the `@Inject` annotations inside the `@InjectParams` *is important* as with this order parameters will be
 passed to the method/constructor. Wrong order will result in PHP's errors.
@@ -142,7 +145,7 @@ namespace Application\Service;
 use Doctrine\ORM\EntityManager;
 use mxdiModule\Annotation as DI;
 
-class UsersService
+class UserService
 {
     /** @var EntityManager */
     protected $em;
@@ -184,10 +187,3 @@ available out-of-the-box adapters at the [ZF2 docs site](http://framework.zend.c
 If you get *ServiceNotCreated* exception most probably one of your injections is not registered in the ZF2's Service
  Manager. In the exception stack you will see some more detailed information. For instance look for *CannotGetValue*
  exceptions.
-
-### TODO
-
-* ~~Caching !!!~~
-* ~~Injecting ZF2's configuration params for example `@InjectConfig("doctrine.connection.orm_default")`~~
-* Increase test coverage and code rating
-* Lazy injections via `@InjectLazy` or `lazy=true` flag :o !!!
