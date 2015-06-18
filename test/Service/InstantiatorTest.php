@@ -3,7 +3,6 @@ namespace mxdiModuleTest\Service;
 
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
-use mxdiModule\Module;
 use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\DiFactory;
 use mxdiModule\Service\Instantiator;
@@ -112,11 +111,7 @@ class InstantiatorTest extends TestCase
      */
     public function testCreateIntegration()
     {
-        $config = (new Module())->getConfig();
-        $config['service_manager']['invokables'][DiFactory::class] = DiFactory::class;
-
-        $this->setServiceManagerConfig($config['service_manager']);
-        $this->getServiceManager()->setService('config', $config);
+        $this->config['service_manager']['invokables'][DiFactory::class] = DiFactory::class;
 
         /** @var IntegrationTest $object */
         $object = $this->getServiceManager()->get(IntegrationTest::class);
