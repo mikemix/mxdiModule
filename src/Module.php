@@ -59,7 +59,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
     public function getConsoleUsage(AdapterInterface $console)
     {
         return [
-            'proxy clear' => 'Remove proxies from the proxy dir',
+            'mxdimodule proxy clear' => 'Remove proxies from the proxy dir',
         ];
     }
 }
