@@ -48,9 +48,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
      */
     public function getConsoleBanner(AdapterInterface $console)
     {
-        return [
-            'mxdiModule console'
-        ];
+        return 'mxdiModule console';
     }
 
     /**
