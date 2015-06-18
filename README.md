@@ -143,6 +143,8 @@ $service = $factory(\YourApplication\Service\SomeService::class);
 
 Make sure to copy dist config file mentioned below and set the `proxy_dir` accordingly. Make sure this directory exists and is writable by the webserver.
 
+You can clear generated proxies by executing console command: `php public/index.php mxdimodule proxy clear`
+
 ### Caching
 
 Annotation parsing is very heavy. You should enable the cache on production servers.
