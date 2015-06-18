@@ -37,4 +37,9 @@ return [
             ],
         ],
     ],
+    'controllers' => [
+        'invokables' => [
+            'mxdiModule\Controller\Console' => mxdiModule\Controller\ConsoleController::class,
+        ],
+    ],
 ];
