@@ -1,8 +1,8 @@
 <?php
 namespace mxdiModule\Annotation;
 
-use mxdiModule\Exception\CannotGetValue;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use mxdiModule\Exception\CannotGetValue;
 
 /**
  * @Annotation
