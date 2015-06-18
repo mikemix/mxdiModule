@@ -11,7 +11,7 @@ Install with Composer.
 
 ```js
     "require": {
-        "mikemix/mxdi-module": "*@dev"
+        "mikemix/mxdi-module": "~1.1"
     }
 ```
 
