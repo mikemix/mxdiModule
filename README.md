@@ -141,7 +141,7 @@ $service = $factory(\YourApplication\Service\SomeService::class);
 
 ### Lazy injection
 
-Make sure to copy dist config file mentioned below and set the `proxy_dir` accordingly. Make sure this directory exists and is writable by the webserver.
+Make sure to copy dist config file mentioned below and set the `proxy_dir` accordingly. Default directory is `data/mxdiModule`. Make sure this directory exists and is writable by the webserver.
 
 You can clear generated proxies by executing console command: `php public/index.php mxdimodule proxy clear`
 
