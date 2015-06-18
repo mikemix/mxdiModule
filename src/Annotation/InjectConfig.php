@@ -32,14 +32,21 @@ final class InjectConfig implements Annotation
         throw CannotGetValue::of($this->value);
     }
 
-    protected function read(array $config, $value)
+    /**
+     * Convert dotted notation to config value.
+     *
+     * @param array $config
+     * @param string $configKey
+     * @return mixed
+     */
+    protected function read(array $config, $configKey)
     {
-        if (isset($config[$value])) {
+        if (isset($config[$configKey])) {
             // value found
-            return $config[$value];
+            return $config[$configKey];
         }
 
-        $keys = explode('.', $value);
+        $keys = explode('.', $configKey);
 
         foreach ($keys as $key) {
             if (isset($config[$key])) {
