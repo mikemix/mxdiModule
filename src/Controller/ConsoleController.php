@@ -2,23 +2,17 @@
 namespace mxdiModule\Controller;
 
 use Zend\Console\Adapter\AdapterInterface;
-use Zend\Console\Request;
-use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Controller\AbstractConsoleController;
 
-class ConsoleController extends AbstractActionController
+class ConsoleController extends AbstractConsoleController
 {
     /**
      * Clear proxy files.
      *
      * @return int
-     * @throws \BadMethodCallException
      */
     public function proxyClearAction()
     {
-        if (!$this->request instanceof Request) {
-            throw new \BadMethodCallException('Action allowed only from the console');
-        }
-
         $config = $this->getServiceLocator()->get('config');
         if (! isset($config['mxdimodule']['proxy_dir']) || empty($config['mxdimodule']['proxy_dir'])) {
             $this->console()->writeLine('Proxy dir is not set or empty');
