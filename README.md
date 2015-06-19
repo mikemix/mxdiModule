@@ -36,8 +36,8 @@ This will enable the module and register the Abstract Factory in the ZF2's Servi
 
 * [`@InjectParams`](#injectparams-annotation)
 * [`@Inject`](#inject-annotation)
-* [`@InjectConfig`](#inject-config-annotation)
-* [`@InjectLazy`](#inject-lazy-annotation)
+* [`@InjectConfig`](#injectconfig-annotation)
+* [`@InjectLazy`](#injectlazy-annotation)
 
 #### InjectParams Annotation
 
@@ -61,6 +61,8 @@ public function setRequest(
     $serviceLocator->get('config')['service_manager']['factories']
 ) ...
 ```
+
+[[Go back to annotation reference](#annotation-reference)]
 
 #### Inject Annotation
 
@@ -86,6 +88,8 @@ $object->evm = new \Zend\EventManager\EventManager();
 $object->doctrine = $serviceLocator->get('Doctrine\ORM\EntityManager');
 ```
 
+[[Go back to annotation reference](#annotation-reference)]
+
 #### InjectConfig Annotation
 
 `@InjectConfig` annotation is allowed inside `@InjectParams` annotation and properties.
@@ -102,6 +106,8 @@ protected $mySettings;
 
 $object->mySettings = $serviceLocator->get('config')['mymodule']['config']['some.dotted.key'];
 ```
+
+[[Go back to annotation reference](#annotation-reference)]
 
 #### InjectLazy Annotation
 
@@ -137,6 +143,8 @@ $object->request = $proxyGenerator->create('Zend\Http\Request', function () use 
     return $serviceLocator->get($name);
 });
 ```
+
+[[Go back to annotation reference](#annotation-reference)]
 
 ### Complete example class
 
