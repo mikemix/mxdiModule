@@ -38,6 +38,7 @@ This will enable the module and register the Abstract Factory in the ZF2's Servi
 * [`@Inject`](#inject-annotation)
 * [`@InjectConfig`](#injectconfig-annotation)
 * [`@InjectLazy`](#injectlazy-annotation)
+* [`@InjectDoctrine`](#injectdoctrine-annotation)
 
 #### InjectParams Annotation
 
@@ -76,14 +77,14 @@ from the Serivce Manager, but simply instantiate it directly.
 public $evm;
 
 /**
- * @Inject("Doctrine\ORM\EntityManager")
+ * @Inject("Application\Service\UserService")
  */
 protected $doctrine;
 
 // which translates to
 
 $object->evm = new \Zend\EventManager\EventManager();
-$object->doctrine = $serviceLocator->get('Doctrine\ORM\EntityManager');
+$object->doctrine = $serviceLocator->get('Application\Service\UserService');
 ```
 
 #### InjectConfig Annotation
@@ -137,6 +138,11 @@ $object->request = $proxyGenerator->create('Zend\Http\Request', function () use 
     return $serviceLocator->get($name);
 });
 ```
+
+#### InjectDoctrine annotation
+
+`@InjectDoctrine` annotation is allowed inside `@InjectParams` annotation and properties.
+This annotation injects the Doctrine\ORM\EntityManager.
 
 ### Complete example class
 
