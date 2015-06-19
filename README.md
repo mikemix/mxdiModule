@@ -253,3 +253,11 @@ If you get *ServiceNotCreated* exception most probably one of your injections is
 ### Console commands
 
 * Clear generated proxy files: `php public/index.php mxdimodule proxy clear`
+
+### Custom annotations
+
+You can write custom `@Inject(type)` annotations in couple easy steps:
+
+1. Write your custom annotation class which implements the `mxdiModule\Annotation\Annotation` interface
+2. Register it in the YourModule::init() method: `\Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . '/src/Module/Annotation/YourAnnotation.php')`
+3. Voila!
