@@ -5,6 +5,17 @@ Configure dependency injection in Zend Framework 2 using annotations.
 
 Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBundle) for the Symfony2 project.
 
+
+1. [Installation](#installation)
+2. [Annotation reference](#annotation-reference)
+3. [Complete example class](#complete-example-class)
+4. [Important notes](#important-notes)
+5. [Caching](#caching)
+6. [Debugging](#debugging)
+7. [Console commands](#console-commands)
+8. [Custom annotations](#custom-annotations)
+
+
 ### Installation
 
 Install with Composer.
