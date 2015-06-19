@@ -12,6 +12,7 @@ use mxdiModuleTest\TestObjects\DependencyB;
 use mxdiModuleTest\TestObjects\DependencyC;
 use mxdiModuleTest\TestObjects\DependencyD;
 use mxdiModuleTest\TestObjects\DependencyE;
+use mxdiModuleTest\TestObjects\FakeDoctrine;
 use mxdiModuleTest\TestObjects\Injectable;
 use mxdiModuleTest\TestObjects\IntegrationTest;
 
@@ -122,5 +123,6 @@ class InstantiatorTest extends TestCase
         $this->assertInternalType('string', $object->getConfigInjectionScalar());
         $this->assertNotEmpty($object->getConfigInjectionArray());
         $this->assertInternalType('array', $object->getConfigDefaultValue());
+        $this->assertInstanceOf(FakeDoctrine::class, $object->getDoctrine());
     }
 }

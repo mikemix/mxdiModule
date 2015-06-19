@@ -38,6 +38,12 @@ class IntegrationTest
     private $configDefaultValue = [];
 
     /**
+     * @var FakeDoctrine
+     * @DI\InjectDoctrine
+     */
+    public $doctrine;
+
+    /**
      * @param DiFactory $factory
      * @DI\InjectParams({
      *     @DI\Inject("mxdiModule\Service\DiFactory")
@@ -105,5 +111,13 @@ class IntegrationTest
     public function getConfigDefaultValue()
     {
         return $this->configDefaultValue;
+    }
+
+    /**
+     * @return FakeDoctrine
+     */
+    public function getDoctrine()
+    {
+        return $this->doctrine;
     }
 }

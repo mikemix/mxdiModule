@@ -10,10 +10,20 @@ class InjectDoctrineTest extends TestCase
 {
     public function testGetValueThrowsExceptionOnMissingDoctrine()
     {
+        /** @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $sm */
+        $sm = $this->getMockBuilder(ServiceLocatorInterface::class)
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $sm->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('Doctrine\ORM\EntityManager'))
+            ->will($this->throwException(new \Exception()));
+
         $inject = new InjectDoctrine();
 
         $this->setExpectedException(CannotGetValue::class);
-        $inject->getValue($this->getServiceManager());
+        $inject->getValue($sm);
     }
 
     public function testGetDoctrine()

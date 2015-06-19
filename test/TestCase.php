@@ -19,6 +19,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
                 TestObjects\DependencyC::class => TestObjects\DependencyC::class,
                 TestObjects\DependencyD::class => TestObjects\DependencyD::class,
                 'dependency_e'                 => TestObjects\DependencyE::class,
+                'Doctrine\ORM\EntityManager'   => TestObjects\FakeDoctrine::class,
             ],
             'abstract_factories' => [
                 DiAbstractFactory::class,
