@@ -62,8 +62,6 @@ public function setRequest(
 ) ...
 ```
 
-[[Go back to annotation reference](#annotation-reference)]
-
 #### Inject Annotation
 
 `@Inject` annotation is allowed inside `@InjectParams` annotation and properties.
@@ -88,8 +86,6 @@ $object->evm = new \Zend\EventManager\EventManager();
 $object->doctrine = $serviceLocator->get('Doctrine\ORM\EntityManager');
 ```
 
-[[Go back to annotation reference](#annotation-reference)]
-
 #### InjectConfig Annotation
 
 `@InjectConfig` annotation is allowed inside `@InjectParams` annotation and properties.
@@ -106,8 +102,6 @@ protected $mySettings;
 
 $object->mySettings = $serviceLocator->get('config')['mymodule']['config']['some.dotted.key'];
 ```
-
-[[Go back to annotation reference](#annotation-reference)]
 
 #### InjectLazy Annotation
 
@@ -143,8 +137,6 @@ $object->request = $proxyGenerator->create('Zend\Http\Request', function () use 
     return $serviceLocator->get($name);
 });
 ```
-
-[[Go back to annotation reference](#annotation-reference)]
 
 ### Complete example class
 
