@@ -32,25 +32,113 @@ return [
 
 This will enable the module and register the Abstract Factory in the ZF2's Service Manager.
 
-### Annotation mapping
+### Annotation reference
 
-For now following injections are available:
+* [`@InjectParams`](#injectparams-annotation)
+* [`@Inject`](#inject-annotation)
+* [`@InjectConfig`](#inject-config-annotation)
+* [`@InjectLazy`](#inject-lazy-annotation)
 
-* constructor injection via `@InjectParams` annotation
-* method injection via `@InjectParams` annotation
-* property injection via `@Inject` annotation
-   * example usage: `@Inject("service_name")` where service_name is registered in the ZF2's Service Manager
-   * set `invokable=true` to bypass service manager, useful with simple POPO's
-* ZF2 configuration injection via `@InjectConfig` annotation
-   * example usage `@InjectConfig("service_manager.invokables")` to get array of registered invokables
-   * if the key in the configuration contains dots, escape them with a backslash, for example `@InjectConfig("module.config\.key.setting")`
-* Lazy object injection via `@InjectLazy` annotation
-   * set `fqcn="service\fqcn"` if its name in the Service Manager is different from its FQCN. For example, to lazily inject the ZF2's request object: `@InjectLazy("request", "Zend\Http\Request")`. If your service is for example registered as `Application\Service\SomeService` then simple `@InjectLazy("Application\Service\SomeService")` will do.
-   * see important notes about [configuring lazy injection](#lazy-injection).
+#### InjectParams Annotation
 
-DI for private/protected methods/properties is available altough not recommended to avoid costly reflection.
+`@InjectParams` annotation is allowed in constructor and methods. It's an array of other `@Inject` annotations.
+The order of the `@Inject(type)` annotations inside the `@InjectParams` *is important* as with this order parameters will be
+passed to the method/constructor. Wrong order will result in PHP's errors.
 
-### Example class:
+```php
+/**
+ * @InjectParams({
+ *     @Inject("request"),
+ *     @InjectConfig("service_manager.factories")
+ * })
+ */
+public function setRequest(\Zend\Http\Request $request, array $factories) ...
+
+// which translates to
+
+public function setRequest(
+    $serviceLocator->get('request'),
+    $serviceLocator->get('config')['service_manager']['factories']
+) ...
+```
+
+#### Inject Annotation
+
+`@Inject` annotation is allowed inside `@InjectParams` annotation and properties.
+This annotation injects ZF2's service from the Service Manager. Annotation requires the name of the service. Optional
+boolean argument `invokable=true|false` tells the injector that requested service is simple POPO and will not fetch it
+from the Serivce Manager, but simply instantiate it directly. 
+
+```php
+/**
+ * @Inject("Zend\EventManager\EventManager", invokable=true)
+ */
+public $evm;
+
+/**
+ * @Inject("Doctrine\ORM\EntityManager")
+ */
+protected $doctrine;
+
+// which translates to
+
+$object->evm = new \Zend\EventManager\EventManager();
+$object->doctrine = $serviceLocator->get('Doctrine\ORM\EntityManager');
+```
+
+#### InjectConfig Annotation
+
+`@InjectConfig` annotation is allowed inside `@InjectParams` annotation and properties.
+This annotation injects config values from ZF2's config. Annotation requires the name of the key in dotted notation.
+If the requested key consists of dots, dots in the key name must be escaped with backslash.
+
+```php
+/**
+ * @InjectConfig("mymodule.config.some\.dotted\.key")
+ */
+protected $mySettings;
+
+// which translates to
+
+$object->mySettings = $serviceLocator->get('config')['mymodule']['config']['some.dotted.key'];
+```
+
+#### InjectLazy Annotation
+
+`@InjectLazy` annotation is allowed inside `@InjectParams` annotation and properties.
+This annotation injects ZF2's service from the Service Manager, but it does not instantiate those objects directly.
+Instead it returns a proxy. You can read more about [Lazy Services in the ZF2 docs](http://framework.zend.com/manual/current/en/modules/zend.service-manager.lazy-services.html).
+
+Annotation requires the name of the service and its FQCN (fqcn parameter) if the service name is different from it. The class you are
+trying to request must not be marked as *final*.
+
+Generated proxy files are stored on disk for performance reasons. Make sure to copy dist config file mentioned
+in the [Caching](#caching) section and set the `proxy_dir` accordingly. Default directory is `data/mxdiModule`.
+Make sure this directory exists and is writable by the webserver.
+
+You can clear generated proxies by executing console command: `php public/index.php mxdimodule proxy clear`
+
+```php
+/**
+ * @InjectLazy("Doctrine\ORM\EntityManager")
+ */
+public function setDoctrine(EntityManager $em) ...
+
+/**
+ * @var Request
+ * @InjectLazy("request", fqcn="Zend\Http\Request")
+ */
+protected $request;
+
+// which translates to
+
+$object->setDoctrine($proxyGenerator->create('Doctrine\ORM\EntityManager'));
+$object->request = $proxyGenerator->create('Zend\Http\Request', function () use ($serviceLocator, $name = 'request') {
+    return $serviceLocator->get($name);
+});
+```
+
+### Complete example class
 
 ```php
 <?php
@@ -128,9 +216,6 @@ class Injectable
 *Remember*, the service you are about to inject, like the `Injectable` class above, must not be registered in the Service Manager.
 If you register it as factory or invokable, it won't go through the Abstract Factory and won't get injected. By the way, this allows you to create custom factory for the service in mention.
 
-The order of the `@Inject` annotations inside the `@InjectParams` *is important* as with this order parameters will be
-passed to the method/constructor. Wrong order will result in PHP's errors.
-
 To speed up locate time you can request the service through the DiFactory invokable, for example:
 
 ```php
@@ -140,12 +225,6 @@ $factory = $this->getServiceLocator()->get(\mxdiModule\Service\DiFactory::class)
 /** @var \YourApplication\Service\SomeService $service */
 $service = $factory(\YourApplication\Service\SomeService::class);
 ```
-
-### Lazy injection
-
-Make sure to copy dist config file mentioned below and set the `proxy_dir` accordingly. Default directory is `data/mxdiModule`. Make sure this directory exists and is writable by the webserver.
-
-You can clear generated proxies by executing console command: `php public/index.php mxdimodule proxy clear`
 
 ### Caching
 
@@ -168,42 +247,3 @@ If you get *ServiceNotCreated* exception most probably one of your injections is
 ### Console commands
 
 * Clear generated proxy files: `php public/index.php mxdimodule proxy clear`
-
-### Example Doctrine service
-
-```php
-<?php
-namespace Application\Service;
-
-use Doctrine\ORM\EntityManager;
-use mxdiModule\Annotation as DI;
-
-class UserService
-{
-    /** @var EntityManager */
-    protected $em;
-    
-    /** @var array */
-    protected $params;
-    
-    /**
-     * @DI\InjectParams({
-     *     @DI\Inject("Doctrine\ORM\EntityManager")
-     *     @DI\InjectConfig("doctrine.connection.orm_default.params")
-     * })
-     */
-    public function __construct(EntityManager $em, array $params)
-    {
-        $this->em = $em;
-        $this->params = $params;
-    }
-    
-    /**
-     * @return array
-     */
-    public function getUsers()
-    {
-        return $this->em->getRepository('Application\Entity\User')->findAll();
-    }
-}
-```
