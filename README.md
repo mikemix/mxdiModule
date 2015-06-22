@@ -144,9 +144,12 @@ protected $request;
 
 // which translates to
 
-$object->setDoctrine($proxyGenerator->create('Doctrine\ORM\EntityManager'));
-$object->request = $proxyGenerator->create('Zend\Http\Request', function () use ($serviceLocator, $name = 'request') {
-    return $serviceLocator->get($name);
+$object->setDoctrine($proxyGenerator->create('Doctrine\ORM\EntityManager'), function () use ($sm) {
+    return $sm->get('Doctrine\ORM\EntityManager');
+});
+
+$object->request = $proxyGenerator->create('Zend\Http\Request', function () use ($sm) {
+    return $sm->get('request');
 });
 ```
 
