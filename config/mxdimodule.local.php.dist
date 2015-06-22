@@ -2,17 +2,17 @@
 
 return [
     'mxdimodule' => [
-        /* Proxy directory for generated proxy files */
-        'proxy_dir'     => 'data/mxdiModule',
+        /* Proxy directory for generated proxy files. Uncomment to change */
+        //'proxy_dir'     => 'data/mxdiModule',
 
-        /* Proxy namespace */
-        'proxy_namespace' => 'mxdiModuleProxy',
+        /* Proxy namespace. Uncomment to change */
+        //'proxy_namespace' => 'mxdiModuleProxy',
 
-        /* ZF2 cache adapter FQCN */
-        'cache_adapter' => 'memory',
+        /* ZF2 cache adapter FQCN. Uncomment to change */
+        //'cache_adapter' => 'memory',
 
-        /* Additional adapter options */
-        'cache_options' => [],
+        /* Additional adapter options. Uncomment to change */
+        //'cache_options' => [],
 
         /* Services to avoid in the Abstract Factory. Will be avoided if set to true */
         'avoid_service' => [
