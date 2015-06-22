@@ -22,7 +22,7 @@ class AnnotationExtractor
      */
     public function getConstructorInjections($fqcn)
     {
-        if (! in_array('__construct', get_class_methods($fqcn))) {
+        if (! in_array('__construct', (array)get_class_methods($fqcn))) {
             return null;
         }
 
