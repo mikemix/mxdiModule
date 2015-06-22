@@ -22,7 +22,7 @@ Install with Composer.
 
 ```js
     "require": {
-        "mikemix/mxdi-module": "~1.1"
+        "mikemix/mxdi-module": "~2.0"
     }
 ```
 
