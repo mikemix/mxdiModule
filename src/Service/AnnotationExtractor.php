@@ -1,89 +1,101 @@
 <?php
 namespace mxdiModule\Service;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use mxdiModule\Annotation\AnnotationInterface;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 
-class ChangeSet
+class AnnotationExtractor
 {
-    /** @var InjectParams|null */
-    protected $constructorInjections;
+    /** @var AnnotationReader */
+    protected $reader;
 
-    /** @var bool */
-    protected $hasSimpleConstructor;
-
-    /** @var InjectParams[] */
-    protected $methodsInjections;
-
-    /** @var Inject[] */
-    protected $propertiesInjections;
-
-    /** @var bool */
-    protected $isAnnotated = false;
-
-    public function __construct(AnnotationExtractor $extractor, $fqcn)
+    public function __construct(AnnotationReader $reader = null)
     {
-        if (!class_exists($fqcn)) {
-            return;
+        $this->reader = $reader ?: new AnnotationReader();
+    }
+
+    /**
+     * @param string $fqcn
+     * @return InjectParams|null
+     */
+    public function getConstructorInjections($fqcn)
+    {
+        if (! in_array('__construct', (array)get_class_methods($fqcn))) {
+            return null;
         }
 
-        $this->constructorInjections = $extractor->getConstructorInjections($fqcn);
-        $this->hasSimpleConstructor = null === $this->constructorInjections;
-
-        $this->methodsInjections = $extractor->getMethodsInjections($fqcn);
-        $this->propertiesInjections = $extractor->getPropertiesInjections($fqcn);
-
-        $this->isAnnotated =
-            $this->constructorInjections ||
-            count($this->methodsInjections) ||
-            count($this->propertiesInjections);
+        return $this->reader->getMethodAnnotation(
+            new \ReflectionMethod($fqcn, '__construct'),
+            InjectParams::class
+        );
     }
 
     /**
-     * @return InjectParams|null
+     * Get methods injections (except the constructor).
+     *
+     * @param string $fqcn
+     * @return InjectParams[]
      */
-    public function getConstructorInjections()
+    public function getMethodsInjections($fqcn)
     {
-        return $this->constructorInjections;
+        $injections = [];
+
+        $reflection = new \ReflectionClass($fqcn);
+
+        foreach ($reflection->getMethods() as $method) {
+            $name = $method->getName();
+            if ('__construct' === $name) {
+                continue;
+            }
+
+            $inject = $this->reader->getMethodAnnotation(
+                new \ReflectionMethod($fqcn, $name),
+                AnnotationInterface::class
+            );
+
+            if (null !== $inject) {
+                $injections[$name] = $inject;
+            }
+        }
+
+        return $injections;
     }
 
     /**
-     * @return boolean
+     * Get properties injections (except the constructor).
+     *
+     * @param string $fqcn
+     * @return Inject[]
      */
-    public function hasSimpleConstructor()
+    public function getPropertiesInjections($fqcn)
     {
-        return $this->hasSimpleConstructor;
+        $injections = [];
+        $reflection = new \ReflectionClass($fqcn);
+
+        foreach ($reflection->getProperties() as $property) {
+            $inject = $this->reader->getPropertyAnnotation(
+                new \ReflectionProperty($fqcn, $property->getName()),
+                AnnotationInterface::class
+            );
+
+            if (null !== $inject) {
+                $injections[$property->getName()] = $inject;
+            }
+        }
+
+        return $injections;
     }
 
     /**
-     * @return InjectParams|null
+     * Handy shortcut.
+     *
+     * @param string $fqcn
+     * @return ChangeSet
      */
-    public function getMethodsInjections()
+    public function getChangeSet($fqcn)
     {
-        return $this->methodsInjections;
-    }
-
-    /**
-     * @return array|\mxdiModule\Annotation\Inject[]
-     */
-    public function getPropertiesInjections()
-    {
-        return $this->propertiesInjections;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isAnnotated()
-    {
-        return $this->isAnnotated;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return serialize($this);
+        return new ChangeSet($this, $fqcn);
     }
 }
