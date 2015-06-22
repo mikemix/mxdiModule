@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION", "METHOD"})
  */
-final class InjectDoctrine implements Annotation
+final class InjectDoctrine implements AnnotationInterface
 {
     /**
      * Get the value.

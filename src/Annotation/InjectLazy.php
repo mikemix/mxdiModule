@@ -11,7 +11,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION", "METHOD"})
  */
-final class InjectLazy implements Annotation
+final class InjectLazy implements AnnotationInterface
 {
     /** @var string */
     public $value;

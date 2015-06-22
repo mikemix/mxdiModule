@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @Annotation
  * @Target("METHOD")
  */
-final class InjectParams implements \IteratorAggregate, \Countable, Annotation
+final class InjectParams implements \IteratorAggregate, \Countable, AnnotationInterface
 {
     /** @var array */
     public $value = [];

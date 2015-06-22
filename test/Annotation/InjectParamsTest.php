@@ -1,7 +1,7 @@
 <?php
 namespace mxdiModuleTest\Annotation;
 
-use mxdiModule\Annotation\Annotation;
+use mxdiModule\Annotation\AnnotationInterface;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 use mxdiModuleTest\TestCase;
@@ -21,7 +21,7 @@ class InjectParamsTest extends TestCase
 
     public function testGetValue()
     {
-        $injectionA = $this->getMockBuilder(Annotation::class)
+        $injectionA = $this->getMockBuilder(AnnotationInterface::class)
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
 
@@ -29,7 +29,7 @@ class InjectParamsTest extends TestCase
             ->method('getValue')
             ->will($this->returnValue('A'));
 
-        $injectionB = $this->getMockBuilder(Annotation::class)
+        $injectionB = $this->getMockBuilder(AnnotationInterface::class)
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
 

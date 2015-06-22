@@ -8,7 +8,7 @@ use mxdiModule\Exception\CannotGetValue;
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION", "METHOD"})
  */
-final class InjectConfig implements Annotation
+final class InjectConfig implements AnnotationInterface
 {
     /** @var string */
     public $value;

@@ -4,7 +4,7 @@ namespace mxdiModule\Annotation;
 use mxdiModule\Exception\CannotGetValue;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-interface Annotation
+interface AnnotationInterface
 {
     /**
      * Get the value.
