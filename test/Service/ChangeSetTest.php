@@ -21,16 +21,23 @@ class ChangeSetTest extends TestCase
         ]);
     }
 
+    public function testDontAllowInvalidFqcns()
+    {
+        $changeSet = new ChangeSet($this->extractor, \stdClass::class);
+
+        $this->assertFalse($changeSet->isAnnotated());
+    }
+
     public function testGetConstructorInjections()
     {
         $params = new InjectParams();
 
         $this->extractor->expects($this->once())
             ->method('getConstructorInjections')
-            ->with($this->equalTo('fqcn'))
+            ->with($this->equalTo(\stdClass::class))
             ->will($this->returnValue($params));
 
-        $changeSet = new ChangeSet($this->extractor, 'fqcn');
+        $changeSet = new ChangeSet($this->extractor, \stdClass::class);
 
         $this->assertSame($params, $changeSet->getConstructorInjections());
         $this->assertFalse($changeSet->hasSimpleConstructor());
@@ -41,10 +48,10 @@ class ChangeSetTest extends TestCase
     {
         $this->extractor->expects($this->once())
             ->method('getConstructorInjections')
-            ->with($this->equalTo('fqcn'))
+            ->with($this->equalTo(\stdClass::class))
             ->will($this->returnValue(null));
 
-        $changeSet = new ChangeSet($this->extractor, 'fqcn');
+        $changeSet = new ChangeSet($this->extractor, \stdClass::class);
         $this->assertTrue($changeSet->hasSimpleConstructor());
         $this->assertFalse($changeSet->isAnnotated());
     }
@@ -57,10 +64,10 @@ class ChangeSetTest extends TestCase
 
         $this->extractor->expects($this->once())
             ->method('getMethodsInjections')
-            ->with($this->equalTo('fqcn'))
+            ->with($this->equalTo(\stdClass::class))
             ->will($this->returnValue($params));
 
-        $changeSet = new ChangeSet($this->extractor, 'fqcn');
+        $changeSet = new ChangeSet($this->extractor, \stdClass::class);
 
         $this->assertSame($params, $changeSet->getMethodsInjections());
         $this->assertTrue($changeSet->isAnnotated());
@@ -74,10 +81,10 @@ class ChangeSetTest extends TestCase
 
         $this->extractor->expects($this->once())
             ->method('getPropertiesInjections')
-            ->with($this->equalTo('fqcn'))
+            ->with($this->equalTo(\stdClass::class))
             ->will($this->returnValue($params));
 
-        $changeSet = new ChangeSet($this->extractor, 'fqcn');
+        $changeSet = new ChangeSet($this->extractor, \stdClass::class);
 
         $this->assertSame($params, $changeSet->getPropertiesInjections());
         $this->assertTrue($changeSet->isAnnotated());
@@ -91,10 +98,10 @@ class ChangeSetTest extends TestCase
 
         $this->extractor->expects($this->once())
             ->method('getPropertiesInjections')
-            ->with($this->equalTo('fqcn'))
+            ->with($this->equalTo(\stdClass::class))
             ->will($this->returnValue($params));
 
-        $changeSet = new ChangeSet($this->extractor, 'fqcn');
+        $changeSet = new ChangeSet($this->extractor, \stdClass::class);
 
         $this->assertInternalType('string', (string) $changeSet);
     }
