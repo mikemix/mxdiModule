@@ -19,10 +19,14 @@ class ChangeSet
     protected $propertiesInjections;
 
     /** @var bool */
-    protected $isAnnotated;
+    protected $isAnnotated = false;
 
     public function __construct(AnnotationExtractor $extractor, $fqcn)
     {
+        if (!class_exists($fqcn)) {
+            return;
+        }
+
         $this->constructorInjections = $extractor->getConstructorInjections($fqcn);
         $this->hasSimpleConstructor = null === $this->constructorInjections;
 
