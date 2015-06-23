@@ -33,8 +33,8 @@ return [
     //
     //
     'modules' => [
-        // other modules
         'mxdiModule',
+        // other modules
     ],
     //
     //
