@@ -70,7 +70,7 @@ class InstantiatorTest extends TestCase
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
 
-        $injection->expects($this->once())
+        $injection->expects($this->atLeastOnce())
             ->method('getValue')
             ->will($this->returnValue('testValue'));
 
@@ -91,7 +91,8 @@ class InstantiatorTest extends TestCase
         $changeSet->expects($this->once())
             ->method('getPropertiesInjections')
             ->will($this->returnValue([
-                'property' => $injection
+                'propertyNull' => $injection,
+                'propertyString' => $injection,
             ]));
 
         $this->service->setServiceLocator($this->getServiceManager());
@@ -100,7 +101,8 @@ class InstantiatorTest extends TestCase
         $object = $this->service->create(WithPublicProperty::class, $changeSet);
 
         $this->assertInstanceOf(WithPublicProperty::class, $object);
-        $this->assertEquals('testValue', $object->property);
+        $this->assertEquals('testValue', $object->propertyNull);
+        $this->assertEquals('testValue', $object->propertyString);
     }
 
     public function testCreate()

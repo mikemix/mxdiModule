@@ -3,5 +3,7 @@ namespace mxdiModuleTest\TestObjects;
 
 class WithPublicProperty
 {
-    public $property;
+    public $propertyNull = null;
+
+    public $propertyString = 'string';
 }
