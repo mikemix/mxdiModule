@@ -7,6 +7,7 @@ return [
         ],
         'factories' => [
             mxdiModule\Factory\ProxyFactory::class => mxdiModule\Factory\ProxyFactory::class,
+            'mxdiModule\Cache'                     => mxdiModule\Factory\Cache\CacheFactory::class,
         ],
         'abstract_factories' => [
             mxdiModule\Factory\DiAbstractFactory::class,
@@ -25,6 +26,15 @@ return [
     'console' => [
         'router' => [
             'routes' => [
+                'mxdimodule-cache-clear' => [
+                    'options' => [
+                        'route'    => 'mxdimodule cache clear',
+                        'defaults' => [
+                            'controller' => 'mxdiModule\Controller\CacheClear',
+                            'action'     => 'index'
+                        ],
+                    ],
+                ],
                 'mxdimodule-proxy-clear' => [
                     'options' => [
                         'route'    => 'mxdimodule proxy clear',
