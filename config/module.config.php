@@ -50,6 +50,7 @@ return [
     'controllers' => [
         'factories' => [
             'mxdiModule\Controller\ProxyClear' => mxdiModule\Factory\Controller\ProxyClearControllerFactory::class,
+            'mxdiModule\Controller\CacheClear' => mxdiModule\Factory\Controller\CacheClearControllerFactory::class,
         ],
     ],
 ];
