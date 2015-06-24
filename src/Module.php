@@ -58,6 +58,7 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
     {
         return [
             'mxdimodule proxy clear' => 'Remove proxies from the proxy dir',
+            'mxdimodule cache clear' => 'Flush the cache',
         ];
     }
 }
