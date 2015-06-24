@@ -286,6 +286,7 @@ If you get *ServiceNotCreated* exception most probably one of your injections is
 ### Console commands
 
 * Clear generated proxy files: `php public/index.php mxdimodule proxy clear`
+* Clear annotation parsing cache: `php public/index.php mxdimodule cache clear`
 
 ### Custom annotations
 
