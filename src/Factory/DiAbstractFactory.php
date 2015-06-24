@@ -1,9 +1,7 @@
 <?php
 namespace mxdiModule\Factory;
 
-use Zend\Cache\StorageFactory;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
-use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -44,7 +42,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        if (! $this->config) {
+        if (!$this->config) {
             $this->config = (array)$serviceLocator->get('config')['mxdimodule'];
         }
 
@@ -53,7 +51,11 @@ class DiAbstractFactory implements AbstractFactoryInterface
             return false;
         }
 
-        $this->changeSet = $this->getCache()->getItem($name);
+        if (!$this->cache) {
+            $this->cache = $serviceLocator->get('mxdiModule\Cache');
+        }
+
+        $this->changeSet = $this->cache->getItem($name);
 
         if ($this->changeSet instanceof ChangeSet) {
             // Positive result available via cache
@@ -67,13 +69,13 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         if ($this->changeSet->isAnnotated()) {
             // Service is annotated to cache results
-            $this->getCache()->setItem($name, $this->changeSet);
+            $this->cache->setItem($name, $this->changeSet);
             return true;
         }
 
         // Service is not annotated
         // Cache false for it
-        $this->getCache()->setItem($name, false);
+        $this->cache->setItem($name, false);
         return false;
     }
 
@@ -89,28 +91,5 @@ class DiAbstractFactory implements AbstractFactoryInterface
     {
         $this->instantiator->setServiceLocator($serviceLocator);
         return $this->instantiator->create($requestedName, $this->changeSet);
-    }
-
-    /**
-     * Get cache adapter
-     *
-     * @return AbstractAdapter|StorageInterface
-     */
-    protected function getCache()
-    {
-        if ($this->cache) {
-            return $this->cache;
-        }
-
-        $this->cache = StorageFactory::adapterFactory(
-            $this->config['cache_adapter'],
-            $this->config['cache_options']
-        );
-
-        if ($this->cache instanceof AbstractAdapter) {
-            $this->cache->addPlugin(new Serializer());
-        }
-
-        return $this->cache;
     }
 }
