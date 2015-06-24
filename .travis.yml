@@ -10,6 +10,7 @@ php:
 matrix:
   allow_failures:
     - php: nightly
+    - php: hvvm
 
 before_script:
   - travis_retry composer self-update
