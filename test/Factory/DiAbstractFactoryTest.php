@@ -39,19 +39,6 @@ class DiAbstractFactoryTest extends TestCase
             ->setMethods(['get'])
             ->getMockForAbstractClass();
 
-        $this->serviceLocator->expects($this->any())
-            ->method('get')
-            ->with($this->equalTo('config'))
-            ->will($this->returnValue([
-                'mxdimodule' => [
-                    'cache_adapter' => $this->cacheAdapter,
-                    'cache_options' => [],
-                    'avoid_service' => [
-                        'servicename' => true,
-                    ],
-                ],
-            ]));
-
         $this->extractor = $this->getMockBuilder(AnnotationExtractor::class)
             ->setMethods(['getChangeSet'])
             ->disableOriginalConstructor()
@@ -78,6 +65,18 @@ class DiAbstractFactoryTest extends TestCase
 
         $this->cacheAdapter->expects($this->never())
             ->method('setItem');
+
+        $this->serviceLocator->expects($this->at(0))
+            ->method('get')
+            ->with($this->equalTo('config'))
+            ->will($this->returnValue([
+                'mxdimodule' => []
+            ]));
+
+        $this->serviceLocator->expects($this->at(1))
+            ->method('get')
+            ->with($this->equalTo('mxdiModule\Cache'))
+            ->will($this->returnValue($this->cacheAdapter));
 
         $this->assertTrue(
             $this->factory->canCreateServiceWithName($this->serviceLocator, 'injectable', Injectable::class)
@@ -109,6 +108,18 @@ class DiAbstractFactoryTest extends TestCase
             ->method('setItem')
             ->with($this->equalTo('injectable'), $this->equalTo(false));
 
+        $this->serviceLocator->expects($this->at(0))
+            ->method('get')
+            ->with($this->equalTo('config'))
+            ->will($this->returnValue([
+                'mxdimodule' => [],
+            ]));
+
+        $this->serviceLocator->expects($this->at(1))
+            ->method('get')
+            ->with($this->equalTo('mxdiModule\Cache'))
+            ->will($this->returnValue($this->cacheAdapter));
+
         $this->assertFalse(
             $this->factory->canCreateServiceWithName($this->serviceLocator, 'injectable', Injectable::class)
         );
@@ -139,6 +150,18 @@ class DiAbstractFactoryTest extends TestCase
             ->method('setItem')
             ->with($this->equalTo('injectable'), $this->equalTo($result));
 
+        $this->serviceLocator->expects($this->at(0))
+            ->method('get')
+            ->with($this->equalTo('config'))
+            ->will($this->returnValue([
+                'mxdimodule' => [],
+            ]));
+
+        $this->serviceLocator->expects($this->at(1))
+            ->method('get')
+            ->with($this->equalTo('mxdiModule\Cache'))
+            ->will($this->returnValue($this->cacheAdapter));
+
         $this->assertTrue(
             $this->factory->canCreateServiceWithName($this->serviceLocator, 'injectable', Injectable::class)
         );
@@ -166,6 +189,17 @@ class DiAbstractFactoryTest extends TestCase
 
     public function testFactoryAvoidsKnownServices()
     {
+        $this->serviceLocator->expects($this->at(0))
+            ->method('get')
+            ->with($this->equalTo('config'))
+            ->will($this->returnValue([
+                'mxdimodule' => [
+                    'avoid_service' => [
+                        'servicename' => true,
+                    ],
+                ],
+            ]));
+
         $this->assertFalse(
             $this->factory->canCreateServiceWithName($this->serviceLocator, 'servicename', 'fqcn')
         );
