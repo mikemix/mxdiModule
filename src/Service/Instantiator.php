@@ -68,7 +68,7 @@ class Instantiator
                 continue;
             }
 
-            if (isset(get_object_vars($object)[$propertyName])) {
+            if (array_key_exists($propertyName, get_object_vars($object))) {
                 $object->$propertyName = $value;
                 continue;
             }

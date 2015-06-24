@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModuleTest\Service;
 
+use mxdiModule\Annotation\AnnotationInterface;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 use mxdiModule\Service\ChangeSet;
@@ -15,6 +16,7 @@ use mxdiModuleTest\TestObjects\DependencyE;
 use mxdiModuleTest\TestObjects\FakeDoctrine;
 use mxdiModuleTest\TestObjects\Injectable;
 use mxdiModuleTest\TestObjects\IntegrationTest;
+use mxdiModuleTest\TestObjects\WithPublicProperty;
 
 class InstantiatorTest extends TestCase
 {
@@ -35,6 +37,70 @@ class InstantiatorTest extends TestCase
 
         $this->setExpectedException('InvalidArgumentException');
         $this->service->create('fqcn', $changeSet);
+    }
+
+    public function testCreateWithSimpleConstructor()
+    {
+        /** @var ChangeSet|\PHPUnit_Framework_MockObject_MockObject $changeSet */
+        $changeSet = $this->getMockBuilder(ChangeSet::class)
+            ->setMethods(['hasSimpleConstructor', 'getMethodsInjections', 'getPropertiesInjections'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $changeSet->expects($this->once())
+            ->method('hasSimpleConstructor')
+            ->will($this->returnValue(true));
+
+        $changeSet->expects($this->once())
+            ->method('getMethodsInjections')
+            ->will($this->returnValue([]));
+
+        $changeSet->expects($this->once())
+            ->method('getPropertiesInjections')
+            ->will($this->returnValue([]));
+
+        $this->service->setServiceLocator($this->getServiceManager());
+
+        $this->assertInstanceOf(\stdClass::class, $this->service->create(\stdClass::class, $changeSet));
+    }
+
+    public function testCreateWithPubliclyAvailableProperties()
+    {
+        $injection = $this->getMockBuilder(AnnotationInterface::class)
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
+
+        $injection->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue('testValue'));
+
+        /** @var ChangeSet|\PHPUnit_Framework_MockObject_MockObject $changeSet */
+        $changeSet = $this->getMockBuilder(ChangeSet::class)
+            ->setMethods(['hasSimpleConstructor', 'getMethodsInjections', 'getPropertiesInjections'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $changeSet->expects($this->once())
+            ->method('hasSimpleConstructor')
+            ->will($this->returnValue(true));
+
+        $changeSet->expects($this->once())
+            ->method('getMethodsInjections')
+            ->will($this->returnValue([]));
+
+        $changeSet->expects($this->once())
+            ->method('getPropertiesInjections')
+            ->will($this->returnValue([
+                'property' => $injection
+            ]));
+
+        $this->service->setServiceLocator($this->getServiceManager());
+
+        /** @var WithPublicProperty $object */
+        $object = $this->service->create(WithPublicProperty::class, $changeSet);
+
+        $this->assertInstanceOf(WithPublicProperty::class, $object);
+        $this->assertEquals('testValue', $object->property);
     }
 
     public function testCreate()
