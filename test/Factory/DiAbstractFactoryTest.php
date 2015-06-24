@@ -70,7 +70,7 @@ class DiAbstractFactoryTest extends TestCase
             ->method('get')
             ->with($this->equalTo('config'))
             ->will($this->returnValue([
-                'mxdimodule' => []
+                'mxdimodule' => ['avoid_service' => []]
             ]));
 
         $this->serviceLocator->expects($this->at(1))
@@ -112,7 +112,7 @@ class DiAbstractFactoryTest extends TestCase
             ->method('get')
             ->with($this->equalTo('config'))
             ->will($this->returnValue([
-                'mxdimodule' => [],
+                'mxdimodule' => ['avoid_service' => []]
             ]));
 
         $this->serviceLocator->expects($this->at(1))
@@ -154,7 +154,7 @@ class DiAbstractFactoryTest extends TestCase
             ->method('get')
             ->with($this->equalTo('config'))
             ->will($this->returnValue([
-                'mxdimodule' => [],
+                'mxdimodule' => ['avoid_service' => []]
             ]));
 
         $this->serviceLocator->expects($this->at(1))

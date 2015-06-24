@@ -42,19 +42,11 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        if (!$this->config) {
-            $this->config = (array)$serviceLocator->get('config')['mxdimodule'];
-        }
-
-        if (isset($this->config['avoid_service'][$name]) && $this->config['avoid_service'][$name]) {
-            // avoid known services
+        if ($this->shouldBeAvoided($serviceLocator, $name)) {
             return false;
         }
 
-        if (!$this->cache) {
-            $this->cache = $serviceLocator->get('mxdiModule\Cache');
-        }
-
+        $this->initializeCache($serviceLocator);
         $this->changeSet = $this->cache->getItem($name);
 
         if ($this->changeSet instanceof ChangeSet) {
@@ -91,5 +83,29 @@ class DiAbstractFactory implements AbstractFactoryInterface
     {
         $this->instantiator->setServiceLocator($serviceLocator);
         return $this->instantiator->create($requestedName, $this->changeSet);
+    }
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param string $name
+     * @return bool
+     */
+    protected function shouldBeAvoided(ServiceLocatorInterface $serviceLocator, $name)
+    {
+        if (! $this->config) {
+            $this->config = $serviceLocator->get('config')['mxdimodule']['avoid_service'];
+        }
+
+        return isset($this->config[$name]) && $this->config[$name];
+    }
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    protected function initializeCache(ServiceLocatorInterface $serviceLocator)
+    {
+        if (!$this->cache) {
+            $this->cache = $serviceLocator->get('mxdiModule\Cache');
+        }
     }
 }
