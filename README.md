@@ -50,6 +50,7 @@ This will enable the module and register the Abstract Factory in the ZF2's Servi
 * [`@InjectConfig`](#injectconfig-annotation)
 * [`@InjectLazy`](#injectlazy-annotation)
 * [`@InjectDoctrine`](#injectdoctrine-annotation)
+* [`@InjectDoctrineRepository`](#injectdoctrinerepository-annotation)
 
 #### InjectParams Annotation
 
@@ -157,6 +158,24 @@ $object->request = $proxyGenerator->create('Zend\Http\Request', function () use 
 
 `@InjectDoctrine` annotation is allowed inside `@InjectParams` annotation and properties.
 This annotation injects the Doctrine\ORM\EntityManager.
+
+#### InjectDoctrineRepository annotation
+
+`@InjectDoctrineRepository` annotation is allowed inside `@InjectParams` annotation and properties.
+This annotation injects Doctrine's repository for given entity.
+
+```php
+/**
+ * @var App\Entity\UserRepository
+ * @InjectDoctrineRepository("App\Entity\User")
+ */
+public function setRepository(UserRepository $repository) ...
+
+// which translates to
+
+$object->setRepository($sm->get('Doctrine\ORM\EntityManager')->getRepository('App\Entity\User'));
+
+```
 
 ### Complete example class
 
