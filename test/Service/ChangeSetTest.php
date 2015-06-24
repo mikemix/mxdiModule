@@ -23,7 +23,7 @@ class ChangeSetTest extends TestCase
 
     public function testDontAllowInvalidFqcns()
     {
-        $changeSet = new ChangeSet($this->extractor, \stdClass::class);
+        $changeSet = new ChangeSet($this->extractor, 'invalid_fqcn');
 
         $this->assertFalse($changeSet->isAnnotated());
     }
