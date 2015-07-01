@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModule\Factory;
 
+use mxdiModule\Service\ExtractorInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
@@ -17,7 +18,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
     /** @var ChangeSet|mixed */
     protected $changeSet;
 
-    /** @var AnnotationExtractor */
+    /** @var ExtractorInterface */
     protected $extractor;
 
     /** @var Instantiator */
@@ -26,7 +27,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
     /** @var StorageInterface|AbstractAdapter */
     protected $cache;
 
-    public function __construct(AnnotationExtractor $extractor = null, Instantiator $instantiator = null)
+    public function __construct(ExtractorInterface $extractor = null, Instantiator $instantiator = null)
     {
         $this->extractor = $extractor ?: new AnnotationExtractor();
         $this->instantiator = $instantiator ?: new Instantiator();
