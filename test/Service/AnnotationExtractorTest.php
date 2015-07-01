@@ -64,14 +64,8 @@ class AnnotationExtractorTest extends TestCase
         ];
 
         $expected = [
-            'setDependencyPrivate' => [
-                'public' => false,
-                'inject' => $paramsPrivate,
-            ],
-            'setDependencyPublic' => [
-                'public' => true,
-                'inject' => $paramsPublic,
-            ],
+            'setDependencyPrivate' => $paramsPrivate,
+            'setDependencyPublic' => $paramsPublic,
         ];
 
         $this->assertEquals($expected, $this->service->getMethodsInjections(PublicPrivate::class));
@@ -80,14 +74,8 @@ class AnnotationExtractorTest extends TestCase
     public function testGetPropertiesInjections()
     {
         $expected = [
-            'propertyPrivate' => [
-                'public' => false,
-                'inject' => $this->createInjectionFor(DependencyA::class),
-            ],
-            'propertyPublic' => [
-                'public' => true,
-                'inject' => $this->createInjectionFor(DependencyB::class),
-            ],
+            'propertyPrivate' => $this->createInjectionFor(DependencyA::class),
+            'propertyPublic' => $this->createInjectionFor(DependencyB::class),
         ];
 
         $this->assertEquals($expected, $this->service->getPropertiesInjections(PublicPrivate::class));
