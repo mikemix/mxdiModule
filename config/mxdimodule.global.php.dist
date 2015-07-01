@@ -1,0 +1,9 @@
+<?php
+
+return [
+    'mxdimodule' => [
+        /* AnnotationExtractor is the default extractor. Uncomment to change */
+        //'extractor'         => mxdiModule\Service\YamlExtractor::class,
+        //'extractor_options' => ['file' => __DIR__ . '/../path.to.yml'],
+    ],
+];
