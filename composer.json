@@ -1,12 +1,13 @@
 {
     "name": "mikemix/mxdi-module",
-    "description": "Configure dependency injection using annotations",
+    "description": "Configure dependency injection in ZF2 using annotations/YAML",
     "keywords": [
         "zf2",
         "zendframework",
         "di",
         "dependency injection",
-        "annotations"
+        "annotations",
+        "yaml"
     ],
     "homepage": "https://github.com/mikemix/mxdiModule",
     "license": "MIT",
