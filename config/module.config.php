@@ -14,11 +14,13 @@ return [
         ],
     ],
     'mxdimodule' => [
-        'proxy_dir'     => 'data/mxdiModule',
-        'proxy_namespace' => 'mxdiModuleProxy',
-        'cache_adapter' => 'memory',
-        'cache_options' => [],
-        'avoid_service' => [
+        'extractor'         => mxdiModule\Service\YamlExtractor::class,
+        'extractor_options' => [],
+        'proxy_dir'         => 'data/mxdiModule',
+        'proxy_namespace'   => 'mxdiModuleProxy',
+        'cache_adapter'     => 'memory',
+        'cache_options'     => [],
+        'avoid_service'     => [
             'zendmodulemanagermodulemanager' => true,
             'zendi18ntranslatortranslatorinterface' => true,
         ],
