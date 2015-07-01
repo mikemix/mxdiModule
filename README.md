@@ -14,7 +14,7 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
 6. [Debugging](#debugging)
 7. [Console commands](#console-commands)
 8. [Custom annotations](#custom-annotations)
-
+9. [Working with Plugin Managers](#working-with-plugin-managers)
 
 ### Installation
 
@@ -289,3 +289,28 @@ You can write custom `@Inject(type)` annotations in couple easy steps:
 1. Write your custom annotation class which implements the `mxdiModule\Annotation\AnnotationInterface` interface
 2. Register it in the YourModule::init() method: `\Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . '/src/Module/Annotation/YourAnnotation.php')`
 3. Voila!
+
+### Working with Plugin Managers
+
+By default the Abstract Factory is not registered for abstract plugin managers like `FormElementManager` (form management),
+`PluginManager` (controller management) etc. for performance reasons. You can register the Abstract Factory for yourself if you want to.
+
+For example, to enable annotations in controllers:
+
+```php
+// example config file module/Application/config/module.config.php
+
+return [
+    // other keys
+    //
+    'controllers' => [
+        'abstract_factories' => [
+            mxdiModule\Factory\DiAbstractPluginFactory::class, // <-- annotations now enabled
+        ],
+        'invokables' => [
+            // your controllers
+        ],
+    ],
+    //
+    //
+];
