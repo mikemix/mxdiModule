@@ -30,30 +30,20 @@ class Instantiator
             throw new \InvalidArgumentException('Service locator is mandatory');
         }
 
-        if ($changeSet->hasSimpleConstructor()) {
-            $object = new $fqcn;
-        } else {
-            $reflection = new \ReflectionClass($fqcn);
-            $object = $reflection->newInstanceArgs(
-                $changeSet->getConstructorInjections()->getValue($this->serviceLocator)
-            );
-        }
+        $object = $this->createObject($fqcn, $changeSet);
+        $this->injectMethods($object, $fqcn, $changeSet);
+        $this->injectProperties($object, $fqcn, $changeSet);
 
-        /**
-         * @var string $propertyName
-         * @var Inject[]|bool[] $injection
-         */
-        foreach ($changeSet->getMethodsInjections() as $methodName => $injection) {
-            $value = $injection['inject']->getValue($this->serviceLocator);
+        return $object;
+    }
 
-            if ($injection['public']) {
-                call_user_func_array([$object, $methodName], $value);
-                continue;
-            }
-
-            $this->invokeMethod($fqcn, $object, $methodName, $value);
-        }
-
+    /**
+     * @param object $object
+     * @param string $fqcn
+     * @param ChangeSet $changeSet
+     */
+    protected function injectProperties($object, $fqcn, ChangeSet $changeSet)
+    {
         /**
          * @var string $propertyName
          * @var Inject[]|bool[] $injection
@@ -68,8 +58,47 @@ class Instantiator
 
             $this->setPropertyValue($fqcn, $object, $propertyName, $value);
         }
+    }
 
-        return $object;
+    /**
+     * @param object $object
+     * @param string $fqcn
+     * @param ChangeSet $changeSet
+     */
+    protected function injectMethods($object, $fqcn, ChangeSet $changeSet)
+    {
+        /**
+         * @var string $propertyName
+         * @var Inject[]|bool[] $injection
+         * @var array $value
+         */
+        foreach ($changeSet->getMethodsInjections() as $methodName => $injection) {
+            $value = $injection['inject']->getValue($this->serviceLocator);
+
+            if ($injection['public']) {
+                call_user_func_array([$object, $methodName], $value);
+                continue;
+            }
+
+            $this->invokeMethod($fqcn, $object, $methodName, $value);
+        }
+    }
+
+    /**
+     * @param string $fqcn
+     * @param ChangeSet $changeSet
+     * @return object
+     */
+    protected function createObject($fqcn, ChangeSet $changeSet)
+    {
+        if ($changeSet->hasSimpleConstructor()) {
+            return new $fqcn;
+        }
+
+        $reflection = new \ReflectionClass($fqcn);
+        return $reflection->newInstanceArgs(
+            $changeSet->getConstructorInjections()->getValue($this->serviceLocator)
+        );
     }
 
     /**
