@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModuleTest\Service;
 
+use mxdiModule\Annotation\InjectParams;
 use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\YamlExtractor;
 
@@ -52,15 +53,11 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
 
         $service = new YamlExtractor(['file' => '']);
 
-        $injections = $service->getConstructorInjections('fqcn');
-        $injection1 = $injections[0];
-        $injection2 = $injections[1];
+        $injection = $service->getConstructorInjections('fqcn');
 
-        $this->assertInstanceOf(\stdClass::class, $injection1);
-        $this->assertEquals('testValue', $injection1->value);
-
-        $this->assertInstanceOf(\stdClass::class, $injection2);
-        $this->assertEquals('anotherValue', $injection2->value);
+        $this->assertInstanceOf(InjectParams::class, $injection);
+        $this->assertEquals('testValue', $injection->value[0]->value);
+        $this->assertEquals('anotherValue', $injection->value[1]->value);
     }
 
     public function testParseReturnsNullWhenNoMethodsInjections()

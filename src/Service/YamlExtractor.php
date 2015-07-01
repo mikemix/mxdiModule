@@ -2,6 +2,7 @@
 namespace mxdiModule\Service;
 
 use mxdiModule\Annotation\AnnotationInterface;
+use mxdiModule\Annotation\InjectParams;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlExtractor implements ExtractorInterface
@@ -40,9 +41,9 @@ class YamlExtractor implements ExtractorInterface
             return null;
         }
 
-        $injections = [];
+        $injections = new InjectParams();
         foreach ($this->config[$fqcn]['constructor'] as $spec) {
-            $injections[] = $this->createInjectionObject($spec);
+            $injections->value[] = $this->createInjectionObject($spec);
         }
 
         return $injections;
