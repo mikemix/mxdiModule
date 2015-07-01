@@ -6,7 +6,6 @@ use Zend\Cache\Storage\Adapter\AbstractAdapter;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\Instantiator;
 
@@ -27,9 +26,8 @@ class DiAbstractFactory implements AbstractFactoryInterface
     /** @var StorageInterface|AbstractAdapter */
     protected $cache;
 
-    public function __construct(ExtractorInterface $extractor = null, Instantiator $instantiator = null)
+    public function __construct(Instantiator $instantiator = null)
     {
-        $this->extractor = $extractor ?: new AnnotationExtractor();
         $this->instantiator = $instantiator ?: new Instantiator();
     }
 
@@ -58,6 +56,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         // Result is not available via cache
         // Calculate the result first
+        $this->initializeExtractor($serviceLocator);
         $this->setChangeSet($this->extractor->getChangeSet($requestedName));
 
         if ($this->getChangeSet()->isAnnotated()) {
@@ -103,6 +102,16 @@ class DiAbstractFactory implements AbstractFactoryInterface
     /**
      * @param ServiceLocatorInterface $serviceLocator
      */
+    protected function initializeExtractor(ServiceLocatorInterface $serviceLocator)
+    {
+        if (!$this->extractor) {
+            $this->extractor = $serviceLocator->get('mxdiModule\Extractor');
+        }
+    }
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     */
     protected function initializeCache(ServiceLocatorInterface $serviceLocator)
     {
         if (!$this->cache) {
@@ -124,5 +133,21 @@ class DiAbstractFactory implements AbstractFactoryInterface
     public function setChangeSet($changeSet)
     {
         $this->changeSet = $changeSet;
+    }
+
+    /**
+     * @param ExtractorInterface $extractor
+     */
+    public function setExtractor(ExtractorInterface $extractor)
+    {
+        $this->extractor = $extractor;
+    }
+
+    /**
+     * @param Instantiator $instantiator
+     */
+    public function setInstantiator(Instantiator $instantiator)
+    {
+        $this->instantiator = $instantiator;
     }
 }
