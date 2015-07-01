@@ -3,22 +3,20 @@ namespace mxdiModule\Service;
 
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use mxdiModule\Annotation\AnnotationInterface;
-use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 
-class AnnotationExtractor
+class AnnotationExtractor implements ExtractorInterface
 {
     /** @var Reader */
     protected $reader;
 
-    public function __construct(Reader $reader = null)
+    public function __construct()
     {
-        $this->reader = $reader ?: new Reader();
+        $this->reader = new Reader();
     }
 
     /**
-     * @param string $fqcn
-     * @return InjectParams|null
+     * {@inheritdoc}
      */
     public function getConstructorInjections($fqcn)
     {
@@ -33,10 +31,7 @@ class AnnotationExtractor
     }
 
     /**
-     * Get methods injections (except the constructor).
-     *
-     * @param string $fqcn
-     * @return InjectParams[]
+     * {@inheritdoc}
      */
     public function getMethodsInjections($fqcn)
     {
@@ -50,14 +45,13 @@ class AnnotationExtractor
                 continue;
             }
 
-            $reflectionMethod = new \ReflectionMethod($fqcn, $name);
-            $inject = $this->reader->getMethodAnnotation($reflectionMethod, AnnotationInterface::class);
+            $inject = $this->reader->getMethodAnnotation(
+                new \ReflectionMethod($fqcn, $name),
+                AnnotationInterface::class
+            );
 
             if (null !== $inject) {
-                $injections[$name] = [
-                    'public'    => $reflectionMethod->isPublic(),
-                    'inject' => $inject,
-                ];
+                $injections[$name] = $inject;
             }
         }
 
@@ -65,10 +59,7 @@ class AnnotationExtractor
     }
 
     /**
-     * Get properties injections (except the constructor).
-     *
-     * @param string $fqcn
-     * @return Inject[]
+     * {@inheritdoc}
      */
     public function getPropertiesInjections($fqcn)
     {
@@ -80,10 +71,7 @@ class AnnotationExtractor
             $inject = $this->reader->getPropertyAnnotation($reflectionProperty, AnnotationInterface::class);
 
             if (null !== $inject) {
-                $injections[$property->getName()] = [
-                    'public' => $reflectionProperty->isPublic(),
-                    'inject' => $inject,
-                ];
+                $injections[$property->getName()] = $inject;
             }
         }
 
@@ -91,13 +79,18 @@ class AnnotationExtractor
     }
 
     /**
-     * Handy shortcut.
-     *
-     * @param string $fqcn
-     * @return ChangeSet
+     * {@inheritdoc}
      */
     public function getChangeSet($fqcn)
     {
         return new ChangeSet($this, $fqcn);
+    }
+
+    /**
+     * @param Reader $reader
+     */
+    public function setReader(Reader $reader)
+    {
+        $this->reader = $reader;
     }
 }

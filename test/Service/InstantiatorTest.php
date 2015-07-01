@@ -19,6 +19,14 @@ class InstantiatorTest extends TestCase
         $this->service = new Instantiator();
     }
 
+    public function testCreateThrowsExceptionWithNoServiceLocator()
+    {
+        $changeSet = $this->getChangeSetMock();
+
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->service->create('fqcn', $changeSet);
+    }
+
     public function testCreateWithSimpleConstructor()
     {
         $changeSet = $this->getChangeSetMock();
@@ -74,10 +82,7 @@ class InstantiatorTest extends TestCase
         $params = [new \stdClass()];
 
         $injections = [
-            'setDependencyPrivate' => [
-                'public' => false,
-                'inject' => $this->getInjectionMock($params),
-            ],
+            'setDependencyPrivate' => $this->getInjectionMock($params),
         ];
 
         $changeSet = $this->getChangeSetMock();
@@ -93,6 +98,11 @@ class InstantiatorTest extends TestCase
         $changeSet->expects($this->once())
             ->method('getPropertiesInjections')
             ->will($this->returnValue([]));
+
+        $changeSet->expects($this->once())
+            ->method('isMethodPublic')
+            ->with($this->equalTo('setDependencyPrivate'))
+            ->will($this->returnValue(false));
 
         $object = $this->service->create(PublicPrivate::class, $changeSet);
 
@@ -106,10 +116,7 @@ class InstantiatorTest extends TestCase
         $params = [new \stdClass()];
 
         $injections = [
-            'setDependencyPublic' => [
-                'public' => true,
-                'inject' => $this->getInjectionMock($params),
-            ],
+            'setDependencyPublic' => $this->getInjectionMock($params),
         ];
 
         $changeSet = $this->getChangeSetMock();
@@ -125,6 +132,11 @@ class InstantiatorTest extends TestCase
         $changeSet->expects($this->once())
             ->method('getPropertiesInjections')
             ->will($this->returnValue([]));
+
+        $changeSet->expects($this->once())
+            ->method('isMethodPublic')
+            ->with($this->equalTo('setDependencyPublic'))
+            ->will($this->returnValue(true));
 
         $object = $this->service->create(PublicPrivate::class, $changeSet);
 
@@ -148,15 +160,13 @@ class InstantiatorTest extends TestCase
         $changeSet->expects($this->once())
             ->method('getPropertiesInjections')
             ->will($this->returnValue([
-                'propertyNull' => [
-                    'public' => true,
-                    'inject' => $injection,
-                ],
-                'propertyString' => [
-                    'public' => true,
-                    'inject' => $injection,
-                ],
+                'propertyNull' => $injection,
+                'propertyString' => $injection,
             ]));
+
+        $changeSet->expects($this->atLeastOnce())
+            ->method('isPropertyPublic')
+            ->will($this->returnValue(true));
 
         $this->service->setServiceLocator(new ServiceManager());
 
@@ -175,10 +185,7 @@ class InstantiatorTest extends TestCase
         $params = new \stdClass();
 
         $injections = [
-            'propertyPrivate' => [
-                'public' => false,
-                'inject' => $this->getInjectionMock($params),
-            ],
+            'propertyPrivate' => $this->getInjectionMock($params),
         ];
 
         $changeSet = $this->getChangeSetMock();
@@ -195,15 +202,12 @@ class InstantiatorTest extends TestCase
             ->method('getPropertiesInjections')
             ->will($this->returnValue($injections));
 
+        $changeSet->expects($this->atLeastOnce())
+            ->method('isPropertyPublic')
+            ->with($this->equalTo('propertyPrivate'))
+            ->will($this->returnValue(false));
+
         $this->service->create(PublicPrivate::class, $changeSet);
-    }
-
-    public function testCreateThrowsExceptionWithNoServiceLocator()
-    {
-        $changeSet = $this->getChangeSetMock();
-
-        $this->setExpectedException('InvalidArgumentException');
-        $this->service->create('fqcn', $changeSet);
     }
 
     /**
@@ -235,6 +239,8 @@ class InstantiatorTest extends TestCase
                 'getConstructorInjections',
                 'getMethodsInjections',
                 'getPropertiesInjections',
+                'isPropertyPublic',
+                'isMethodPublic',
             ])
             ->disableOriginalConstructor()
             ->getMock();

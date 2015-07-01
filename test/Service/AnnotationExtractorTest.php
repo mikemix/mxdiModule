@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModuleTest\Service;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 use mxdiModule\Service\AnnotationExtractor;
@@ -18,7 +19,7 @@ use mxdiModuleTest\TestObjects\NoConstructor;
 class AnnotationExtractorTest extends TestCase
 {
     /** @var AnnotationExtractor */
-    protected $service;
+    private $service;
 
     public function setUp()
     {
@@ -64,14 +65,8 @@ class AnnotationExtractorTest extends TestCase
         ];
 
         $expected = [
-            'setDependencyPrivate' => [
-                'public' => false,
-                'inject' => $paramsPrivate,
-            ],
-            'setDependencyPublic' => [
-                'public' => true,
-                'inject' => $paramsPublic,
-            ],
+            'setDependencyPrivate' => $paramsPrivate,
+            'setDependencyPublic' => $paramsPublic,
         ];
 
         $this->assertEquals($expected, $this->service->getMethodsInjections(PublicPrivate::class));
@@ -80,14 +75,8 @@ class AnnotationExtractorTest extends TestCase
     public function testGetPropertiesInjections()
     {
         $expected = [
-            'propertyPrivate' => [
-                'public' => false,
-                'inject' => $this->createInjectionFor(DependencyA::class),
-            ],
-            'propertyPublic' => [
-                'public' => true,
-                'inject' => $this->createInjectionFor(DependencyB::class),
-            ],
+            'propertyPrivate' => $this->createInjectionFor(DependencyA::class),
+            'propertyPublic' => $this->createInjectionFor(DependencyB::class),
         ];
 
         $this->assertEquals($expected, $this->service->getPropertiesInjections(PublicPrivate::class));
@@ -96,6 +85,11 @@ class AnnotationExtractorTest extends TestCase
     public function testGetConstructorInjectionsWhenNoConstructorExistsShouldReturnNull()
     {
         $this->assertNull($this->service->getConstructorInjections(NoConstructor::class));
+    }
+
+    public function testSetReader()
+    {
+        $this->service->setReader($this->getMock(AnnotationReader::class));
     }
 
     private function createInjectionFor($fqcn)

@@ -8,17 +8,20 @@ return [
         'factories' => [
             mxdiModule\Factory\ProxyFactory::class => mxdiModule\Factory\ProxyFactory::class,
             'mxdiModule\Cache'                     => mxdiModule\Factory\Cache\CacheFactory::class,
+            'mxdiModule\Extractor'                 => mxdiModule\Factory\Service\ExtractorFactory::class,
         ],
         'abstract_factories' => [
             mxdiModule\Factory\DiAbstractFactory::class,
         ],
     ],
     'mxdimodule' => [
-        'proxy_dir'     => 'data/mxdiModule',
-        'proxy_namespace' => 'mxdiModuleProxy',
-        'cache_adapter' => 'memory',
-        'cache_options' => [],
-        'avoid_service' => [
+        'extractor'         => mxdiModule\Service\YamlExtractor::class,
+        'extractor_options' => [],
+        'proxy_dir'         => 'data/mxdiModule',
+        'proxy_namespace'   => 'mxdiModuleProxy',
+        'cache_adapter'     => 'memory',
+        'cache_options'     => [],
+        'avoid_service'     => [
             'zendmodulemanagermodulemanager' => true,
             'zendi18ntranslatortranslatorinterface' => true,
         ],
