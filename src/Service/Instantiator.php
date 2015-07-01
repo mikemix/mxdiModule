@@ -46,12 +46,12 @@ class Instantiator
     {
         /**
          * @var string $propertyName
-         * @var Inject[]|bool[] $injection
+         * @var Inject $injection
          */
         foreach ($changeSet->getPropertiesInjections() as $propertyName => $injection) {
-            $value = $injection['inject']->getValue($this->serviceLocator);
+            $value = $injection->getValue($this->serviceLocator);
 
-            if ($injection['public']) {
+            if ($changeSet->isPropertyPublic($propertyName)) {
                 $object->$propertyName = $value;
                 continue;
             }
@@ -69,13 +69,13 @@ class Instantiator
     {
         /**
          * @var string $propertyName
-         * @var Inject[]|bool[] $injection
+         * @var Inject $injection
          * @var array $value
          */
         foreach ($changeSet->getMethodsInjections() as $methodName => $injection) {
-            $value = $injection['inject']->getValue($this->serviceLocator);
+            $value = $injection->getValue($this->serviceLocator);
 
-            if ($injection['public']) {
+            if ($changeSet->isMethodPublic($methodName)) {
                 call_user_func_array([$object, $methodName], $value);
                 continue;
             }
