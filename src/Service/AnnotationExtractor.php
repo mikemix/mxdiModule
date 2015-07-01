@@ -1,19 +1,19 @@
 <?php
 namespace mxdiModule\Service;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use mxdiModule\Annotation\AnnotationInterface;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 
 class AnnotationExtractor
 {
-    /** @var AnnotationReader */
+    /** @var Reader */
     protected $reader;
 
-    public function __construct(AnnotationReader $reader = null)
+    public function __construct(Reader $reader = null)
     {
-        $this->reader = $reader ?: new AnnotationReader();
+        $this->reader = $reader ?: new Reader();
     }
 
     /**
@@ -50,13 +50,14 @@ class AnnotationExtractor
                 continue;
             }
 
-            $inject = $this->reader->getMethodAnnotation(
-                new \ReflectionMethod($fqcn, $name),
-                AnnotationInterface::class
-            );
+            $reflectionMethod = new \ReflectionMethod($fqcn, $name);
+            $inject = $this->reader->getMethodAnnotation($reflectionMethod, AnnotationInterface::class);
 
             if (null !== $inject) {
-                $injections[$name] = $inject;
+                $injections[$name] = [
+                    'public'    => $reflectionMethod->isPublic(),
+                    'inject' => $inject,
+                ];
             }
         }
 
@@ -75,13 +76,14 @@ class AnnotationExtractor
         $reflection = new \ReflectionClass($fqcn);
 
         foreach ($reflection->getProperties() as $property) {
-            $inject = $this->reader->getPropertyAnnotation(
-                new \ReflectionProperty($fqcn, $property->getName()),
-                AnnotationInterface::class
-            );
+            $reflectionProperty = new \ReflectionProperty($fqcn, $property->getName());
+            $inject = $this->reader->getPropertyAnnotation($reflectionProperty, AnnotationInterface::class);
 
             if (null !== $inject) {
-                $injections[$property->getName()] = $inject;
+                $injections[$property->getName()] = [
+                    'public' => $reflectionProperty->isPublic(),
+                    'inject' => $inject,
+                ];
             }
         }
 

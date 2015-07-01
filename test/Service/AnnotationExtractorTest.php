@@ -4,7 +4,10 @@ namespace mxdiModuleTest\Service;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 use mxdiModule\Service\AnnotationExtractor;
+use mxdiModule\Service\ChangeSet;
 use mxdiModuleTest\TestCase;
+use mxdiModuleTest\TestObjects\Constructor;
+use mxdiModuleTest\TestObjects\PublicPrivate;
 use mxdiModuleTest\TestObjects\DependencyA;
 use mxdiModuleTest\TestObjects\DependencyB;
 use mxdiModuleTest\TestObjects\DependencyC;
@@ -22,7 +25,7 @@ class AnnotationExtractorTest extends TestCase
         $this->service = new AnnotationExtractor();
     }
 
-    public function testGetConstructorParams()
+    public function testGetConstructorInjections()
     {
         $injectA = new Inject();
         $injectA->value = DependencyA::class;
@@ -36,31 +39,70 @@ class AnnotationExtractorTest extends TestCase
         $this->assertEquals($params, $this->service->getConstructorInjections(Injectable::class));
     }
 
-    public function testGetMethodsAnnotations()
+    public function testGetMethodsInjectionsIgnoresConstructor()
     {
-        $injectC = new Inject();
-        $injectC->value = DependencyC::class;
-
-        $injectD = new Inject();
-        $injectD->value = DependencyD::class;
-        $injectD->invokable = true;
-
-        $params = new InjectParams();
-        $params->value = [$injectC, $injectD];
-
-        $this->assertEquals(['setDependency' => $params], $this->service->getMethodsInjections(Injectable::class));
+        $this->assertEmpty($this->service->getMethodsInjections(Constructor::class));
     }
 
-    public function testGetPropertiesAnnotations()
+    public function testGetChangeSet()
     {
-        $inject = new Inject();
-        $inject->value = 'dependency_e';
+        $this->assertInstanceOf(ChangeSet::class, $this->service->getChangeSet('fqcn'));
+    }
 
-        $this->assertEquals(['dependencyE' => $inject], $this->service->getPropertiesInjections(Injectable::class));
+    public function testGetMethodsInjections()
+    {
+        $paramsPrivate = new InjectParams();
+        $paramsPrivate->value = [
+            $this->createInjectionFor(DependencyA::class),
+            $this->createInjectionFor(DependencyB::class)
+        ];
+
+        $paramsPublic = new InjectParams();
+        $paramsPublic->value = [
+            $this->createInjectionFor(DependencyC::class),
+            $this->createInjectionFor(DependencyD::class)
+        ];
+
+        $expected = [
+            'setDependencyPrivate' => [
+                'public' => false,
+                'inject' => $paramsPrivate,
+            ],
+            'setDependencyPublic' => [
+                'public' => true,
+                'inject' => $paramsPublic,
+            ],
+        ];
+
+        $this->assertEquals($expected, $this->service->getMethodsInjections(PublicPrivate::class));
+    }
+
+    public function testGetPropertiesInjections()
+    {
+        $expected = [
+            'propertyPrivate' => [
+                'public' => false,
+                'inject' => $this->createInjectionFor(DependencyA::class),
+            ],
+            'propertyPublic' => [
+                'public' => true,
+                'inject' => $this->createInjectionFor(DependencyB::class),
+            ],
+        ];
+
+        $this->assertEquals($expected, $this->service->getPropertiesInjections(PublicPrivate::class));
     }
 
     public function testGetConstructorInjectionsWhenNoConstructorExistsShouldReturnNull()
     {
         $this->assertNull($this->service->getConstructorInjections(NoConstructor::class));
+    }
+
+    private function createInjectionFor($fqcn)
+    {
+        $inject = new Inject();
+        $inject->value = $fqcn;
+
+        return $inject;
     }
 }
