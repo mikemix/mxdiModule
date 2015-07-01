@@ -77,7 +77,7 @@ class YamlExtractor implements ExtractorInterface
         }
 
         $injections = [];
-        foreach ($this->config[$fqcn]['methods'] as $propertyName => $injection) {
+        foreach ($this->config[$fqcn]['properties'] as $propertyName => $injection) {
             $injections[$propertyName] = $this->createInjectionObject($injection);
         }
 
