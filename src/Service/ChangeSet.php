@@ -18,6 +18,12 @@ class ChangeSet
     /** @var Inject[] */
     protected $propertiesInjections;
 
+    /** @var bool[] */
+    protected $propertyVisibility;
+
+    /** @var bool[] */
+    protected $methodVisibility;
+
     /** @var bool */
     protected $isAnnotated = false;
 
@@ -27,11 +33,9 @@ class ChangeSet
             return;
         }
 
-        $this->constructorInjections = $extractor->getConstructorInjections($fqcn);
-        $this->hasSimpleConstructor = null === $this->constructorInjections;
-
-        $this->methodsInjections = $extractor->getMethodsInjections($fqcn);
-        $this->propertiesInjections = $extractor->getPropertiesInjections($fqcn);
+        $this->setConstructorInjections($extractor, $fqcn);
+        $this->setMethodsInjections($extractor, $fqcn);
+        $this->setPropertiesInjections($extractor, $fqcn);
 
         $this->isAnnotated =
             $this->constructorInjections ||
@@ -72,6 +76,24 @@ class ChangeSet
     }
 
     /**
+     * @param string $name
+     * @return bool
+     */
+    public function isPropertyPublic($name)
+    {
+        return $this->propertyVisibility[$name];
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function isMethodPublic($name)
+    {
+        return $this->methodVisibility[$name];
+    }
+
+    /**
      * @return boolean
      */
     public function isAnnotated()
@@ -80,10 +102,40 @@ class ChangeSet
     }
 
     /**
-     * @return string
+     * @param ExtractorInterface $extractor
+     * @param string $fqcn
      */
-    public function __toString()
+    protected function setConstructorInjections(ExtractorInterface $extractor, $fqcn)
     {
-        return serialize($this);
+        $this->constructorInjections = $extractor->getConstructorInjections($fqcn);
+        $this->hasSimpleConstructor = null === $this->constructorInjections;
+    }
+
+    /**
+     * @param ExtractorInterface $extractor
+     * @param string $fqcn
+     */
+    protected function setMethodsInjections(ExtractorInterface $extractor, $fqcn)
+    {
+        $this->methodsInjections = $extractor->getMethodsInjections($fqcn);
+
+        foreach ($this->methodsInjections as $methodName => $injection) {
+            $reflection = new \ReflectionMethod($fqcn, $methodName);
+            $this->methodVisibility[$methodName] = $reflection->isPublic();
+        }
+    }
+
+    /**
+     * @param ExtractorInterface $extractor
+     * @param string $fqcn
+     */
+    protected function setPropertiesInjections(ExtractorInterface $extractor, $fqcn)
+    {
+        $this->propertiesInjections = $extractor->getPropertiesInjections($fqcn);
+
+        foreach ($this->propertiesInjections as $propertyName => $injection) {
+            $reflection = new \ReflectionProperty($fqcn, $propertyName);
+            $this->propertyVisibility[$propertyName] = $reflection->isPublic();
+        }
     }
 }
