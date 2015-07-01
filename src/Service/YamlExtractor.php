@@ -93,6 +93,14 @@ class YamlExtractor implements ExtractorInterface
     }
 
     /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * @param array $spec
      * @return AnnotationInterface
      */
