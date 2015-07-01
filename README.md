@@ -18,7 +18,7 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
 
 1. Install with Composer: `composer require mikemix/mxdi-module:~2.2`
 
-2. Enable via ZF2 config in `appliation.config.php` under `modules` key:
+2. Enable the module via ZF2 config in `appliation.config.php` under `modules` key:
 
 ```php
 return [
@@ -35,6 +35,10 @@ return [
 
 This will enable the module and register the Abstract Factory in the ZF2's Service Manager.
 
+3. Copy the global config file `cp vendor/mikemix/mxdi-module/config/mxdimodule.global.php.dist config/autoload/mxdimodule.global.php` if you want to override the default mapping driver.
+
+4. Copy the local config file `cp vendor/mikemix/mxdi-module/config/mxdimodule.local.php.dist config/autoload/mxdimodule.local.php` if you want to override other settings, like caching etc.
+
 ### Changing mapping driver
 
 The default mapping driver is `AnnotationExtractor` as source of mapping information for the module. You can change it however to other. Available extractors are:
@@ -42,11 +46,11 @@ The default mapping driver is `AnnotationExtractor` as source of mapping informa
 * `AnnotationExtractor` which uses annotations inside your classes. See the [Annotation docs](docs/Annotations.md) for annotations reference and examples.
 * `YamlExtractor` which uses a yml file. See the [Yaml](docs/Yaml.md) docs for examples.
 
-There's *no difference* between choosing annotation driver or YAML driver, because the mapping information in the end is converted to *plain php* and stored *inside the cache*.
+There's **no difference** between choosing annotation driver or YAML driver, because the mapping information in the end is converted to **plain php** and stored **inside the cache**.
 
 ### Important notes
 
-*Remember*, the service you are about to inject must not be registered in the Service Manager.
+**Remember**, the service you are about to inject must not be registered in the Service Manager.
 If you register it as factory or invokable, it won't go through the Abstract Factory and won't get injected. By the way, this allows you to create custom factory for the service in mention.
 
 To speed up locate time you can request the service through the DiFactory invokable, for example:
@@ -63,13 +67,7 @@ $service = $factory(\YourApplication\Service\SomeService::class);
 
 Parsing mapping sources is very heavy. You *should* enable the cache on production servers.
 
-You can set up caching easily with any custom or pre-existing ZF2 cache adapter. Copy the dist configuration file
-to your `config/autoload` directory, for example:
-
-`cp vendor/mikemix/mxdi-module/config/mxdimodule.local.php.dist config/autoload/mxdimodule.local.php`
-
-and override the `cache_adapter` and `cache_options` keys for your needs. You can find more information about
-available out-of-the-box adapters at the [ZF2 docs site](http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html).
+You can set up caching easily with any custom or pre-existing ZF2 cache adapter. In the `config/autoload/mxdimodule.local.php` override the `cache_adapter` and `cache_options` keys for your needs. You can find more information about available out-of-the-box adapters at the [ZF2 docs site](http://framework.zend.com/manual/current/en/modules/zend.cache.storage.adapter.html).
 
 ### Debugging
 
