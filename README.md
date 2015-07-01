@@ -39,8 +39,8 @@ This will enable the module and register the Abstract Factory in the ZF2's Servi
 
 The default mapping driver is `AnnotationExtractor` as source of mapping information for the module. You can change it however to other. Available extractors are:
 
-* `AnnotationExtractor` which uses annotations inside your classes. See the [Annotation docs](mxdiModule/docs/Annotations.md) for annotations reference and examples.
-* `YamlExtractor` which uses a yml file. See the [Yaml](mxdiModule/docs/Yaml.md) docs for examples.
+* `AnnotationExtractor` which uses annotations inside your classes. See the [Annotation docs](docs/Annotations.md) for annotations reference and examples.
+* `YamlExtractor` which uses a yml file. See the [Yaml](docs/Yaml.md) docs for examples.
 
 There's *no difference* between choosing annotation driver or YAML driver, because the mapping information in the end is converted to *plain php* and stored *inside the cache*.
 
