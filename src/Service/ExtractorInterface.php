@@ -44,7 +44,8 @@ interface ExtractorInterface
     /**
      * Shortcut to get the changeSet DTO.
      *
+     * @param string $fqcn FQCN of the class
      * @return ChangeSet
      */
-    public function getChangeSet();
+    public function getChangeSet($fqcn);
 }
