@@ -7,7 +7,7 @@ interface ExtractorInterface
      * Return array of values for the constructor.
      *
      * @param string $fqcn FQCN of the class
-     * @return \mixed[]
+     * @return \mxdiModule\Annotation\AnnotationInterface
      */
     public function getConstructorInjections($fqcn);
 
@@ -17,7 +17,7 @@ interface ExtractorInterface
      * Example array:
      *   "methodName" => [
      *     "public" => true,
-     *     "inject" => $injectedValue
+     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
      *   ],
      *   // more methods
      *
@@ -32,7 +32,7 @@ interface ExtractorInterface
      * Example array:
      *   "propertyName" => [
      *     "public" => false,
-     *     "inject" => $injectedValue
+     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
      *   ],
      *   // more properties
      *
