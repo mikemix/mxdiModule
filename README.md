@@ -305,7 +305,8 @@ return [
     //
     'controllers' => [
         'abstract_factories' => [
-            mxdiModule\Factory\DiAbstractPluginFactory::class, // <-- annotations now enabled
+            // annotations now enabled
+            mxdiModule\Factory\DiAbstractPluginFactory::class,
         ],
         'invokables' => [
             // your controllers
