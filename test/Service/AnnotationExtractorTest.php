@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModuleTest\Service;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 use mxdiModule\Service\AnnotationExtractor;
@@ -18,7 +19,7 @@ use mxdiModuleTest\TestObjects\NoConstructor;
 class AnnotationExtractorTest extends TestCase
 {
     /** @var AnnotationExtractor */
-    protected $service;
+    private $service;
 
     public function setUp()
     {
@@ -84,6 +85,11 @@ class AnnotationExtractorTest extends TestCase
     public function testGetConstructorInjectionsWhenNoConstructorExistsShouldReturnNull()
     {
         $this->assertNull($this->service->getConstructorInjections(NoConstructor::class));
+    }
+
+    public function testSetReader()
+    {
+        $this->service->setReader($this->getMock(AnnotationReader::class));
     }
 
     private function createInjectionFor($fqcn)
