@@ -3,7 +3,6 @@ namespace mxdiModule\Service;
 
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use mxdiModule\Annotation\AnnotationInterface;
-use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 
 class AnnotationExtractor implements ExtractorInterface
@@ -17,8 +16,10 @@ class AnnotationExtractor implements ExtractorInterface
     }
 
     /**
-     * @param string $fqcn
-     * @return InjectParams|null
+     * Return array of values for the constructor.
+     *
+     * @param string $fqcn FQCN of the class
+     * @return \mxdiModule\Annotation\AnnotationInterface
      */
     public function getConstructorInjections($fqcn)
     {
@@ -33,10 +34,17 @@ class AnnotationExtractor implements ExtractorInterface
     }
 
     /**
-     * Get methods injections (except the constructor).
+     * Return injections for methods.
      *
-     * @param string $fqcn
-     * @return InjectParams[]
+     * Example array:
+     *   "methodName" => [
+     *     "public" => true,
+     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
+     *   ],
+     *   // more methods
+     *
+     * @param string $fqcn FQCN of the class
+     * @return array
      */
     public function getMethodsInjections($fqcn)
     {
@@ -65,10 +73,17 @@ class AnnotationExtractor implements ExtractorInterface
     }
 
     /**
-     * Get properties injections (except the constructor).
+     * Return injections for properties.
      *
-     * @param string $fqcn
-     * @return Inject[]
+     * Example array:
+     *   "propertyName" => [
+     *     "public" => false,
+     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
+     *   ],
+     *   // more properties
+     *
+     * @param string $fqcn FQCN of the class
+     * @return array
      */
     public function getPropertiesInjections($fqcn)
     {
@@ -91,9 +106,9 @@ class AnnotationExtractor implements ExtractorInterface
     }
 
     /**
-     * Handy shortcut.
+     * Shortcut to get the changeSet DTO.
      *
-     * @param string $fqcn
+     * @param string $fqcn FQCN of the class
      * @return ChangeSet
      */
     public function getChangeSet($fqcn)
