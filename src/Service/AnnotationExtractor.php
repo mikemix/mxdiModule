@@ -6,7 +6,7 @@ use mxdiModule\Annotation\AnnotationInterface;
 use mxdiModule\Annotation\Inject;
 use mxdiModule\Annotation\InjectParams;
 
-class AnnotationExtractor
+class AnnotationExtractor implements ExtractorInterface
 {
     /** @var Reader */
     protected $reader;
@@ -55,7 +55,7 @@ class AnnotationExtractor
 
             if (null !== $inject) {
                 $injections[$name] = [
-                    'public'    => $reflectionMethod->isPublic(),
+                    'public' => $reflectionMethod->isPublic(),
                     'inject' => $inject,
                 ];
             }
