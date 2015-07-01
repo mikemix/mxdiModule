@@ -1,4 +1,7 @@
-# Annotation reference
+Configuring annotation driver
+=======================
+
+The `AnnotationExtractor` is set as default extractor and it's working out-of-the-box. Following annotations are available:
 
 * [`@InjectParams`](#injectparams-annotation)
 * [`@Inject`](#inject-annotation)
