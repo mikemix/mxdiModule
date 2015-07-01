@@ -40,4 +40,11 @@ interface ExtractorInterface
      * @return array
      */
     public function getPropertiesInjections($fqcn);
+
+    /**
+     * Shortcut to get the changeSet DTO.
+     *
+     * @return ChangeSet
+     */
+    public function getChangeSet();
 }
