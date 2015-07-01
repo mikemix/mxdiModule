@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModule\Service;
 
+use mxdiModule\Annotation\AnnotationInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlExtractor implements ExtractorInterface
@@ -39,7 +40,12 @@ class YamlExtractor implements ExtractorInterface
             return null;
         }
 
-        return $this->config[$fqcn]['constructor'];
+        $injections = [];
+        foreach ($this->config[$fqcn]['constructor'] as $spec) {
+            $injections[] = $this->createInjectionObject($spec);
+        }
+
+        return $injections;
     }
 
     /**
@@ -51,7 +57,14 @@ class YamlExtractor implements ExtractorInterface
             return null;
         }
 
-        return $this->config[$fqcn]['methods'];
+        $injections = [];
+        foreach ($this->config[$fqcn]['methods'] as $methodName => $spec) {
+            foreach ($spec as $injection) {
+                $injections[$methodName][] = $this->createInjectionObject($injection);
+            }
+        }
+
+        return $injections;
     }
 
     /**
@@ -63,7 +76,12 @@ class YamlExtractor implements ExtractorInterface
             return null;
         }
 
-        return $this->config[$fqcn]['properties'];
+        $injections = [];
+        foreach ($this->config[$fqcn]['methods'] as $propertyName => $injection) {
+            $injections[$propertyName] = $this->createInjectionObject($injection);
+        }
+
+        return $injections;
     }
 
     /**
@@ -72,5 +90,22 @@ class YamlExtractor implements ExtractorInterface
     public function getChangeSet($fqcn)
     {
         return new ChangeSet($this, $fqcn);
+    }
+
+    /**
+     * @param array $spec
+     * @return AnnotationInterface
+     */
+    private function createInjectionObject(array $spec)
+    {
+        $injectionFqcn = $spec['name'];
+        $injection = new $injectionFqcn;
+        unset($spec['name']);
+
+        foreach ($spec as $property => $value) {
+            $injection->$property = $value;
+        }
+
+        return $injection;
     }
 }
