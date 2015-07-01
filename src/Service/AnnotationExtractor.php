@@ -10,16 +10,13 @@ class AnnotationExtractor implements ExtractorInterface
     /** @var Reader */
     protected $reader;
 
-    public function __construct(Reader $reader = null)
+    public function __construct()
     {
-        $this->reader = $reader ?: new Reader();
+        $this->reader = new Reader();
     }
 
     /**
-     * Return array of values for the constructor.
-     *
-     * @param string $fqcn FQCN of the class
-     * @return \mxdiModule\Annotation\AnnotationInterface
+     * {@inheritdoc}
      */
     public function getConstructorInjections($fqcn)
     {
@@ -34,17 +31,7 @@ class AnnotationExtractor implements ExtractorInterface
     }
 
     /**
-     * Return injections for methods.
-     *
-     * Example array:
-     *   "methodName" => [
-     *     "public" => true,
-     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
-     *   ],
-     *   // more methods
-     *
-     * @param string $fqcn FQCN of the class
-     * @return array
+     * {@inheritdoc}
      */
     public function getMethodsInjections($fqcn)
     {
@@ -73,17 +60,7 @@ class AnnotationExtractor implements ExtractorInterface
     }
 
     /**
-     * Return injections for properties.
-     *
-     * Example array:
-     *   "propertyName" => [
-     *     "public" => false,
-     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
-     *   ],
-     *   // more properties
-     *
-     * @param string $fqcn FQCN of the class
-     * @return array
+     * {@inheritdoc}
      */
     public function getPropertiesInjections($fqcn)
     {
@@ -106,13 +83,18 @@ class AnnotationExtractor implements ExtractorInterface
     }
 
     /**
-     * Shortcut to get the changeSet DTO.
-     *
-     * @param string $fqcn FQCN of the class
-     * @return ChangeSet
+     * {@inheritdoc}
      */
     public function getChangeSet($fqcn)
     {
         return new ChangeSet($this, $fqcn);
+    }
+
+    /**
+     * @param Reader $reader
+     */
+    public function setReader(Reader $reader)
+    {
+        $this->reader = $reader;
     }
 }
