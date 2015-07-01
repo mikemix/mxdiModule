@@ -47,9 +47,9 @@ class DiAbstractFactory implements AbstractFactoryInterface
         }
 
         $this->initializeCache($serviceLocator);
-        $this->changeSet = $this->cache->getItem($name);
+        $this->setChangeSet($this->cache->getItem($name));
 
-        if ($this->changeSet instanceof ChangeSet) {
+        if ($this->getChangeSet() instanceof ChangeSet) {
             // Positive result available via cache
             // Because we don't allow not annotated results to be set there
             return true;
@@ -57,11 +57,11 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         // Result is not available via cache
         // Calculate the result first
-        $this->changeSet = $this->extractor->getChangeSet($requestedName);
+        $this->setChangeSet($this->extractor->getChangeSet($requestedName));
 
-        if ($this->changeSet->isAnnotated()) {
+        if ($this->getChangeSet()->isAnnotated()) {
             // Service is annotated to cache results
-            $this->cache->setItem($name, $this->changeSet);
+            $this->cache->setItem($name, $this->getChangeSet());
             return true;
         }
 
@@ -82,7 +82,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $this->instantiator->setServiceLocator($serviceLocator);
-        return $this->instantiator->create($requestedName, $this->changeSet);
+        return $this->instantiator->create($requestedName, $this->getChangeSet());
     }
 
     /**
@@ -107,5 +107,21 @@ class DiAbstractFactory implements AbstractFactoryInterface
         if (!$this->cache) {
             $this->cache = $serviceLocator->get('mxdiModule\Cache');
         }
+    }
+
+    /**
+     * @return mixed|ChangeSet
+     */
+    public function getChangeSet()
+    {
+        return $this->changeSet;
+    }
+
+    /**
+     * @param mixed|ChangeSet $changeSet
+     */
+    public function setChangeSet($changeSet)
+    {
+        $this->changeSet = $changeSet;
     }
 }
