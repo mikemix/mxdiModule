@@ -21,7 +21,7 @@ class ChangeSet
     /** @var bool */
     protected $isAnnotated = false;
 
-    public function __construct(AnnotationExtractor $extractor, $fqcn)
+    public function __construct(ExtractorInterface $extractor, $fqcn)
     {
         if (!class_exists($fqcn)) {
             return;
