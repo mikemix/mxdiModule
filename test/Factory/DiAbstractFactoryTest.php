@@ -49,7 +49,8 @@ class DiAbstractFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->factory = new DiAbstractFactory($this->extractor, $this->instantiator);
+        $this->factory = new DiAbstractFactory($this->instantiator);
+        $this->factory->setExtractor($this->extractor);
     }
 
     public function testCanCreateServiceWithNameReturnsResultFromCache()
