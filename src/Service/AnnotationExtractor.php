@@ -45,14 +45,13 @@ class AnnotationExtractor implements ExtractorInterface
                 continue;
             }
 
-            $reflectionMethod = new \ReflectionMethod($fqcn, $name);
-            $inject = $this->reader->getMethodAnnotation($reflectionMethod, AnnotationInterface::class);
+            $inject = $this->reader->getMethodAnnotation(
+                new \ReflectionMethod($fqcn, $name),
+                AnnotationInterface::class
+            );
 
             if (null !== $inject) {
-                $injections[$name] = [
-                    'public' => $reflectionMethod->isPublic(),
-                    'inject' => $inject,
-                ];
+                $injections[$name] = $inject;
             }
         }
 
@@ -72,10 +71,7 @@ class AnnotationExtractor implements ExtractorInterface
             $inject = $this->reader->getPropertyAnnotation($reflectionProperty, AnnotationInterface::class);
 
             if (null !== $inject) {
-                $injections[$property->getName()] = [
-                    'public' => $reflectionProperty->isPublic(),
-                    'inject' => $inject,
-                ];
+                $injections[$property->getName()] = $inject;
             }
         }
 
