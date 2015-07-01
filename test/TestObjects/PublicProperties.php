@@ -1,7 +1,7 @@
 <?php
 namespace mxdiModuleTest\TestObjects;
 
-class WithPublicProperty
+class PublicProperties
 {
     public $propertyNull = null;
 

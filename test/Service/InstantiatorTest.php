@@ -6,7 +6,7 @@ use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\Instantiator;
 use mxdiModuleTest\TestCase;
 use mxdiModuleTest\TestObjects\PublicPrivate;
-use mxdiModuleTest\TestObjects\WithPublicProperty;
+use mxdiModuleTest\TestObjects\PublicProperties;
 use Zend\ServiceManager\ServiceManager;
 
 class InstantiatorTest extends TestCase
@@ -160,10 +160,10 @@ class InstantiatorTest extends TestCase
 
         $this->service->setServiceLocator(new ServiceManager());
 
-        /** @var WithPublicProperty $object */
-        $object = $this->service->create(WithPublicProperty::class, $changeSet);
+        /** @var PublicProperties $object */
+        $object = $this->service->create(PublicProperties::class, $changeSet);
 
-        $this->assertInstanceOf(WithPublicProperty::class, $object);
+        $this->assertInstanceOf(PublicProperties::class, $object);
         $this->assertEquals('testValue', $object->propertyNull);
         $this->assertEquals('testValue', $object->propertyString);
     }
