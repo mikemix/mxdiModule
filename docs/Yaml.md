@@ -2,7 +2,15 @@
 
 In the `mxdimodule.local.php` file, you can uncomment the `extractor` and `extractor_options` keys to change the default extractor from Annotations to Yaml as mapping source.
 
-Make sure the `file` key under `extractor_options` points to a valid yml file with mapping information.
+Make sure the `file` key under `extractor_options` points to a valid yml file with mapping information. Example configuration can look as follows:
+
+```php
+// config/autoload/mxdiModule.local.php file
+// make sure config/services.yml is a valid yaml file
+
+    'extractor' => mxdiModule\Service\YamlExtractor::class,
+    'extractor_options' => ['file' => __DIR__ . '/../services.yml'],
+```
 
 ## Example YAML file
 
