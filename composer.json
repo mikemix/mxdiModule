@@ -19,6 +19,7 @@
     "require": {
         "php" : ">=5.5.0",
         "doctrine/annotations": "~1.2.4",
+        "symfony/yaml": "~2.7.1",
         "zendframework/zend-servicemanager": "~2.5",
         "zendframework/zend-modulemanager": "~2.5",
         "zendframework/zend-mvc": "~2.5",
