@@ -15,7 +15,7 @@ return [
         ],
     ],
     'mxdimodule' => [
-        'extractor'         => mxdiModule\Service\YamlExtractor::class,
+        'extractor'         => mxdiModule\Service\AnnotationExtractor::class,
         'extractor_options' => [],
         'proxy_dir'         => 'data/mxdiModule',
         'proxy_namespace'   => 'mxdiModuleProxy',
