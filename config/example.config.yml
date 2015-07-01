@@ -1,0 +1,4 @@
+App\Service\MyService:
+    constructor: [{ name: mxdiModule\Annotation\InjectConfig, value: service_manager.invokables }, { name: mxdiModule\Annotation\Inject, value: request }]
+    methods: { setDependency: [{ name: mxdiModule\Annotation\InjectConfig, value: service_manager.invokables }, { name: mxdiModule\Annotation\Inject, value: request, invokable: true }] }
+    properties: { propertyName: { name: mxdiModule\Annotation\Inject, value: request } }
