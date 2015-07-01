@@ -117,7 +117,7 @@ class ChangeSet
      */
     protected function setMethodsInjections(ExtractorInterface $extractor, $fqcn)
     {
-        $this->methodsInjections = $extractor->getMethodsInjections($fqcn);
+        $this->methodsInjections = (array)$extractor->getMethodsInjections($fqcn);
 
         foreach ($this->methodsInjections as $methodName => $injection) {
             $reflection = new \ReflectionMethod($fqcn, $methodName);
@@ -131,7 +131,7 @@ class ChangeSet
      */
     protected function setPropertiesInjections(ExtractorInterface $extractor, $fqcn)
     {
-        $this->propertiesInjections = $extractor->getPropertiesInjections($fqcn);
+        $this->propertiesInjections = (array)$extractor->getPropertiesInjections($fqcn);
 
         foreach ($this->propertiesInjections as $propertyName => $injection) {
             $reflection = new \ReflectionProperty($fqcn, $propertyName);
