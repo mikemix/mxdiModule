@@ -3,6 +3,8 @@
 
     <service id="EmptyService" />
 
+    <service id="request" fqcn="Zend\Http\Request" />
+
     <service id="Application\Service\MyService">
         <constructor>
             <inject type="mxdiModule\Annotation\Inject">

@@ -18,7 +18,7 @@ class XmlExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->file = __DIR__ . '/../.resources/Annotations.xml';
+        $this->file = __DIR__ . '/../.resources/Services.xml';
         $this->service = new XmlExtractor(['file' => $this->file]);
     }
 
