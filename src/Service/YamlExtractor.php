@@ -24,8 +24,12 @@ class YamlExtractor implements ExtractorInterface
      */
     public function __construct(array $options)
     {
-        if (!isset($options['file']) || empty($options['file'])) {
-            throw new \InvalidArgumentException('YAML file path is missing');
+        if (empty($options['file'])) {
+            throw new \InvalidArgumentException('YAML file path missing');
+        }
+
+        if (!file_exists($options['file'])) {
+            throw new \InvalidArgumentException('YAML file missing');
         }
 
         $parser = self::$parser;
