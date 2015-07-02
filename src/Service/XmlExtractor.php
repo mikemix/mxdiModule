@@ -171,10 +171,7 @@ class XmlExtractor implements ExtractorInterface
     {
         $property = (string)$param['name'];
 
-        $type = (string)$param['type'];
-        $type = empty($type) ? 'string' : $type;
-
-        switch ($type) {
+        switch ((string)$param['type']) {
             case 'boolean': $value = (bool)(string)$param; break;
             case 'integer': $value = (int)(string)$param; break;
             case 'float': $value = (float)(string)$param; break;
