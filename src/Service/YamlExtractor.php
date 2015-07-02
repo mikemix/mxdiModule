@@ -107,9 +107,9 @@ class YamlExtractor implements ExtractorInterface
      */
     private function createInjectionObject(array $spec)
     {
-        $injectionFqcn = $spec['name'];
+        $injectionFqcn = $spec['type'];
         $injection = new $injectionFqcn;
-        unset($spec['name']);
+        unset($spec['type']);
 
         foreach ($spec as $property => $value) {
             $injection->$property = $value;

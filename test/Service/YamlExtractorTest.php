@@ -40,8 +40,8 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
     public function testParseReturnsConstructorInjections()
     {
         $config['fqcn']['constructor'] = [
-            ['name' => \stdClass::class, 'value' => 'testValue'],
-            ['name' => \stdClass::class, 'value' => 'anotherValue'],
+            ['type' => \stdClass::class, 'value' => 'testValue'],
+            ['type' => \stdClass::class, 'value' => 'anotherValue'],
         ];
 
         $parser = $this->getMock(\stdClass::class, ['parse']);
@@ -70,12 +70,12 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
     {
         $config['fqcn']['methods'] = [
             'setDependency' => [
-                ['name' => \stdClass::class, 'value' => 'testValue'],
-                ['name' => \stdClass::class, 'value' => 'anotherValue'],
+                ['type' => \stdClass::class, 'value' => 'testValue'],
+                ['type' => \stdClass::class, 'value' => 'anotherValue'],
             ],
             'setOther' => [
-                ['name' => \stdClass::class, 'value' => 'testValue'],
-                ['name' => \stdClass::class, 'value' => 'anotherValue'],
+                ['type' => \stdClass::class, 'value' => 'testValue'],
+                ['type' => \stdClass::class, 'value' => 'anotherValue'],
             ],
         ];
 
@@ -116,8 +116,8 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
     public function testParseReturnsPropertiesInjections()
     {
         $config['fqcn']['properties'] = [
-            'property1' => ['name' => \stdClass::class, 'value' => 'testValue'],
-            'property2' => ['name' => \stdClass::class, 'value' => 'anotherValue'],
+            'property1' => ['type' => \stdClass::class, 'value' => 'testValue'],
+            'property2' => ['type' => \stdClass::class, 'value' => 'anotherValue'],
         ];
 
         $parser = $this->getMock(\stdClass::class, ['parse']);
