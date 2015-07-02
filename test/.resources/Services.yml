@@ -1,9 +1,6 @@
 # ID of the service class
 App\Service\MyService:
 
-  # FQCN if it is different from its ID
-  fqcn: App\Service\MyService
-
   # Constructor injections
   constructor:
     - { type: mxdiModule\Annotation\Inject, value: Zend\EventManager\EventNamager, invokable: true }
@@ -30,6 +27,11 @@ App\Service\MyService:
 
 # Another service with ID different from its FQCN
 request:
+
+  # FQCN if it is different from its ID
   fqcn: Zend\Http\Request
+
+# Empty service
+emptyService:
 
 # Place here another mappings
