@@ -6,6 +6,9 @@ use mxdiModule\Annotation\InjectParams;
 
 class ChangeSet
 {
+    /** @var string */
+    protected $fqcn;
+
     /** @var InjectParams|null */
     protected $constructorInjections;
 
@@ -33,6 +36,7 @@ class ChangeSet
             return;
         }
 
+        $this->fqcn = $fqcn;
         $this->setConstructorInjections($extractor, $fqcn);
         $this->setMethodsInjections($extractor, $fqcn);
         $this->setPropertiesInjections($extractor, $fqcn);
@@ -41,6 +45,14 @@ class ChangeSet
             $this->constructorInjections ||
             count($this->methodsInjections) ||
             count($this->propertiesInjections);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFqcn()
+    {
+        return $this->fqcn;
     }
 
     /**
