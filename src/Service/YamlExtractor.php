@@ -8,7 +8,13 @@ use Symfony\Component\Yaml\Yaml;
 class YamlExtractor implements ExtractorInterface
 {
     /**
-     * The configuration from the YAML file.
+     * Path to the YAML file
+     * @var string
+     */
+    protected $file;
+
+    /**
+     * Parsed configuration
      * @var array
      */
     protected $config;
@@ -17,7 +23,7 @@ class YamlExtractor implements ExtractorInterface
      * YAML parser
      * @var callable
      */
-    public static $parser = [Yaml::class, 'parse'];
+    public $parser = [Yaml::class, 'parse'];
 
     /**
      * @param array $options
@@ -32,8 +38,7 @@ class YamlExtractor implements ExtractorInterface
             throw new \InvalidArgumentException('YAML file missing');
         }
 
-        $parser = self::$parser;
-        $this->config = $parser($options['file']);
+        $this->file = $options['file'];
     }
 
     /**
@@ -41,12 +46,14 @@ class YamlExtractor implements ExtractorInterface
      */
     public function getConstructorInjections($fqcn)
     {
-        if (!isset($this->config[$fqcn]['constructor'])) {
+        $config = $this->getConfig($fqcn);
+
+        if (!isset($config['constructor'])) {
             return null;
         }
 
         $injections = new InjectParams();
-        foreach ($this->config[$fqcn]['constructor'] as $spec) {
+        foreach ($config['constructor'] as $spec) {
             $injections->value[] = $this->createInjectionObject($spec);
         }
 
@@ -58,12 +65,14 @@ class YamlExtractor implements ExtractorInterface
      */
     public function getMethodsInjections($fqcn)
     {
-        if (!isset($this->config[$fqcn]['methods'])) {
+        $config = $this->getConfig($fqcn);
+
+        if (!isset($config['methods'])) {
             return [];
         }
 
         $injections = [];
-        foreach ($this->config[$fqcn]['methods'] as $methodName => $spec) {
+        foreach ($config['methods'] as $methodName => $spec) {
             foreach ($spec as $injection) {
                 $injections[$methodName][] = $this->createInjectionObject($injection);
             }
@@ -77,12 +86,14 @@ class YamlExtractor implements ExtractorInterface
      */
     public function getPropertiesInjections($fqcn)
     {
-        if (!isset($this->config[$fqcn]['properties'])) {
+        $config = $this->getConfig($fqcn);
+
+        if (!isset($config['properties'])) {
             return [];
         }
 
         $injections = [];
-        foreach ($this->config[$fqcn]['properties'] as $propertyName => $injection) {
+        foreach ($config['properties'] as $propertyName => $injection) {
             $injections[$propertyName] = $this->createInjectionObject($injection);
         }
 
@@ -94,14 +105,25 @@ class YamlExtractor implements ExtractorInterface
      */
     public function getChangeSet($fqcn)
     {
+        $config = $this->getConfig($fqcn);
+        if (!empty($config['fqcn'])) {
+            $fqcn = $config['fqcn'];
+        }
+
         return new ChangeSet($this, $fqcn);
     }
 
     /**
+     * @param string $fqcn
      * @return array
      */
-    public function getConfig()
+    public function getConfig($fqcn)
     {
+        if (!$this->config) {
+            $config = call_user_func($this->parser, $this->file);
+            $this->config = $config[$fqcn];
+        }
+
         return $this->config;
     }
 
@@ -120,5 +142,13 @@ class YamlExtractor implements ExtractorInterface
         }
 
         return $injection;
+    }
+
+    /**
+     * @param callable $parser
+     */
+    public function setParser($parser)
+    {
+        $this->parser = $parser;
     }
 }
