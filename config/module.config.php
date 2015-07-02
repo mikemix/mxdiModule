@@ -11,7 +11,7 @@ return [
             'mxdiModule\Extractor'                 => mxdiModule\Factory\Service\ExtractorFactory::class,
         ],
         'abstract_factories' => [
-            mxdiModule\Factory\DiAbstractFactory::class,
+            mxdiModule\ServiceManager\DiAbstractFactory::class,
         ],
     ],
     'mxdimodule' => [

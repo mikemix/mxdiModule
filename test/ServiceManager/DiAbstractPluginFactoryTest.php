@@ -1,8 +1,8 @@
 <?php
-namespace mxdiModuleTest\Factory;
+namespace mxdiModuleTest\ServiceManager;
 
-use mxdiModule\Factory\DiAbstractFactory;
-use mxdiModule\Factory\DiAbstractPluginFactory;
+use mxdiModule\ServiceManager\DiAbstractFactory;
+use mxdiModule\ServiceManager\DiAbstractPluginFactory;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ServiceManager;
 

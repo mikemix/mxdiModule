@@ -1,7 +1,7 @@
 <?php
 namespace mxdiModuleTest\Service;
 
-use mxdiModule\Factory\DiAbstractFactory;
+use mxdiModule\ServiceManager\DiAbstractFactory;
 use mxdiModule\Service\DiFactory;
 use mxdiModule\Service\Exception\CannotCreateService;
 use mxdiModuleTest\TestCase;

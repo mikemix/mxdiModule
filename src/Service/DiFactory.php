@@ -1,7 +1,7 @@
 <?php
 namespace mxdiModule\Service;
 
-use mxdiModule\Factory\DiAbstractFactory;
+use mxdiModule\ServiceManager\DiAbstractFactory;
 use mxdiModule\Service\Exception\CannotCreateService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;

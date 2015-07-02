@@ -1,5 +1,5 @@
 <?php
-namespace mxdiModule\Factory;
+namespace mxdiModule\ServiceManager;
 
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\AbstractPluginManager;

@@ -2,7 +2,7 @@
 namespace mxdiModuleTest;
 
 use mxdiModule\Factory\Cache\CacheFactory;
-use mxdiModule\Factory\DiAbstractFactory;
+use mxdiModule\ServiceManager\DiAbstractFactory;
 use mxdiModuleTest\TestObjects;
 use Zend\ServiceManager as SM;
 

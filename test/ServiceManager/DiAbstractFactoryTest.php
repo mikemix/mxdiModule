@@ -1,7 +1,7 @@
 <?php
-namespace mxdiModuleTest\Factory;
+namespace mxdiModuleTest\ServiceManager;
 
-use mxdiModule\Factory\DiAbstractFactory;
+use mxdiModule\ServiceManager\DiAbstractFactory;
 use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\ChangeSet;
 use mxdiModule\Service\Instantiator;

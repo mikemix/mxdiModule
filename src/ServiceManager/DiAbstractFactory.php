@@ -1,5 +1,5 @@
 <?php
-namespace mxdiModule\Factory;
+namespace mxdiModule\ServiceManager;
 
 use mxdiModule\Service\ExtractorInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
