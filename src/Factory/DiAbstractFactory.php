@@ -28,7 +28,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
     public function __construct(Instantiator $instantiator = null)
     {
-        $this->instantiator = $instantiator ?: new Instantiator();
+        $this->setInstantiator($instantiator ?: new Instantiator());
     }
 
     /**
