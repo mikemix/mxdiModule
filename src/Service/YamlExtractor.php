@@ -55,7 +55,7 @@ class YamlExtractor implements ExtractorInterface
     public function getMethodsInjections($fqcn)
     {
         if (!isset($this->config[$fqcn]['methods'])) {
-            return null;
+            return [];
         }
 
         $injections = [];
@@ -74,7 +74,7 @@ class YamlExtractor implements ExtractorInterface
     public function getPropertiesInjections($fqcn)
     {
         if (!isset($this->config[$fqcn]['properties'])) {
-            return null;
+            return [];
         }
 
         $injections = [];

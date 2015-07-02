@@ -66,10 +66,10 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('anotherValue', $injection->value[1]->value);
     }
 
-    public function testParseReturnsNullWhenNoMethodsInjections()
+    public function testParseReturnsEmptyWhenNoMethodsInjections()
     {
         $service = new YamlExtractor(['file' => '/some/file']);
-        $this->assertNull($service->getMethodsInjections('fqcn'));
+        $this->assertSame([], $service->getMethodsInjections('fqcn'));
     }
 
     public function testParseReturnsMethodsInjections()
@@ -116,7 +116,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
     public function testParseReturnsNullWhenNoPropertiesInjections()
     {
         $service = new YamlExtractor(['file' => '/some/file']);
-        $this->assertNull($service->getPropertiesInjections('fqcn'));
+        $this->assertSame([], $service->getPropertiesInjections('fqcn'));
     }
 
     public function testParseReturnsPropertiesInjections()
