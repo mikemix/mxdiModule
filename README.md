@@ -16,7 +16,7 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
 
 ### Installation
 
-1. Install with Composer: `composer require mikemix/mxdi-module:~2.2`
+1. Install with Composer: `composer require mikemix/mxdi-module:~3.0`
 
 2. Enable the module via ZF2 config in `appliation.config.php` under `modules` key:
 
