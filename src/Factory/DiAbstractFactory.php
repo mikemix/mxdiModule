@@ -82,7 +82,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $this->instantiator->setServiceLocator($serviceLocator);
-        return $this->instantiator->create($requestedName, $this->getChangeSet());
+        return $this->instantiator->create($this->getChangeSet()->getFqcn(), $this->getChangeSet());
     }
 
     /**
