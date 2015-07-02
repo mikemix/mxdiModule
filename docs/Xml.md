@@ -18,8 +18,6 @@ Make sure the `file` key under `extractor_options` points to a valid xml file wi
 <?xml version="1.0" encoding="UTF-8"?>
 <mxdiModule>
 
-    <service id="EmptyService" />
-
     <service id="Application\Service\MyService">
         <constructor>
             <inject type="mxdiModule\Annotation\Inject">
