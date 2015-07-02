@@ -13,6 +13,12 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
         new YamlExtractor([]);
     }
 
+    public function testDontAllowEmptyFileInOptions()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class);
+        new YamlExtractor(['file' => '']);
+    }
+
     public function testParseYamlConfig()
     {
         $file = '/var/some/file.yml';
@@ -33,7 +39,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testParseReturnsNullWhenNoConstructorInjections()
     {
-        $service = new YamlExtractor(['file' => '']);
+        $service = new YamlExtractor(['file' => '/some/file']);
         $this->assertNull($service->getConstructorInjections('fqcn'));
     }
 
@@ -51,7 +57,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
             ->method('parse')
             ->will($this->returnValue($config));
 
-        $service = new YamlExtractor(['file' => '']);
+        $service = new YamlExtractor(['file' => '/some/file']);
 
         $injection = $service->getConstructorInjections('fqcn');
 
@@ -62,7 +68,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testParseReturnsNullWhenNoMethodsInjections()
     {
-        $service = new YamlExtractor(['file' => '']);
+        $service = new YamlExtractor(['file' => '/some/file']);
         $this->assertNull($service->getMethodsInjections('fqcn'));
     }
 
@@ -86,7 +92,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
             ->method('parse')
             ->will($this->returnValue($config));
 
-        $service = new YamlExtractor(['file' => '']);
+        $service = new YamlExtractor(['file' => '/some/file']);
 
         $injections = $service->getMethodsInjections('fqcn');
 
@@ -109,7 +115,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testParseReturnsNullWhenNoPropertiesInjections()
     {
-        $service = new YamlExtractor(['file' => '']);
+        $service = new YamlExtractor(['file' => '/some/file']);
         $this->assertNull($service->getPropertiesInjections('fqcn'));
     }
 
@@ -127,7 +133,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
             ->method('parse')
             ->will($this->returnValue($config));
 
-        $service = new YamlExtractor(['file' => '']);
+        $service = new YamlExtractor(['file' => '/some/file']);
 
         $injections = $service->getPropertiesInjections('fqcn');
 
@@ -143,7 +149,7 @@ class YamlExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChangeSet()
     {
-        $service = new YamlExtractor(['file' => '']);
+        $service = new YamlExtractor(['file' => '/some/file']);
         $this->assertInstanceOf(ChangeSet::class, $service->getChangeSet('fqcn'));
     }
 }
