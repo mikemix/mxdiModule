@@ -15,10 +15,12 @@ Make sure the `file` key under `extractor_options` points to a valid yml file wi
 ## Example YAML file
 
 ```yml
-# Example mapping configuration for the Yaml extractor
-
-# FQCN of the service class
+# ID of the service class
 App\Service\MyService:
+
+  # FQCN if it is different from its ID
+  fqcn: App\Service\MyService
+
   # Constructor injections
   constructor:
     - { type: mxdiModule\Annotation\Inject, value: Zend\EventManager\EventNamager, invokable: true }
@@ -42,6 +44,10 @@ App\Service\MyService:
     someProperty:
       type: mxdiModule\Annotation\InjectConfig
       value: service_manager.invokables
+
+# Another service with ID different from its FQCN
+request:
+  fqcn: Zend\Http\Request
 
 # Place here another mappings
 
