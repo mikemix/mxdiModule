@@ -13,9 +13,13 @@ class XmlExtractorTest extends \PHPUnit_Framework_TestCase
     /** @var XmlExtractor */
     private $service;
 
+    /** @var string */
+    private $file;
+
     public function setUp()
     {
-        $this->service = new XmlExtractor(['file' => __DIR__ . '/../.resources/Annotations.xml']);
+        $this->file = __DIR__ . '/../.resources/Annotations.xml';
+        $this->service = new XmlExtractor(['file' => $this->file]);
     }
 
     public function testDontAllowNoFileInOptions()
@@ -34,6 +38,11 @@ class XmlExtractorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(\InvalidArgumentException::class);
         new XmlExtractor(['file' => '/fake/path.xml']);
+    }
+
+    public function testSetFile()
+    {
+        $this->assertEquals($this->file, $this->service->getFile());
     }
 
     public function testParseReturnsNullWhenNoConstructorInjections()
