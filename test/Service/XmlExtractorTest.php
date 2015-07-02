@@ -39,20 +39,23 @@ class XmlExtractorTest extends \PHPUnit_Framework_TestCase
     public function testParseReturnsNullWhenNoConstructorInjections()
     {
         $this->assertNull($this->service->getConstructorInjections('EmptyService'));
+        $this->assertSame([], $this->service->getMethodsInjections('EmptyService'));
+        $this->assertSame([], $this->service->getPropertiesInjections('EmptyService'));
     }
 
     public function testParseReturnsEmptyOnMissingService()
     {
         $this->assertNull($this->service->getConstructorInjections('FakeService'));
-        $this->assertEmpty($this->service->getMethodsInjections('FakeService'));
-        $this->assertEmpty($this->service->getPropertiesInjections('FakeService'));
+        $this->assertSame([], $this->service->getMethodsInjections('FakeService'));
+        $this->assertSame([], $this->service->getPropertiesInjections('FakeService'));
     }
 
     public function testGetConstructorInjections()
     {
+        /** @var object $injection */
         $injection = $this->service->getConstructorInjections('Application\Service\MyService');
 
-        /** @var object[] $injections */
+        /** @var object $injections */
         $injections = $injection->value;
 
         $this->assertCount(3, $injections);

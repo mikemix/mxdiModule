@@ -51,10 +51,17 @@ class XmlExtractor implements ExtractorInterface
             return null;
         }
 
-        $injections = new InjectParams();
+        $values = [];
         foreach ($this->config->xpath('constructor/inject') as $spec) {
-            $injections->value[] = $this->createInjectionObject($spec);
+            $values[] = $this->createInjectionObject($spec);
         }
+
+        if (!count($values)) {
+            return null;
+        }
+
+        $injections = new InjectParams();
+        $injections->value = $values;
 
         return $injections;
     }
@@ -67,7 +74,7 @@ class XmlExtractor implements ExtractorInterface
         $this->isConfigParsed($fqcn);
 
         if (empty($this->config)) {
-            return null;
+            return [];
         }
 
         $injections = [];
@@ -91,7 +98,7 @@ class XmlExtractor implements ExtractorInterface
         $this->isConfigParsed($fqcn);
 
         if (empty($this->config)) {
-            return null;
+            return [];
         }
 
         $injections = [];
