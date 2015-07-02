@@ -114,6 +114,12 @@ class XmlExtractor implements ExtractorInterface
      */
     public function getChangeSet($fqcn)
     {
+        $this->isConfigParsed($fqcn);
+
+        if (!empty((string)$this->config['fqcn'])) {
+            $fqcn = (string)$this->config['fqcn'];
+        }
+
         return new ChangeSet($this, $fqcn);
     }
 

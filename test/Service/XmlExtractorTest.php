@@ -124,6 +124,7 @@ class XmlExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChangeSet()
     {
-        $this->assertInstanceOf(ChangeSet::class, $this->service->getChangeSet('Application\Service\MyService'));
+        $this->assertInstanceOf(ChangeSet::class, $this->service->getChangeSet('EmptyService'));
+        $this->assertInstanceOf(ChangeSet::class, $this->service->getChangeSet('request'));
     }
 }
