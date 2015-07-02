@@ -15,7 +15,7 @@ App\Service\MyService:
       - { type: mxdiModule\Annotation\Inject, value: application }
 
     setFactories:
-      - { type: mxdiModule\Annotation\InjectConfig, value: service_manager.factories }
+      - { type: mxdiModule\Annotation\InjectConfig, value: service_manager.factories.my\.config }
 
   # Properties injections
   properties:
@@ -24,6 +24,10 @@ App\Service\MyService:
     someProperty:
       type: mxdiModule\Annotation\InjectConfig
       value: service_manager.invokables
+
+    anotherProperty:
+      type: mxdiModule\Annotation\Inject
+      value: request
 
 # Another service with ID different from its FQCN
 request:
