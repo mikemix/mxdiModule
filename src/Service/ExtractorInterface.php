@@ -4,10 +4,10 @@ namespace mxdiModule\Service;
 interface ExtractorInterface
 {
     /**
-     * Return array of values for the constructor.
+     * Return injections of the constructor. Most probably the InjectParams object.
      *
      * @param string $fqcn FQCN of the class
-     * @return \mxdiModule\Annotation\AnnotationInterface
+     * @return \mxdiModule\Annotation\AnnotationInterface|null
      */
     public function getConstructorInjections($fqcn);
 
@@ -15,10 +15,7 @@ interface ExtractorInterface
      * Return injections for methods.
      *
      * Example array:
-     *   "methodName" => [
-     *     "public" => true,
-     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
-     *   ],
+     *   "methodName" => mxdiModule\Annotation\AnnotationInterface object (InjectParams for example),
      *   // more methods
      *
      * @param string $fqcn FQCN of the class
@@ -30,10 +27,7 @@ interface ExtractorInterface
      * Return injections for properties.
      *
      * Example array:
-     *   "propertyName" => [
-     *     "public" => false,
-     *     "inject" => mxdiModule\Annotation\AnnotationInterface object,
-     *   ],
+     *   "propertyName" => mxdiModule\Annotation\AnnotationInterface object (InjectXXX for example),
      *   // more properties
      *
      * @param string $fqcn FQCN of the class
