@@ -7,6 +7,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\Instantiator;
 
+/**
+ * @TODO DELETE THIS FILE BECAUSE IT IS NOT NEEDED
+ * DEFAULT FACTORY WORKS FOR ABSTRACT MANAGERS AS WELL
+ */
 class DiAbstractPluginFactory implements AbstractFactoryInterface
 {
     /** @var DiAbstractFactory */
