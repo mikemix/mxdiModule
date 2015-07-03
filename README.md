@@ -12,7 +12,6 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
 3. [Caching](#caching)
 4. [Debugging](#debugging)
 5. [Console commands](#console-commands)
-6. [Working with Plugin Managers](#working-with-plugin-managers)
 
 ### Installation
 
@@ -80,29 +79,3 @@ If you get *ServiceNotCreated* exception most probably one of your injections is
 
 * Clear generated proxy files: `php public/index.php mxdimodule proxy clear`
 * Clear annotation parsing cache: `php public/index.php mxdimodule cache clear`
-
-### Working with Plugin Managers
-
-By default the Abstract Factory is not registered for abstract plugin managers like `FormElementManager` (form management),
-`PluginManager` (controller management) etc. for performance reasons. You can register the Abstract Factory for yourself if you want to.
-
-For example, to enable injections in controllers:
-
-```php
-// example config file module/Application/config/module.config.php
-
-return [
-    // other keys
-    //
-    'controllers' => [
-        'abstract_factories' => [
-            // annotations now enabled
-            mxdiModule\ServiceManager\DiAbstractPluginFactory::class,
-        ],
-        'invokables' => [
-            // your controllers
-        ],
-    ],
-    //
-    //
-];
