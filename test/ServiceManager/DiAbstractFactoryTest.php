@@ -61,7 +61,7 @@ class DiAbstractFactoryTest extends TestCase
 
         $this->cacheAdapter->expects($this->once())
             ->method('getItem')
-            ->with($this->equalTo('injectable'))
+            ->with($this->equalTo(md5('injectable')))
             ->will($this->returnValue($result));
 
         $this->cacheAdapter->expects($this->never())
@@ -88,7 +88,7 @@ class DiAbstractFactoryTest extends TestCase
     {
         $this->cacheAdapter->expects($this->once())
             ->method('getItem')
-            ->with($this->equalTo('injectable'))
+            ->with($this->equalTo(md5('injectable')))
             ->will($this->returnValue(false));
 
         $result = $this->getMockBuilder(ChangeSet::class)
@@ -107,7 +107,7 @@ class DiAbstractFactoryTest extends TestCase
 
         $this->cacheAdapter->expects($this->once())
             ->method('setItem')
-            ->with($this->equalTo('injectable'), $this->equalTo(false));
+            ->with($this->equalTo(md5('injectable')), $this->equalTo(false));
 
         $this->serviceLocator->expects($this->at(0))
             ->method('get')
@@ -144,12 +144,12 @@ class DiAbstractFactoryTest extends TestCase
 
         $this->cacheAdapter->expects($this->once())
             ->method('getItem')
-            ->with($this->equalTo('injectable'))
+            ->with($this->equalTo(md5('injectable')))
             ->will($this->returnValue(false));
 
         $this->cacheAdapter->expects($this->once())
             ->method('setItem')
-            ->with($this->equalTo('injectable'), $this->equalTo($result));
+            ->with($this->equalTo(md5('injectable')), $this->equalTo($result));
 
         $this->serviceLocator->expects($this->at(0))
             ->method('get')

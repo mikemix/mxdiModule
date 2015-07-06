@@ -46,7 +46,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
         }
 
         $this->initializeCache($serviceLocator);
-        $this->setChangeSet($this->cache->getItem($name));
+        $this->setChangeSet($this->cache->getItem(md5($name)));
 
         if ($this->getChangeSet() instanceof ChangeSet) {
             // Positive result available via cache
@@ -61,13 +61,13 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         if ($this->getChangeSet()->isAnnotated()) {
             // Service is annotated to cache results
-            $this->cache->setItem($name, $this->getChangeSet());
+            $this->cache->setItem(md5($name), $this->getChangeSet());
             return true;
         }
 
         // Service is not annotated
         // Cache false for it
-        $this->cache->setItem($name, false);
+        $this->cache->setItem(md5($name), false);
         return false;
     }
 
