@@ -42,7 +42,7 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
 
 The default mapping driver is `AnnotationExtractor` as source of mapping information for the module. You can change it however to other. Available extractors are:
 
-* `AnnotationExtractor` which uses annotations inside your classes. See the [Annotation docs](docs/Annotations.md) for annotations reference and examples.
+* `AnnotationExtractor` (default) which uses annotations inside your classes. See the [Annotation docs](docs/Annotations.md) for annotations reference and examples.
 * `YamlExtractor` which uses a yml file. See the [YAML](docs/Yaml.md) docs for examples.
 * `XmlExtractor` which uses a xml file. See the [XML](docs/Xml.md) docs for examples.
 
