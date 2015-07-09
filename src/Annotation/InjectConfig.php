@@ -29,10 +29,8 @@ final class InjectConfig implements AnnotationInterface
         try {
             return $this->read($sm->get('config'), $this->value);
         } catch (\InvalidArgumentException $e) {
-            // Return default value
+            throw CannotGetValue::of($this->value, $e);
         }
-
-        throw CannotGetValue::of($this->value);
     }
 
     /**

@@ -25,7 +25,7 @@ final class InjectDoctrine implements AnnotationInterface
         try {
             return $sm->get($name);
         } catch (\Exception $e) {
-            throw CannotGetValue::of($name);
+            throw CannotGetValue::of($name, $e);
         }
     }
 }

@@ -29,7 +29,7 @@ final class InjectDoctrineRepository implements AnnotationInterface
         try {
             return $sm->get('Doctrine\ORM\EntityManager')->getRepository($this->value);
         } catch (\Exception $e) {
-            throw CannotGetValue::of(sprintf('repository for %s', $this->value));
+            throw CannotGetValue::of(sprintf('repository of %s', $this->value), $e);
         }
     }
 }

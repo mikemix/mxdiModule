@@ -35,7 +35,7 @@ final class Inject implements AnnotationInterface
         try {
             return $sm->get($serviceName);
         } catch (\Exception $e) {
-            throw CannotGetValue::of($this->value);
+            throw CannotGetValue::of($this->value, $e);
         }
     }
 }
