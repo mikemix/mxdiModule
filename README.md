@@ -19,20 +19,20 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
 
 2. Enable the module via ZF2 config in `appliation.config.php` under `modules` key:
 
-```php
-return [
-    //
-    //
-    'modules' => [
-        'mxdiModule',
-        // other modules
-    ],
-    //
-    //
-];
-```
-
-This will enable the module and register the Abstract Factory in the ZF2's Service Manager.
+    ```php
+    return [
+        //
+        //
+        'modules' => [
+            'mxdiModule',
+            // other modules
+        ],
+        //
+        //
+    ];
+    ```
+    
+    This will enable the module and register the Abstract Factory in the ZF2's Service Manager.
 
 3. Copy the global config file `cp vendor/mikemix/mxdi-module/config/mxdimodule.global.php.dist config/autoload/mxdimodule.global.php` if you want to override the default mapping driver.
 
@@ -42,7 +42,7 @@ This will enable the module and register the Abstract Factory in the ZF2's Servi
 
 The default mapping driver is `AnnotationExtractor` as source of mapping information for the module. You can change it however to other. Available extractors are:
 
-* `AnnotationExtractor` which uses annotations inside your classes. See the [Annotation docs](docs/Annotations.md) for annotations reference and examples.
+* `AnnotationExtractor` (default) which uses annotations inside your classes. See the [Annotation docs](docs/Annotations.md) for annotations reference and examples.
 * `YamlExtractor` which uses a yml file. See the [YAML](docs/Yaml.md) docs for examples.
 * `XmlExtractor` which uses a xml file. See the [XML](docs/Xml.md) docs for examples.
 
