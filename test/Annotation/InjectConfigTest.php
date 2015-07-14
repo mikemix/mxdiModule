@@ -31,6 +31,7 @@ class InjectConfigTest extends TestCase
                         'field' => [
                             'key' => 1,
                             'bool' => true,
+                            'null' => null,
                         ],
                     ],
                 ],
@@ -85,6 +86,14 @@ class InjectConfigTest extends TestCase
          $this->assertSame(1, $inject->getValue($this->sm));
     }
 
+    public function testGetValueReturnNull()
+    {
+         $inject = new InjectConfig();
+         $inject->value = 'some.nested.field.null';
+
+         $this->assertNull($inject->getValue($this->sm));
+    }
+    
     public function testGetValueReturnBool()
     {
          $inject = new InjectConfig();
