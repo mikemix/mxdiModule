@@ -42,7 +42,7 @@ final class InjectConfig implements AnnotationInterface
      */
     protected function read(array $config, $configKey)
     {
-        if (isset($config[$configKey])) {
+        if (array_key_exists($configKey, $config)) {
             // value found
             return $config[$configKey];
         }
