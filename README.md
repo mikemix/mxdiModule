@@ -78,4 +78,9 @@ If you get *ServiceNotCreated* exception most probably one of your injections is
 ### Console commands
 
 * Clear generated proxy files: `php public/index.php mxdimodule proxy clear`
-* Clear annotation parsing cache: `php public/index.php mxdimodule cache clear`
+
+  Clear all generated proxy files from the proxy dir
+
+* Clear annotation parsing cache: `php public/index.php mxdimodule cache clear [<fqcn>]`
+
+  Flush whole cache or only of a given service
