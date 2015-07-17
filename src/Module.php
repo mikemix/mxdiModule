@@ -57,8 +57,8 @@ class Module implements ConsoleBannerProviderInterface, ConsoleUsageProviderInte
     public function getConsoleUsage(AdapterInterface $console)
     {
         return [
-            'mxdimodule proxy clear' => 'Remove proxies from the proxy dir',
-            'mxdimodule cache clear' => 'Flush the cache',
+            'mxdimodule proxy clear'          => 'Remove proxies from the proxy dir',
+            'mxdimodule cache clear [<fqcn>]' => 'Flush whole cache or only of given service',
         ];
     }
 }

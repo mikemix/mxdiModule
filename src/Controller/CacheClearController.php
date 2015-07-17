@@ -25,6 +25,28 @@ class CacheClearController extends AbstractConsoleController
      */
     public function indexAction()
     {
+        if ($this->params('fqcn')) {
+            return $this->flushOne($this->params('fqcn'));
+        }
+
+        return $this->flushAll();
+    }
+
+    /**
+     * @param string $fqcn
+     * @return int
+     */
+    private function flushOne($fqcn)
+    {
+        $this->storage->removeItem(md5($fqcn));
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    private function flushAll()
+    {
         if (!$this->storage instanceof FlushableInterface) {
             $this->console->writeLine(sprintf('%s adapter is not flushable', get_class($this->storage)));
             return -1;

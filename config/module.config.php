@@ -41,7 +41,7 @@ return [
             'routes' => [
                 'mxdimodule-cache-clear' => [
                     'options' => [
-                        'route'    => 'mxdimodule cache clear',
+                        'route'    => 'mxdimodule cache clear [<fqcn>]',
                         'defaults' => [
                             'controller' => 'mxdiModule\Controller\CacheClear',
                             'action'     => 'index'
