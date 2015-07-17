@@ -1,12 +1,15 @@
 <?php
 namespace mxdiModule\Controller;
 
+use mxdiModule\Traits\ServiceTrait;
 use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Mvc\Controller\AbstractConsoleController;
 
 class CacheClearController extends AbstractConsoleController
 {
+    use ServiceTrait;
+
     /** @var StorageInterface */
     protected $storage;
 
@@ -38,7 +41,7 @@ class CacheClearController extends AbstractConsoleController
      */
     private function flushOne($fqcn)
     {
-        $this->storage->removeItem(md5($fqcn));
+        $this->storage->removeItem($this->getHash($fqcn));
         return 0;
     }
 

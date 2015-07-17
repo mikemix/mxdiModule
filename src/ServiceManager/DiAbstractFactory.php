@@ -2,6 +2,7 @@
 namespace mxdiModule\ServiceManager;
 
 use mxdiModule\Service\ExtractorInterface;
+use mxdiModule\Traits\ServiceTrait;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
@@ -11,6 +12,8 @@ use mxdiModule\Service\Instantiator;
 
 class DiAbstractFactory implements AbstractFactoryInterface
 {
+    use ServiceTrait;
+
     /** @var array */
     protected $config;
 
@@ -46,7 +49,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
         }
 
         $this->initializeCache($serviceLocator);
-        $this->setChangeSet($this->cache->getItem(md5($name)));
+        $this->setChangeSet($this->cache->getItem($this->getHash($name)));
 
         if ($this->getChangeSet() instanceof ChangeSet) {
             // Positive result available via cache
@@ -61,13 +64,13 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
         if ($this->getChangeSet()->isAnnotated()) {
             // Service is annotated to cache results
-            $this->cache->setItem(md5($name), $this->getChangeSet());
+            $this->cache->setItem($this->getHash($name), $this->getChangeSet());
             return true;
         }
 
         // Service is not annotated
         // Cache false for it
-        $this->cache->setItem(md5($name), false);
+        $this->cache->setItem($this->getHash($name), false);
         return false;
     }
 

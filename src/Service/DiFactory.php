@@ -3,12 +3,14 @@ namespace mxdiModule\Service;
 
 use mxdiModule\ServiceManager\DiAbstractFactory;
 use mxdiModule\Service\Exception\CannotCreateService;
+use mxdiModule\Traits\ServiceTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 final class DiFactory implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use ServiceTrait;
 
     /** @var DiAbstractFactory */
     private $diAbstractFactory;
@@ -39,7 +41,7 @@ final class DiFactory implements ServiceLocatorAwareInterface
      */
     public function get($fqcn)
     {
-        $serviceName = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $fqcn));
+        $serviceName = $this->getCanonicalName($fqcn);
 
         if ($this->diAbstractFactory->canCreateServiceWithName($this->serviceLocator, $serviceName, $fqcn)) {
             return $this->diAbstractFactory->createServiceWithName($this->serviceLocator, $serviceName, $fqcn);

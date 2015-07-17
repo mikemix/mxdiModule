@@ -53,7 +53,7 @@ class CacheClearControllerTest extends TestCase
 
         $storage->expects($this->once())
             ->method('removeItem')
-            ->with($this->equalTo(md5($fqcn)));
+            ->with($this->equalTo(md5('appservicetestservice')));
 
         $this->plugin->expects($this->atLeastOnce())
             ->method('__invoke')
