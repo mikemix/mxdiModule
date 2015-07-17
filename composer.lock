@@ -242,20 +242,20 @@
         },
         {
             "name": "zendframework/zend-cache",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-cache.git",
-                "reference": "5999e5a03f7dcf82abbbe67eea74da641f959684"
+                "reference": "325afc68d4381cf8b95288ebb9b1d38dc32ed579"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-cache/zipball/5999e5a03f7dcf82abbbe67eea74da641f959684",
-                "reference": "5999e5a03f7dcf82abbbe67eea74da641f959684",
+                "url": "https://api.github.com/repos/zendframework/zend-cache/zipball/325afc68d4381cf8b95288ebb9b1d38dc32ed579",
+                "reference": "325afc68d4381cf8b95288ebb9b1d38dc32ed579",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.5",
                 "zendframework/zend-eventmanager": "~2.5",
                 "zendframework/zend-serializer": "~2.5",
                 "zendframework/zend-servicemanager": "~2.5",
@@ -267,11 +267,14 @@
                 "zendframework/zend-session": "~2.5"
             },
             "suggest": {
-                "ext-apc": "APC >= 3.1.6 to use the APC storage adapter",
+                "ext-apcu": "APCU, to use the APC storage adapter",
                 "ext-dba": "DBA, to use the DBA storage adapter",
+                "ext-memcache": "Memcache >= 2.0.0 to use the Memcache storage adapter",
                 "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
                 "ext-mongo": "Mongo, to use MongoDb storage adapter",
+                "ext-redis": "Redis, to use Redis storage adapter",
                 "ext-wincache": "WinCache, to use the WinCache storage adapter",
+                "ext-xcache": "XCache, to use the XCache storage adapter",
                 "mongofill/mongofill": "Alternative to ext-mongo - a pure PHP implementation designed as a drop in replacement",
                 "zendframework/zend-serializer": "Zend\\Serializer component",
                 "zendframework/zend-session": "Zend\\Session component"
@@ -298,7 +301,7 @@
                 "cache",
                 "zf2"
             ],
-            "time": "2015-06-03 15:31:59"
+            "time": "2015-07-16 18:44:41"
         },
         {
             "name": "zendframework/zend-code",
@@ -407,20 +410,20 @@
         },
         {
             "name": "zendframework/zend-eventmanager",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-eventmanager.git",
-                "reference": "d94a16039144936f107f906896349900fd634443"
+                "reference": "135af03d07fd048c322259aab6611d2be290475c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/d94a16039144936f107f906896349900fd634443",
-                "reference": "d94a16039144936f107f906896349900fd634443",
+                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/135af03d07fd048c322259aab6611d2be290475c",
+                "reference": "135af03d07fd048c322259aab6611d2be290475c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.5",
                 "zendframework/zend-stdlib": "~2.5"
             },
             "require-dev": {
@@ -448,7 +451,7 @@
                 "eventmanager",
                 "zf2"
             ],
-            "time": "2015-06-03 15:32:01"
+            "time": "2015-07-16 19:00:49"
         },
         {
             "name": "zendframework/zend-filter",
@@ -1044,20 +1047,20 @@
         },
         {
             "name": "zendframework/zend-validator",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-validator.git",
-                "reference": "f2c1a1fc786ff4533003cb7fac477495dc007120"
+                "reference": "6b1e4bb249a00603ebbf4023b4b42c867aa79336"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/f2c1a1fc786ff4533003cb7fac477495dc007120",
-                "reference": "f2c1a1fc786ff4533003cb7fac477495dc007120",
+                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/6b1e4bb249a00603ebbf4023b4b42c867aa79336",
+                "reference": "6b1e4bb249a00603ebbf4023b4b42c867aa79336",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.5",
                 "zendframework/zend-stdlib": "~2.5"
             },
             "require-dev": {
@@ -1078,8 +1081,8 @@
                 "zendframework/zend-db": "Zend\\Db component",
                 "zendframework/zend-filter": "Zend\\Filter component, required by the Digits validator",
                 "zendframework/zend-i18n": "Zend\\I18n component to allow translation of validation error messages as well as to use the various Date validators",
+                "zendframework/zend-i18n-resources": "Translations of validator messages",
                 "zendframework/zend-math": "Zend\\Math component",
-                "zendframework/zend-resources": "Translations of validator messages",
                 "zendframework/zend-servicemanager": "Zend\\ServiceManager component to allow using the ValidatorPluginManager and validator chains",
                 "zendframework/zend-session": "Zend\\Session component",
                 "zendframework/zend-uri": "Zend\\Uri component, required by the Uri and Sitemap\\Loc validators"
@@ -1106,7 +1109,7 @@
                 "validator",
                 "zf2"
             ],
-            "time": "2015-06-03 15:32:03"
+            "time": "2015-07-16 19:29:35"
         }
     ],
     "packages-dev": [
