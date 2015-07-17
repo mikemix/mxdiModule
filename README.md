@@ -50,7 +50,7 @@ There's **no difference** between choosing annotation driver or YAML or XML driv
 
 ### Important notes
 
-**Remember**, the service you are about to inject must not be registered in the Service Manager.
+**Remember**, the requested service must not be registered in the [Service Manager](http://framework.zend.com/manual/2.3/en/modules/zend.service-manager.intro.html).
 If you register it as factory or invokable, it won't go through the Abstract Factory and won't get injected. By the way, this allows you to create custom factory for the service in mention.
 
 To speed up locate time you can request the service through the DiFactory invokable, for example:
