@@ -19,14 +19,6 @@ class InstantiatorTest extends TestCase
         $this->service = new Instantiator();
     }
 
-    public function testCreateThrowsExceptionWithNoServiceLocator()
-    {
-        $changeSet = $this->getChangeSetMock();
-
-        $this->setExpectedException(\InvalidArgumentException::class);
-        $this->service->create('fqcn', $changeSet);
-    }
-
     public function testCreateWithSimpleConstructor()
     {
         $changeSet = $this->getChangeSetMock();
@@ -43,15 +35,15 @@ class InstantiatorTest extends TestCase
             ->method('getPropertiesInjections')
             ->will($this->returnValue([]));
 
-        $this->service->setServiceLocator(new ServiceManager());
-
-        $this->assertInstanceOf(\stdClass::class, $this->service->create(\stdClass::class, $changeSet));
+        $this->assertInstanceOf(\stdClass::class, $this->service->create(
+            new ServiceManager(),
+            \stdClass::class,
+            $changeSet
+        ));
     }
 
     public function testCreateWithoutSimpleConstructor()
     {
-        $this->service->setServiceLocator(new ServiceManager());
-
         $inject = $this->getInjectionMock([]);
 
         $changeSet = $this->getChangeSetMock();
@@ -72,13 +64,11 @@ class InstantiatorTest extends TestCase
             ->method('getPropertiesInjections')
             ->will($this->returnValue([]));
 
-        $this->service->create(\stdClass::class, $changeSet);
+        $this->service->create(new ServiceManager(), \stdClass::class, $changeSet);
     }
 
     public function testCreateWithNotAccessibleMethods()
     {
-        $this->service->setServiceLocator(new ServiceManager());
-
         $params = [new \stdClass()];
 
         $injections = [
@@ -104,15 +94,13 @@ class InstantiatorTest extends TestCase
             ->with($this->equalTo('setDependencyPrivate'))
             ->will($this->returnValue(false));
 
-        $object = $this->service->create(PublicPrivate::class, $changeSet);
+        $object = $this->service->create(new ServiceManager(), PublicPrivate::class, $changeSet);
 
         $this->assertInstanceOf(PublicPrivate::class, $object);
     }
 
     public function testCreateWithAccessibleMethods()
     {
-        $this->service->setServiceLocator(new ServiceManager());
-
         $params = [new \stdClass()];
 
         $injections = [
@@ -138,7 +126,7 @@ class InstantiatorTest extends TestCase
             ->with($this->equalTo('setDependencyPublic'))
             ->will($this->returnValue(true));
 
-        $object = $this->service->create(PublicPrivate::class, $changeSet);
+        $object = $this->service->create(new ServiceManager(), PublicPrivate::class, $changeSet);
 
         $this->assertInstanceOf(PublicPrivate::class, $object);
     }
@@ -168,10 +156,8 @@ class InstantiatorTest extends TestCase
             ->method('isPropertyPublic')
             ->will($this->returnValue(true));
 
-        $this->service->setServiceLocator(new ServiceManager());
-
         /** @var PublicProperties $object */
-        $object = $this->service->create(PublicProperties::class, $changeSet);
+        $object = $this->service->create(new ServiceManager(), PublicProperties::class, $changeSet);
 
         $this->assertInstanceOf(PublicProperties::class, $object);
         $this->assertEquals('testValue', $object->propertyNull);
@@ -180,8 +166,6 @@ class InstantiatorTest extends TestCase
 
     public function testCreateWithNotAccessibleProperties()
     {
-        $this->service->setServiceLocator(new ServiceManager());
-
         $params = new \stdClass();
 
         $injections = [
@@ -207,7 +191,7 @@ class InstantiatorTest extends TestCase
             ->with($this->equalTo('propertyPrivate'))
             ->will($this->returnValue(false));
 
-        $this->service->create(PublicPrivate::class, $changeSet);
+        $this->service->create(new ServiceManager(), PublicPrivate::class, $changeSet);
     }
 
     /**

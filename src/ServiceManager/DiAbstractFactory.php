@@ -31,7 +31,7 @@ class DiAbstractFactory implements AbstractFactoryInterface
 
     public function __construct(Instantiator $instantiator = null)
     {
-        $this->setInstantiator($instantiator ?: new Instantiator());
+        $this->instantiator = $instantiator ?: new Instantiator();
     }
 
     /**
@@ -84,8 +84,11 @@ class DiAbstractFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $this->instantiator->setServiceLocator($serviceLocator);
-        return $this->instantiator->create($this->getChangeSet()->getFqcn(), $this->getChangeSet());
+        return $this->instantiator->create(
+            $serviceLocator,
+            $this->getChangeSet()->getFqcn(),
+            $this->getChangeSet()
+        );
     }
 
     /**
@@ -144,13 +147,5 @@ class DiAbstractFactory implements AbstractFactoryInterface
     public function setExtractor(ExtractorInterface $extractor)
     {
         $this->extractor = $extractor;
-    }
-
-    /**
-     * @param Instantiator $instantiator
-     */
-    public function setInstantiator(Instantiator $instantiator)
-    {
-        $this->instantiator = $instantiator;
     }
 }

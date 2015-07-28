@@ -10,25 +10,16 @@ class Instantiator
     protected $serviceLocator;
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
      * Create object.
      *
+     * @param ServiceLocatorInterface $sm
      * @param string $fqcn
      * @param ChangeSet $changeSet
      * @return object
      */
-    public function create($fqcn, ChangeSet $changeSet)
+    public function create(ServiceLocatorInterface $sm, $fqcn, ChangeSet $changeSet)
     {
-        if (!$this->serviceLocator) {
-            throw new \InvalidArgumentException('Service locator is mandatory');
-        }
+        $this->serviceLocator = $sm;
 
         $object = $this->createObject($fqcn, $changeSet);
         $this->injectMethods($object, $fqcn, $changeSet);

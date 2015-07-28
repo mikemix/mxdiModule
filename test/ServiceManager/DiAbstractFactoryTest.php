@@ -181,12 +181,8 @@ class DiAbstractFactoryTest extends TestCase
             ->will($this->returnValue('fqcn'));
 
         $this->instantiator->expects($this->once())
-            ->method('setServiceLocator')
-            ->with($this->equalTo($this->serviceLocator));
-
-        $this->instantiator->expects($this->once())
             ->method('create')
-            ->with($this->equalTo('fqcn'), $this->equalTo($changeSet));
+            ->with($this->equalTo($this->serviceLocator), $this->equalTo('fqcn'), $this->equalTo($changeSet));
 
         $this->factory->setChangeSet($changeSet);
         $this->factory->createServiceWithName($this->serviceLocator, 'name', 'fqcn');
