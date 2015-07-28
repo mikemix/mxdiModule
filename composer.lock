@@ -612,20 +612,20 @@
         },
         {
             "name": "zendframework/zend-inputfilter",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-inputfilter.git",
-                "reference": "b96ca3c3fb7894c36f440516f3be56d35772de92"
+                "reference": "4d6495f33cfca71e1628648cce58da0eb6c23985"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-inputfilter/zipball/b96ca3c3fb7894c36f440516f3be56d35772de92",
-                "reference": "b96ca3c3fb7894c36f440516f3be56d35772de92",
+                "url": "https://api.github.com/repos/zendframework/zend-inputfilter/zipball/4d6495f33cfca71e1628648cce58da0eb6c23985",
+                "reference": "4d6495f33cfca71e1628648cce58da0eb6c23985",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.5",
                 "zendframework/zend-filter": "~2.5",
                 "zendframework/zend-stdlib": "~2.5",
                 "zendframework/zend-validator": "~2.5"
@@ -660,7 +660,7 @@
                 "inputfilter",
                 "zf2"
             ],
-            "time": "2015-06-03 15:32:01"
+            "time": "2015-07-28 15:15:06"
         },
         {
             "name": "zendframework/zend-json",

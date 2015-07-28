@@ -15,7 +15,7 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
 
 ### Installation
 
-1. Install with Composer: `composer require mikemix/mxdi-module:~3.0`. I follow the rules of [semantic versioning](http://semver.org).
+1. Install with Composer: `composer require mikemix/mxdi-module:~3.0` (rules of [semantic versioning](http://semver.org) apply).
 
 2. Enable the module via ZF2 config in `appliation.config.php` under `modules` key:
 
@@ -34,9 +34,9 @@ Idea based on the [JMSDiExtraBundle](https://github.com/schmittjoh/JMSDiExtraBun
     
     This will enable the module and register the Abstract Factory in the ZF2's Service Manager.
 
-3. Copy the global config file `cp vendor/mikemix/mxdi-module/config/mxdimodule.global.php.dist config/autoload/mxdimodule.global.php` if you want to override the default mapping driver.
+3. Copy the global config file `cp vendor/mikemix/mxdi-module/resources/mxdimodule.global.php.dist config/autoload/mxdimodule.global.php` if you want to override the default mapping driver.
 
-4. Copy the local config file `cp vendor/mikemix/mxdi-module/config/mxdimodule.local.php.dist config/autoload/mxdimodule.local.php` if you want to override other settings, like caching etc.
+4. Copy the local config file `cp vendor/mikemix/mxdi-module/resources/mxdimodule.local.php.dist config/autoload/mxdimodule.local.php` if you want to override other settings, like caching etc.
 
 ### Changing mapping driver
 
