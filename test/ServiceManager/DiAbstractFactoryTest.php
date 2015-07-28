@@ -172,17 +172,12 @@ class DiAbstractFactoryTest extends TestCase
     {
         /** @var ChangeSet|\PHPUnit_Framework_MockObject_MockObject $changeSet */
         $changeSet = $this->getMockBuilder(ChangeSet::class)
-            ->setMethods(['getFqcn'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $changeSet->expects($this->once())
-            ->method('getFqcn')
-            ->will($this->returnValue('fqcn'));
-
         $this->instantiator->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($this->serviceLocator), $this->equalTo('fqcn'), $this->equalTo($changeSet));
+            ->with($this->equalTo($this->serviceLocator), $this->equalTo($changeSet));
 
         $this->factory->setChangeSet($changeSet);
         $this->factory->createServiceWithName($this->serviceLocator, 'name', 'fqcn');

@@ -13,27 +13,25 @@ class Instantiator implements InstantiatorInterface
      * Create object.
      *
      * @param ServiceLocatorInterface $sm
-     * @param string $fqcn
      * @param ChangeSet $changeSet
      * @return object
      */
-    public function create(ServiceLocatorInterface $sm, $fqcn, ChangeSet $changeSet)
+    public function create(ServiceLocatorInterface $sm, ChangeSet $changeSet)
     {
         $this->serviceLocator = $sm;
 
-        $object = $this->createObject($fqcn, $changeSet);
-        $this->injectMethods($object, $fqcn, $changeSet);
-        $this->injectProperties($object, $fqcn, $changeSet);
+        $object = $this->createObject($changeSet);
+        $this->injectMethods($object, $changeSet);
+        $this->injectProperties($object, $changeSet);
 
         return $object;
     }
 
     /**
      * @param object $object
-     * @param string $fqcn
      * @param ChangeSet $changeSet
      */
-    protected function injectProperties($object, $fqcn, ChangeSet $changeSet)
+    protected function injectProperties($object, ChangeSet $changeSet)
     {
         /**
          * @var string $propertyName
@@ -47,16 +45,15 @@ class Instantiator implements InstantiatorInterface
                 continue;
             }
 
-            $this->setPropertyValue($fqcn, $object, $propertyName, $value);
+            $this->setPropertyValue($changeSet->getFqcn(), $object, $propertyName, $value);
         }
     }
 
     /**
      * @param object $object
-     * @param string $fqcn
      * @param ChangeSet $changeSet
      */
-    protected function injectMethods($object, $fqcn, ChangeSet $changeSet)
+    protected function injectMethods($object, ChangeSet $changeSet)
     {
         /**
          * @var string $propertyName
@@ -71,17 +68,18 @@ class Instantiator implements InstantiatorInterface
                 continue;
             }
 
-            $this->invokeMethod($fqcn, $object, $methodName, $value);
+            $this->invokeMethod($changeSet->getFqcn(), $object, $methodName, $value);
         }
     }
 
     /**
-     * @param string $fqcn
      * @param ChangeSet $changeSet
      * @return object
      */
-    protected function createObject($fqcn, ChangeSet $changeSet)
+    protected function createObject(ChangeSet $changeSet)
     {
+        $fqcn = $changeSet->getFqcn();
+
         if ($changeSet->hasSimpleConstructor()) {
             return new $fqcn;
         }

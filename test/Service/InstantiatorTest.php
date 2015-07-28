@@ -23,6 +23,10 @@ class InstantiatorTest extends TestCase
     {
         $changeSet = $this->getChangeSetMock();
 
+        $changeSet->expects($this->atLeastOnce())
+            ->method('getFqcn')
+            ->will($this->returnValue(\stdClass::class));
+
         $changeSet->expects($this->once())
             ->method('hasSimpleConstructor')
             ->will($this->returnValue(true));
@@ -37,7 +41,6 @@ class InstantiatorTest extends TestCase
 
         $this->assertInstanceOf(\stdClass::class, $this->service->create(
             new ServiceManager(),
-            \stdClass::class,
             $changeSet
         ));
     }
@@ -47,6 +50,10 @@ class InstantiatorTest extends TestCase
         $inject = $this->getInjectionMock([]);
 
         $changeSet = $this->getChangeSetMock();
+
+        $changeSet->expects($this->atLeastOnce())
+            ->method('getFqcn')
+            ->will($this->returnValue(\stdClass::class));
 
         $changeSet->expects($this->once())
             ->method('getConstructorInjections')
@@ -64,7 +71,7 @@ class InstantiatorTest extends TestCase
             ->method('getPropertiesInjections')
             ->will($this->returnValue([]));
 
-        $this->service->create(new ServiceManager(), \stdClass::class, $changeSet);
+        $this->service->create(new ServiceManager(), $changeSet);
     }
 
     public function testCreateWithNotAccessibleMethods()
@@ -76,6 +83,10 @@ class InstantiatorTest extends TestCase
         ];
 
         $changeSet = $this->getChangeSetMock();
+
+        $changeSet->expects($this->atLeastOnce())
+            ->method('getFqcn')
+            ->will($this->returnValue(PublicPrivate::class));
 
         $changeSet->expects($this->once())
             ->method('hasSimpleConstructor')
@@ -94,7 +105,7 @@ class InstantiatorTest extends TestCase
             ->with($this->equalTo('setDependencyPrivate'))
             ->will($this->returnValue(false));
 
-        $object = $this->service->create(new ServiceManager(), PublicPrivate::class, $changeSet);
+        $object = $this->service->create(new ServiceManager(), $changeSet);
 
         $this->assertInstanceOf(PublicPrivate::class, $object);
     }
@@ -108,6 +119,10 @@ class InstantiatorTest extends TestCase
         ];
 
         $changeSet = $this->getChangeSetMock();
+
+        $changeSet->expects($this->atLeastOnce())
+            ->method('getFqcn')
+            ->will($this->returnValue(PublicPrivate::class));
 
         $changeSet->expects($this->once())
             ->method('hasSimpleConstructor')
@@ -126,7 +141,7 @@ class InstantiatorTest extends TestCase
             ->with($this->equalTo('setDependencyPublic'))
             ->will($this->returnValue(true));
 
-        $object = $this->service->create(new ServiceManager(), PublicPrivate::class, $changeSet);
+        $object = $this->service->create(new ServiceManager(), $changeSet);
 
         $this->assertInstanceOf(PublicPrivate::class, $object);
     }
@@ -136,6 +151,10 @@ class InstantiatorTest extends TestCase
         $injection = $this->getInjectionMock('testValue', 'atLeastOnce');
 
         $changeSet = $this->getChangeSetMock();
+
+        $changeSet->expects($this->atLeastOnce())
+            ->method('getFqcn')
+            ->will($this->returnValue(PublicProperties::class));
 
         $changeSet->expects($this->once())
             ->method('hasSimpleConstructor')
@@ -157,7 +176,7 @@ class InstantiatorTest extends TestCase
             ->will($this->returnValue(true));
 
         /** @var PublicProperties $object */
-        $object = $this->service->create(new ServiceManager(), PublicProperties::class, $changeSet);
+        $object = $this->service->create(new ServiceManager(), $changeSet);
 
         $this->assertInstanceOf(PublicProperties::class, $object);
         $this->assertEquals('testValue', $object->propertyNull);
@@ -173,6 +192,10 @@ class InstantiatorTest extends TestCase
         ];
 
         $changeSet = $this->getChangeSetMock();
+
+        $changeSet->expects($this->atLeastOnce())
+            ->method('getFqcn')
+            ->will($this->returnValue(PublicPrivate::class));
 
         $changeSet->expects($this->once())
             ->method('hasSimpleConstructor')
@@ -191,7 +214,7 @@ class InstantiatorTest extends TestCase
             ->with($this->equalTo('propertyPrivate'))
             ->will($this->returnValue(false));
 
-        $this->service->create(new ServiceManager(), PublicPrivate::class, $changeSet);
+        $this->service->create(new ServiceManager(), $changeSet);
     }
 
     /**
@@ -219,6 +242,7 @@ class InstantiatorTest extends TestCase
     {
         return $this->getMockBuilder(ChangeSet::class)
             ->setMethods([
+                'getFqcn',
                 'hasSimpleConstructor',
                 'getConstructorInjections',
                 'getMethodsInjections',
