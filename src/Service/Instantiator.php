@@ -4,7 +4,7 @@ namespace mxdiModule\Service;
 use mxdiModule\Annotation\Inject;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Instantiator
+class Instantiator implements InstantiatorInterface
 {
     /** @var ServiceLocatorInterface */
     protected $serviceLocator;

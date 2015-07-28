@@ -1,6 +1,7 @@
 <?php
 namespace mxdiModuleTest\ServiceManager;
 
+use mxdiModule\Service\InstantiatorInterface;
 use mxdiModule\ServiceManager\DiAbstractFactory;
 use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\ChangeSet;
@@ -44,10 +45,9 @@ class DiAbstractFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->instantiator = $this->getMockBuilder(Instantiator::class)
-            ->setMethods(['create', 'setServiceLocator'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->instantiator = $this->getMockBuilder(InstantiatorInterface::class)
+            ->setMethods(['create'])
+            ->getMockForAbstractClass();
 
         $this->factory = new DiAbstractFactory($this->instantiator);
         $this->factory->setExtractor($this->extractor);

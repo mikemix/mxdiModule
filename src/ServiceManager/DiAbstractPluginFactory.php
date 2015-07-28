@@ -4,7 +4,6 @@ namespace mxdiModule\ServiceManager;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use mxdiModule\Service\AnnotationExtractor;
 use mxdiModule\Service\Instantiator;
 
 /**
@@ -18,7 +17,7 @@ class DiAbstractPluginFactory implements AbstractFactoryInterface
 
     public function __construct(DiAbstractFactory $factory = null)
     {
-        $this->factory = $factory ?: new DiAbstractFactory(new AnnotationExtractor(), new Instantiator());
+        $this->factory = $factory ?: new DiAbstractFactory(new Instantiator());
     }
 
     /**
