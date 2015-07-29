@@ -3,7 +3,6 @@ namespace mxdiModule\Service;
 
 use Doctrine\Common\Annotations\AnnotationReader as Reader;
 use mxdiModule\Annotation\AnnotationInterface;
-use mxdiModule\Annotation\InjectParams;
 
 class AnnotationExtractor implements ExtractorInterface
 {
@@ -26,7 +25,7 @@ class AnnotationExtractor implements ExtractorInterface
 
         return $this->reader->getMethodAnnotation(
             new \ReflectionMethod($fqcn, '__construct'),
-            InjectParams::class
+            AnnotationInterface::class
         );
     }
 
