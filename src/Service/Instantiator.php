@@ -64,7 +64,7 @@ class Instantiator implements InstantiatorInterface
             $value = $injection->getValue($this->serviceLocator);
 
             if ($changeSet->isMethodPublic($methodName)) {
-                call_user_func_array([$object, $methodName], $value);
+                call_user_func_array([$object, $methodName], (array)$value);
                 continue;
             }
 
@@ -86,7 +86,7 @@ class Instantiator implements InstantiatorInterface
 
         $reflection = new \ReflectionClass($fqcn);
         return $reflection->newInstanceArgs(
-            $changeSet->getConstructorInjections()->getValue($this->serviceLocator)
+            (array)$changeSet->getConstructorInjections()->getValue($this->serviceLocator)
         );
     }
 
