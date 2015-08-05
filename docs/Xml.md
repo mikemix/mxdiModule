@@ -16,7 +16,7 @@ Make sure the `file` key under `extractor_options` points to a valid xml file wi
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<mxdiModule>
+<mxdiModule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/mikemix/mxdiModule/master/resources/schema/Service3.0.xml">
 
     <!-- Service's FQCN is mandatory only if it is different from its ID -->
     <service id="Application\Service\MyService" fqcn="Application\Service\MyService">
