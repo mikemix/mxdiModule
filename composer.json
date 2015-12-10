@@ -28,9 +28,6 @@
         "zendframework/zend-console": "~2.5",
         "ocramius/proxy-manager": "~1.0.0"
     },
-    "require-dev": {
-        "phpunit/phpunit" : "~4.8"
-    },
     "autoload": {
         "psr-4": {
             "mxdiModule\\": "src"
