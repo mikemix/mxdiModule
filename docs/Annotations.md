@@ -9,6 +9,7 @@ The `AnnotationExtractor` is set as default extractor and it's working out-of-th
 * [`@InjectLazy`](#injectlazy-annotation)
 * [`@InjectDoctrine`](#injectdoctrine-annotation)
 * [`@InjectDoctrineRepository`](#injectdoctrinerepository-annotation)
+* [`@InjectIdentity`](#injectidentity-annotation)
 
 #### InjectParams Annotation
 
@@ -134,6 +135,9 @@ public function setRepository(UserRepository $repository) ...
 $object->setRepository($sm->get('Doctrine\ORM\EntityManager')->getRepository('App\Entity\User'));
 
 ```
+
+#### InjectIdentity annotation
+This annotation injects ZF2's identity. This is simply an alias for `$serviceManager->get('Zend\Authentication\AuthenticationService')->getIdentity()`.
 
 ## Custom annotations
 
